@@ -1,0 +1,6 @@
+node_modules
+.env
+.vercel
+build
+dev-hikers.pem
+build-and-send-aws.sh

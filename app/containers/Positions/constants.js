@@ -1,0 +1,12 @@
+/*
+ *
+ * Positions constants
+ *
+ */
+
+export const UPDATE_POSITION_LIST = "UPDATE_POSITION_LIST";
+export const POSITION_PAGE_SET_LOADING = "POSITION_PAGE_SET_LOADING";
+export const SET_AVAILABLE_CLIENTS = "app/Positions/SET_AVAILABLE_CLIENTS";
+export const SET_AVAILABLE_RECRUITERS =
+  "app/Positions/SET_AVAILABLE_RECRUITERS";
+export const SET_AVAILABLE_SPOCS = "app/Positions/SET_AVAILABLE_SPOCS";

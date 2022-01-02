@@ -1,0 +1,24 @@
+.hover-color-danger:hover {
+    color: $danger !important;
+}
+
+.hover-color-primary:hover {
+    color: $primary !important;
+}
+
+.hover-pointer {
+    cursor: pointer;
+}
+
+#footer-main {
+    bottom: 0;
+    position: fixed;
+    left: 0;
+    width: 100%;
+}
+
+@media (min-width: 1200px) {
+    .g-sidenav-pinned .sidenav.fixed-left+.main-content {
+        margin-left: 180px !important;
+    }
+}

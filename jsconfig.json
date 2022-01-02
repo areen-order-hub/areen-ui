@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "commonJS",
+    "jsx": "preserve",
+    "noImplicitReturns": true,
+    "noUnusedLocals": false,
+    "baseUrl": "app",
+    "paths": {
+      "assets/*": ["assets/*"],
+      "components/*": ["components/*"],
+      "containers/*": ["containers/*"],
+      "utils/*": ["utils/*"],
+      "api/*": ["api/*"]
+    }
+  },
+  "exclude": ["dist", "public", "node_modules", "uploads"]
+}

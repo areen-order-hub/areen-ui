@@ -1,0 +1,24 @@
+.rtFullCalendar {
+        .fc-header-toolbar.fc-toolbar {
+            height: unset !important;
+            font-size: xx-small !important;
+        }
+    
+        h2.fc-toolbar-title {
+            font-weight: unset;
+            color: #8898aa !important;
+        }
+    
+        a.fc-daygrid-day-number {
+            padding: .5rem 0rem !important;
+            width: 100%;
+            text-align: center;
+        }
+    
+        th.fc-col-header-cell.fc-day {
+            padding: .5rem 0rem !important;
+            // width: 100%;
+            text-align: center;
+        }
+    
+}

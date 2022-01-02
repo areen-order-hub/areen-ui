@@ -1,0 +1,2 @@
+export const AUTHENTICATE_USER = 'AUTHENTICATE_USER';
+export const AUTH_PAGE_INIT = 'AUTH_PAGE_INIT';

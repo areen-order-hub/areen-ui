@@ -1,0 +1,8 @@
+/*
+ *
+ * Recruiters constants
+ *
+ */
+
+export const UPDATE_RECRUITERS_LIST = "UPDATE_RECRUITERS_LIST";
+export const RECRUITERS_PAGE_SET_LOADING = "RECRUITERS_PAGE_SET_LOADING";

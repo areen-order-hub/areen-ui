@@ -1,0 +1,26 @@
+.stepProgressBar {
+    .circle {
+        border-radius: 100%;
+        padding: 0.4em 0.8em;
+        transition-delay: 0.5s;
+        -webkit-transition-delay: 0.5s;
+        -moz-transition-delay: 0.5s;
+        -o-transition-delay: 0.5s;
+        -webkit-transition: background-color 0.5s ease;
+        -moz-transition: background-color 0.5s ease;
+        -o-transition: background-color 0.5s ease;
+        transition: background-color 0.5s ease;
+    }
+
+    .bar {
+        height: 4px;
+        -webkit-transition: background-color 1s ease;
+        -moz-transition: background-color 1s ease;
+        -o-transition: background-color 1s ease;
+        transition: background-color 1s ease;
+    }
+
+    .progress-complete {
+        padding: 0.5em 0.8em;
+    }
+}

@@ -1,0 +1,22 @@
+.homePage {
+  .section {
+    margin: 3em auto;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    input {
+      outline: none;
+      border: none;
+      border-bottom: 1px dotted #999;
+      background-color: transparent;
+    }
+
+    .prefix {
+      color: black;
+      margin-left: 0.4em;
+    }
+  }
+
+}

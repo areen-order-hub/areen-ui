@@ -1,0 +1,15 @@
+
+.root {
+  position: fixed;
+  z-index: 9999999;
+  div {
+    div {
+      z-index: 1060 !important;
+    }
+  }
+}
+:global {
+  .rna-wrapper .alert [data-notify='icon'] {
+    padding-top: 5px;
+  }
+}
