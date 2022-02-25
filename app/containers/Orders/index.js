@@ -23,7 +23,9 @@ import {
 } from "utils/componentHelpers";
 import PaginationDetails from "components/PaginationDetails";
 import RtCreatableSelect from "components/RtCreatableSelect";
+import ReactDatetime from "react-datetime";
 import { useInjectReducer } from "utils/injectReducer";
+import moment from "moment-timezone";
 import { isEmpty, get, map } from "lodash";
 import { getStoreFilter } from "./helpers";
 import reducer from "./reducer";
@@ -45,22 +47,45 @@ export default function Orders() {
     stores: selectors.stores(state),
   }));
   const [selectedStores, setSelectedStores] = useState([]);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   useEffect(() => {
     dispatch(operations.fetchOrders({ page: 1 }));
     dispatch(operations.fetchStores());
   }, []);
 
+  const getFilterParams = () => {
+    let filter = { page: 1 };
+    if (!isEmpty(selectedStores)) {
+      filter["store"] = map(selectedStores, ({ value }) => value)
+        .filter((x) => x)
+        .join(",");
+    }
+    if (startDate && !isEmpty(startDate)) {
+      try {
+        filter["startDate"] = moment(startDate)
+          .startOf("day")
+          .valueOf();
+      } catch (err) {
+        console.log("Start Date is invalid");
+      }
+    }
+    if (endDate && !isEmpty(endDate)) {
+      try {
+        filter["endDate"] = moment(endDate)
+          .endOf("day")
+          .valueOf();
+      } catch (err) {
+        console.log("End Date is invalid");
+      }
+    }
+    return filter;
+  };
+
   useEffect(() => {
-    dispatch(
-      operations.fetchOrders({
-        page: 1,
-        store: map(selectedStores, ({ value }) => value)
-          .filter((x) => x)
-          .join(","),
-      })
-    );
-  }, [selectedStores]);
+    dispatch(operations.fetchOrders(getFilterParams()));
+  }, [selectedStores, startDate, endDate]);
 
   const onClick = (id) =>
     history.push({
@@ -123,6 +148,42 @@ export default function Orders() {
               console.log("E", e);
               setSelectedStores(e);
             }}
+          />
+        </Col>
+        <Col md="1">
+          <ReactDatetime
+            inputProps={{
+              placeholder: "Start Date",
+            }}
+            dateFormat="DD MMM YYYY"
+            timeFormat={false}
+            className="text-sm"
+            onChange={(e) => {
+              try {
+                setStartDate(e.format("DD MMM YYYY"));
+              } catch (err) {
+                setStartDate(null);
+              }
+            }}
+            value={startDate}
+          />
+        </Col>
+        <Col md="1">
+          <ReactDatetime
+            inputProps={{
+              placeholder: "End Date",
+            }}
+            dateFormat="DD MMM YYYY"
+            timeFormat={false}
+            className="text-sm"
+            onChange={(e) => {
+              try {
+                setEndDate(e.format("DD MMM YYYY"));
+              } catch (err) {
+                setEndDate(null);
+              }
+            }}
+            value={endDate}
           />
         </Col>
         <div className="align-items-right ml-auto mr-2">
