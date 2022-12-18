@@ -13,6 +13,8 @@ const interviewRoutes = require("./interview.routes");
 const commonDetailRoutes = require("./commonDetail.routes");
 const recruiterRoutes = require("./recruiter.routes");
 
+const storeRoutes = require("./store.routes");
+
 const multer = require("multer");
 var storage = multer.memoryStorage({
   destination: function(req, file, callback) {
@@ -34,6 +36,8 @@ router.use("/position", session.protected, positionRoutes);
 router.use("/interview", session.protected, interviewRoutes);
 router.use("/commonDetail", session.protected, commonDetailRoutes);
 router.use("/recruiter", session.protected, recruiterRoutes);
+
+router.use("/store", session.protected, storeRoutes);
 
 router.use("", session.protected, authorisedRoutes);
 
