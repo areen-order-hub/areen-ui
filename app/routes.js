@@ -22,6 +22,7 @@ import Terms from "views/pages/Terms";
 import Privacy from "views/pages/Privacy";
 import Dashboard from "containers/Dashboard";
 
+import Stores from "containers/Stores";
 import Clients from "containers/Clients";
 import Client from "containers/Client";
 import AddClient from "containers/AddClient";
@@ -54,13 +55,13 @@ const routes = {
       component: Dashboard,
       layout: "",
     },
-    // {
-    //   path: "/clients",
-    //   name: "Clients",
-    //   icon: "far fa-building text-secondary",
-    //   component: Clients,
-    //   layout: "",
-    // },
+    {
+      path: "/stores",
+      name: "Stores",
+      icon: "far fa-building text-secondary",
+      component: Stores,
+      layout: "",
+    },
     // {
     //   permission: permissions.ADD_A_CLIENT,
     //   redirect: true,

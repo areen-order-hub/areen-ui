@@ -66,12 +66,12 @@ export default function RtNavBar({
                 </div>
               </NavItem>
             </Nav>
-            <img
+            {/* <img
               alt={logo.imgAlt}
               className="navbar-brand-img ml-md-5"
               src={logo.imgSrc}
               height="20px"
-            />
+            /> */}
             <Nav className="align-items-right ml-auto" navbar>
               {/* <UncontrolledDropdown nav>
                 <DropdownToggle className="nav-link my-1" color="" tag="a">
