@@ -45,4 +45,4 @@ jobs:
           host: ${{ secrets.AWS_HOST }}
           username: ${{ secrets.AWS_USER }}
           key: ${{ secrets.AWS_KEY }}
-          script: sh /home/ec2-user/hikers-ui/deploy-aws.sh
+          script: sh /home/ec2-user/areen-ui/deploy-aws.sh
