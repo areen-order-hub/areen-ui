@@ -282,7 +282,8 @@ export default function Orders() {
             Areen Shipping
           </DropdownItem>
           <DropdownItem
-            disabled={some(selectedOrders, { paymentMode: "COD" })}
+            disabled
+            // disabled={some(selectedOrders, { paymentMode: "COD" })}
             onClick={() => onGenerateShipment("BeeThere")}
           >
             BeeThere
