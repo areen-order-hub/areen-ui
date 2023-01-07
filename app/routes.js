@@ -23,24 +23,7 @@ import Privacy from "views/pages/Privacy";
 import Dashboard from "containers/Dashboard";
 
 import Stores from "containers/Stores";
-import Clients from "containers/Clients";
-import Client from "containers/Client";
-import AddClient from "containers/AddClient";
-
-import Candidates from "containers/Candidates";
-import Candidate from "containers/Candidate";
-
-import Positions from "containers/Positions";
-import Position from "containers/Position";
-import AddPosition from "containers/AddPosition";
-import PositionTracker from "containers/PositionTracker";
-
-import Interviews from "containers/Interviews";
-
-import Recruiters from "containers/Recruiters";
-import AddRecruiter from "containers/AddRecruiter";
-
-import Profile from "containers/Profile";
+import StoreForm from "containers/StoreForm";
 
 import WhatsNew from "containers/WhatsNew";
 
@@ -62,14 +45,13 @@ const routes = {
       component: Stores,
       layout: "",
     },
-    // {
-    //   permission: permissions.ADD_A_CLIENT,
-    //   redirect: true,
-    //   path: "/add-client",
-    //   name: "AddClient",
-    //   component: AddClient,
-    //   layout: "",
-    // },
+    {
+      redirect: true,
+      path: "/store-form",
+      name: "StoreForm",
+      component: StoreForm,
+      layout: "",
+    },
     // {
     //   redirect: true,
     //   path: "/client/:id",

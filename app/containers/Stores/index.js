@@ -67,7 +67,7 @@ export default function Stores() {
               type="button"
               color="primary"
               size="sm"
-              onClick={() => history.push(`/store-form?id=${id}`)}
+              onClick={() => history.push(`/store-form?id=${_id}`)}
             >
               <span className="btn-inner--icon">
                 <i className="fas fa-edit" />
@@ -112,7 +112,6 @@ export default function Stores() {
       <Row className="mt-3">
         <div className="align-items-right ml-auto mr-3 mr-md-5">
           <Button
-            disabled
             color="primary"
             className="btn-icon btn-3"
             type="button"
