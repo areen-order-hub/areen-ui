@@ -21,7 +21,7 @@ import {
   Button,
   Spinner,
 } from "reactstrap";
-import { get, map } from "lodash";
+import { get, map, isEmpty } from "lodash";
 import Skeleton from "react-loading-skeleton";
 import AlertPopupHandler from "components/AlertPopup/AlertPopupHandler";
 import reducer from "./reducer";
@@ -256,23 +256,38 @@ export default function OrderDetails({ match }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {map(
-                    get(invoiceDetails, "items", []),
-                    ({ itemCode, quantity, unitPrice, price }, index) => (
-                      <tr key={index}>
-                        <td>
-                          {get(shopifyOrderItems, [itemCode, "title"], "-")}
-                        </td>
-                        <td>{itemCode}</td>
-                        <td>
-                          {get(shopifyOrderItems, [itemCode, "quantity"], 0)}
-                        </td>
-                        <td>{quantity}</td>
-                        <td>{unitPrice}</td>
-                        <td>{price}</td>
-                      </tr>
-                    )
-                  )}
+                  {isEmpty(get(invoiceDetails, "items", []))
+                    ? Object.entries(shopifyOrderItems).map(([key, value]) => (
+                        <tr>
+                          <td>{get(value, "title", "-")}</td>
+                          <td>{key}</td>
+                          <td>{get(value, "quantity", 0)}</td>
+                          <td>-</td>
+                          <td>-</td>
+                          <td>-</td>
+                        </tr>
+                      ))
+                    : map(
+                        get(invoiceDetails, "items", []),
+                        ({ itemCode, quantity, unitPrice, price }, index) => (
+                          <tr key={index}>
+                            <td>
+                              {get(shopifyOrderItems, [itemCode, "title"], "-")}
+                            </td>
+                            <td>{itemCode}</td>
+                            <td>
+                              {get(
+                                shopifyOrderItems,
+                                [itemCode, "quantity"],
+                                0
+                              )}
+                            </td>
+                            <td>{quantity}</td>
+                            <td>{unitPrice}</td>
+                            <td>{price}</td>
+                          </tr>
+                        )
+                      )}
                 </tbody>
               </Table>
             </div>
