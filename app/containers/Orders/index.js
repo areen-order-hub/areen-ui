@@ -105,7 +105,11 @@ export default function Orders() {
 
   const nonSelectableRows = useMemo(() => {
     const rowsWithNoInvoice = map(orders, (order, index) => {
-      if (isEmpty(get(order, "invoiceDetails", {})) || order.carrierService) {
+      if (
+        isEmpty(get(order, "invoiceDetails", {})) ||
+        (order.carrierService &&
+          get(order, "carrierStatus", "") !== "Shipment cancelled")
+      ) {
         return order._id;
       }
     });
