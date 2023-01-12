@@ -36,6 +36,7 @@ import {
   generateAreenShippingBills,
 } from "./helpers";
 import reducer from "./reducer";
+import numberFormatter from "../../utils/numberFormatter";
 import history from "../../utils/history";
 import { parseDate } from "../../utils/dateTimeHelpers";
 import * as operations from "./actions";
@@ -488,14 +489,14 @@ export default function Orders() {
             formatter: (cell) => parseDate(cell),
           },
           {
-            text: "Shopify Price",
+            text: "Shopify Price (AED)",
             dataField: "shopifyPrice",
-            formatter: (cell) => `${cell} AED`,
+            formatter: (cell) => cell || "N/A",
           },
           {
-            text: "Inv. Price",
+            text: "Inv. Price (AED)",
             dataField: "invoiceDetails.price",
-            formatter: (cell) => cell || "N/A",
+            formatter: (cell) => `${numberFormatter(cell)}` || "N/A",
           },
           {
             text: "Weight (Kg)",
