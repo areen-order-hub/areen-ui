@@ -109,7 +109,7 @@ const getBillDocDefinition = ({
         },
         {},
         {
-          text: shopifyOrderName,
+          text: `Order Id: ${shopifyOrderName}`,
           alignment: "center",
           bold: true,
           colSpan: 2,
@@ -121,7 +121,7 @@ const getBillDocDefinition = ({
         {},
         {},
         {
-          text: get(invoiceDetails, "orderNo", "N/A"),
+          text: `Invoice Id: ${get(invoiceDetails, "orderNo", "N/A")}`,
           alignment: "center",
           bold: true,
           colSpan: 2,
