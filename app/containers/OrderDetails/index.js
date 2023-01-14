@@ -250,7 +250,7 @@ export default function OrderDetails({ match }) {
                     <th scope="col">Title</th>
                     <th scope="col">Item Code</th>
                     <th scope="col">Ordered QTY.</th>
-                    <th scope="col">Fulfilled QTY.</th>
+                    <th scope="col">Invoiced QTY.</th>
                     <th scope="col">Unit Price</th>
                     <th scope="col">Total</th>
                   </tr>

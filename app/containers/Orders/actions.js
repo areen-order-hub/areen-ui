@@ -19,6 +19,7 @@ import {
   createEliteShipment,
 } from "api/order";
 import { getStores } from "api/store";
+import { get } from "lodash";
 import NotificationHandler from "../../components/Notifications/NotificationHandler";
 
 export const fetchOrders = (params) => {
