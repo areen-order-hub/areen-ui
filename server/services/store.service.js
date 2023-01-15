@@ -16,6 +16,22 @@ exports.list = async (req, res) => {
   }
 };
 
+exports.paginate = async (req, res) => {
+  try {
+    const stores = await Request(
+      {
+        url: "/v1/store/paginate",
+        method: "GET",
+        params: req.query,
+      },
+      req.headers
+    );
+    res.json(stores);
+  } catch (err) {
+    res.status(err.status).json(err.message);
+  }
+};
+
 exports.create = async (req, res) => {
   try {
     const url = "/v1/store";

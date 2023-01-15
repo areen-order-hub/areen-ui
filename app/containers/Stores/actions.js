@@ -5,13 +5,13 @@
  */
 
 import { SET_STORE_LIST, STORES_PAGE_SET_LOADING } from "./constants";
-import { getStores, editStore } from "api/store";
+import { paginateStores, editStore } from "api/store";
 import NotificationHandler from "components/Notifications/NotificationHandler";
 
-export const fetchStores = () => {
+export const fetchStores = (params) => {
   return async (dispatch) => {
     try {
-      const { data } = await getStores();
+      const { data } = await paginateStores(params);
       dispatch(setStoreList(data));
     } catch (err) {
       dispatch(setStoreList());
@@ -19,7 +19,7 @@ export const fetchStores = () => {
   };
 };
 
-export const updateStoreStatus = (id, storeDetails) => {
+export const updateStoreStatus = (id, storeDetails, params) => {
   return async (dispatch) => {
     try {
       await editStore(id, storeDetails);
@@ -27,7 +27,7 @@ export const updateStoreStatus = (id, storeDetails) => {
         operation: "success",
         title: "Store status changed successfully",
       });
-      dispatch(fetchStores());
+      dispatch(fetchStores(params));
     } catch (err) {
       NotificationHandler.open({
         operation: "failure",

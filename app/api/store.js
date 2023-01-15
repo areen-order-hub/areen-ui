@@ -7,6 +7,14 @@ export const getStores = async () => {
   });
 };
 
+export const paginateStores = async (params) => {
+  return await Request({
+    url: "/api/store/paginate",
+    method: "GET",
+    params,
+  });
+};
+
 export const getStore = async (id) => {
   return await Request({
     url: `/api/store/${id}`,

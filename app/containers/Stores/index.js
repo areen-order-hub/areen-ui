@@ -7,8 +7,9 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Helmet } from "react-helmet";
-import { Row, Button, Table, Badge } from "reactstrap";
+import { Row, Col, Button, Table, Badge } from "reactstrap";
 import AlertPopupHandler from "components/AlertPopup/AlertPopupHandler";
+import PaginationDetails from "components/PaginationDetails";
 import { useInjectReducer } from "utils/injectReducer";
 import reducer from "./reducer";
 import history from "../../utils/history";
@@ -19,22 +20,27 @@ import "./storesStyle.scss";
 export default function Stores() {
   useInjectReducer({ key: "stores", reducer });
   const dispatch = useDispatch();
-  const { isLoading, stores } = useSelector((state) => ({
+  const { isLoading, stores, paginationDetails } = useSelector((state) => ({
     isLoading: selectors.isLoading(state),
     stores: selectors.stores(state),
+    paginationDetails: selectors.paginationDetails(state),
   }));
 
   useEffect(() => {
-    dispatch(operations.fetchStores());
+    dispatch(operations.fetchStores({ page: 1 }));
   }, []);
 
   const onStoreStatusChange = (id, isActive) => {
     AlertPopupHandler.open({
       onConfirm: () =>
         dispatch(
-          operations.updateStoreStatus(id, {
-            isActive,
-          })
+          operations.updateStoreStatus(
+            id,
+            {
+              isActive,
+            },
+            { page: paginationDetails.page }
+          )
         ),
       confirmBtnText: isActive ? "Activate" : "Deactivate",
       text: `You are about to ${
@@ -137,6 +143,16 @@ export default function Stores() {
           <tbody>{getStoreData()}</tbody>
         </Table>
       </div>
+      <Row>
+        <Col className="text-end ms-auto">
+          <PaginationDetails
+            paginationDetails={paginationDetails}
+            onClick={(page) => {
+              dispatch(operations.fetchStores({ page }));
+            }}
+          />
+        </Col>
+      </Row>
     </div>
   );
 }
