@@ -23,6 +23,7 @@ import {
 } from "utils/componentHelpers";
 import PaginationDetails from "components/PaginationDetails";
 import RtCreatableSelect from "components/RtCreatableSelect";
+import AlertPopupHandler from "components/AlertPopup/AlertPopupHandler";
 import Table from "components/Table";
 import ReactDatetime from "react-datetime";
 import { useInjectReducer } from "utils/injectReducer";
@@ -202,6 +203,44 @@ export default function Orders() {
     },
   };
 
+  const onGenerateShipment = (carrierService) => {
+    AlertPopupHandler.open({
+      onConfirm: () => {
+        switch (carrierService) {
+          case "Areen":
+            dispatch(operations.setIsShipmentGenerating(true));
+            generateAreenShippingBills(selectedOrders, generateAreenShipment);
+            break;
+          case "BeeThere":
+            generateBeeThereShipment(
+              map(selectedOrders, (order) => order._id).join(",")
+            );
+            break;
+          case "Elite":
+            generateEliteShipment(
+              map(selectedOrders, (order) => order._id).join(",")
+            );
+            break;
+        }
+      },
+      confirmBtnText: "Yes, Proceed",
+      cancelBtnText: "No, Go Back",
+      text: (
+        <>
+          You are about to proceed with{" "}
+          <span className="font-weight-bold">{carrierService}</span> carrier
+          service. This action is irreversible.
+        </>
+      ),
+      data: {},
+      type: "success",
+      customClass: "text-xs",
+      btnSize: "sm",
+      confirmBtnBsStyle: "success",
+      cancelBtnBsStyle: "outline-success",
+    });
+  };
+
   const getGenerateShipmentButton = () => {
     if (isShipmentGenerating)
       return (
@@ -234,32 +273,16 @@ export default function Orders() {
           Generate Shipping Bill
         </DropdownToggle>
         <DropdownMenu>
-          <DropdownItem
-            onClick={() => {
-              dispatch(operations.setIsShipmentGenerating(true));
-              generateAreenShippingBills(selectedOrders, generateAreenShipment);
-            }}
-          >
+          <DropdownItem onClick={() => onGenerateShipment("Areen")}>
             Areen Shipping
           </DropdownItem>
           <DropdownItem
             disabled={some(selectedOrders, { paymentMode: "COD" })}
-            onClick={() =>
-              generateBeeThereShipment(
-                map(selectedOrders, (order) => order._id).join(",")
-              )
-            }
+            onClick={() => onGenerateShipment("BeeThere")}
           >
             BeeThere
           </DropdownItem>
-          <DropdownItem
-            disabled
-            onClick={() =>
-              generateEliteShipment(
-                map(selectedOrders, (order) => order._id).join(",")
-              )
-            }
-          >
+          <DropdownItem disabled onClick={() => onGenerateShipment("Elite")}>
             Elite
           </DropdownItem>
         </DropdownMenu>
@@ -429,6 +452,11 @@ export default function Orders() {
             ),
           },
           {
+            text: "Inv. No.",
+            dataField: "invoiceDetails.orderNo",
+            formatter: (cell) => cell || "N/A",
+          },
+          {
             text: "Cust. Name",
             dataField: "customerName",
             formatter: (cell) => cell || "N/A",
@@ -470,18 +498,13 @@ export default function Orders() {
             formatter: (cell) => cell || "N/A",
           },
           {
-            text: "Weight",
+            text: "Weight (Kg)",
             dataField: "weight",
             formatter: (cell) => cell || "N/A",
           },
           {
             text: "Store",
             dataField: "storeId.alias",
-            formatter: (cell) => cell || "N/A",
-          },
-          {
-            text: "Inv. No.",
-            dataField: "invoiceDetails.orderNo",
             formatter: (cell) => cell || "N/A",
           },
         ]}
