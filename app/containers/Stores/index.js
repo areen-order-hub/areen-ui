@@ -53,7 +53,7 @@ export default function Stores() {
         ? {
             success: true,
             confirmBtnBsStyle: "success",
-            cancelBtnBsStyle: "outline-sucess",
+            cancelBtnBsStyle: "outline-success",
           }
         : { warning: true }),
     });
@@ -110,7 +110,7 @@ export default function Stores() {
     ));
 
   return (
-    <div className="stores  mx-3 mx-md-4 ml-lg-7">
+    <div className="stores mx-3 mx-md-4 ml-lg-7">
       <Helmet>
         <title>Stores</title>
         <meta name="description" content="Description of Stores" />

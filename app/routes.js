@@ -25,6 +25,8 @@ import Dashboard from "containers/Dashboard";
 import Stores from "containers/Stores";
 import StoreForm from "containers/StoreForm";
 
+import Orders from "containers/Orders";
+
 import WhatsNew from "containers/WhatsNew";
 
 import { permissions } from "utils/permissions";
@@ -59,13 +61,13 @@ const routes = {
     //   component: Client,
     //   layout: "",
     // },
-    // {
-    //   path: "/positions",
-    //   name: "Positions",
-    //   icon: "fas fa-file-signature text-secondary",
-    //   component: Positions,
-    //   layout: "",
-    // },
+    {
+      path: "/orders",
+      name: "Orders",
+      icon: "fas fa-file-signature text-secondary",
+      component: Orders,
+      layout: "",
+    },
     // {
     //   redirect: true,
     //   path: "/add-position",
