@@ -8,11 +8,13 @@ import {
   INIT_ORDER_DETAILS,
   SET_ORDER_DETAILS,
   SET_COMMENT_DETAILS,
+  SET_IS_SHIPMENT_CANCELLING,
 } from "./constants";
 import { getDateTimeString } from "utils/dateTimeHelpers";
 
 export const initialState = {
   isLoading: true,
+  isShipmentCancelling: false,
   shopifyOrderName: "",
   shopifyOrderDate: "",
   billingAddress: {},
@@ -58,6 +60,9 @@ const orderDetailsReducer = (state = initialState, action) =>
         break;
       case INIT_ORDER_DETAILS:
         return initialState;
+      case SET_IS_SHIPMENT_CANCELLING:
+        draft.isShipmentCancelling = action.payload;
+        break;
     }
   });
 

@@ -29,3 +29,5 @@ export const paymentMode = (state) =>
 export const comments = (state) => get(state, "orderDetails.comments", []);
 
 export const isLoading = (state) => get(state, "orderDetails.isLoading", "");
+export const isShipmentCancelling = (state) =>
+  get(state, "orderDetails.isShipmentCancelling", false);

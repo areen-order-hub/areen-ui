@@ -9,6 +9,7 @@ import {
   INIT_ORDER_DETAILS,
   SET_ORDER_DETAILS,
   SET_COMMENT_DETAILS,
+  SET_IS_SHIPMENT_CANCELLING,
 } from "./constants";
 import { getOrder, cancelShipment } from "api/order";
 import { saveComment, getComments } from "api/comment";
@@ -34,6 +35,7 @@ export const fetchOrder = (orderId) => {
 export const deleteShipment = (orderId) => {
   return async (dispatch) => {
     try {
+      dispatch(setIsShipmentCancelling(true));
       await cancelShipment(orderId);
       NotificationHandler.open({
         operation: "success",
@@ -48,6 +50,8 @@ export const deleteShipment = (orderId) => {
           "Something went wrong. Please try again later",
         title: "Unable to cancel shipment",
       });
+    } finally {
+      dispatch(setIsShipmentCancelling(false));
     }
   };
 };
@@ -102,4 +106,9 @@ const setCommentDetails = (payload) => ({
 
 export const orderDetailsInit = () => ({
   type: INIT_ORDER_DETAILS,
+});
+
+const setIsShipmentCancelling = (payload = false) => ({
+  type: SET_IS_SHIPMENT_CANCELLING,
+  payload,
 });

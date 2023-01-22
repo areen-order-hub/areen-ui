@@ -19,6 +19,7 @@ import {
   FormGroup,
   Label,
   Button,
+  Spinner,
 } from "reactstrap";
 import { get, map } from "lodash";
 import Skeleton from "react-loading-skeleton";
@@ -51,6 +52,7 @@ export default function OrderDetails({ match }) {
     weight,
     paymentMode,
     comments,
+    isShipmentCancelling,
   } = useSelector((state) => ({
     shopifyOrderName: selectors.shopifyOrderName(state),
     shopifyOrderDate: selectors.shopifyOrderDate(state),
@@ -68,6 +70,7 @@ export default function OrderDetails({ match }) {
     paymentMode: selectors.paymentMode(state),
     comments: selectors.comments(state),
     isLoading: selectors.isLoading(state),
+    isShipmentCancelling: selectors.isShipmentCancelling(state),
   }));
 
   const [commentText, setCommentText] = useState("");
@@ -139,6 +142,24 @@ export default function OrderDetails({ match }) {
     });
   };
 
+  const getCancelShipmentButton = () => {
+    if (isShipmentCancelling)
+      return (
+        <Button size="sm" disabled color="danger">
+          <span className="btn-inner-icon">
+            <Spinner size="sm" className="mr-2" />
+          </span>
+          <span className="btn-inner-text">Cancelling</span>
+        </Button>
+      );
+
+    return (
+      <Button size="sm" color="danger" onClick={() => onCancelShipment()}>
+        Cancel Shipment
+      </Button>
+    );
+  };
+
   const getOrderComponent = () => {
     return (
       <Card>
@@ -148,15 +169,7 @@ export default function OrderDetails({ match }) {
               <span className="h1 mr-2 text-primary">{shopifyOrderName}</span>
             </Col>
             {carrierService && carrierStatus != "Shipment cancelled" && (
-              <Col className="text-right">
-                <Button
-                  size="sm"
-                  color="danger"
-                  onClick={() => onCancelShipment()}
-                >
-                  Cancel Shipment
-                </Button>
-              </Col>
+              <Col className="text-right">{getCancelShipmentButton()}</Col>
             )}
           </Row>
           <Row className="mx-1 mt-3 text-md text-muted">
