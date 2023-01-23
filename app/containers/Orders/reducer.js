@@ -4,12 +4,17 @@
  *
  */
 import produce from "immer";
-import { SET_ORDER_LIST, SET_STORE_LIST } from "./constants";
+import {
+  SET_ORDER_LIST,
+  SET_STORE_LIST,
+  SET_IS_SHIPMENT_GENERATING,
+} from "./constants";
 
 export const initialState = {
   orders: [],
   stores: [],
   paginationDetails: {},
+  isShipmentGenerating: false,
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -30,6 +35,10 @@ const ordersReducer = (state = initialState, action) =>
         break;
       case SET_STORE_LIST:
         draft.stores = action.payload;
+        break;
+
+      case SET_IS_SHIPMENT_GENERATING:
+        draft.isShipmentGenerating = action.payload;
         break;
     }
   });

@@ -4,7 +4,11 @@
  *
  */
 
-import { SET_ORDER_LIST, SET_STORE_LIST } from "./constants";
+import {
+  SET_ORDER_LIST,
+  SET_STORE_LIST,
+  SET_IS_SHIPMENT_GENERATING,
+} from "./constants";
 import {
   paginateOrders,
   triggerProductSync,
@@ -73,6 +77,7 @@ export const syncOrders = () => {
 export const generateAreenShipment = (ordersString, pageParams) => {
   return async (dispatch) => {
     try {
+      dispatch(setIsShipmentGenerating(true));
       await createAreenShipment({ ordersString });
       NotificationHandler.open({
         operation: "success",
@@ -87,6 +92,8 @@ export const generateAreenShipment = (ordersString, pageParams) => {
           "Something went wrong. Please try again later",
         title: "Unable to create Areen Shipment",
       });
+    } finally {
+      dispatch(setIsShipmentGenerating(false));
     }
   };
 };
@@ -94,6 +101,7 @@ export const generateAreenShipment = (ordersString, pageParams) => {
 export const generateBeeThereShipment = (ordersString, pageParams) => {
   return async (dispatch) => {
     try {
+      dispatch(setIsShipmentGenerating(true));
       await createBeeThereShipment({ ordersString });
       NotificationHandler.open({
         operation: "success",
@@ -109,6 +117,8 @@ export const generateBeeThereShipment = (ordersString, pageParams) => {
           "Something went wrong. Please try again later",
         title: "Unable to create BeeThere Shipment",
       });
+    } finally {
+      dispatch(setIsShipmentGenerating(false));
     }
   };
 };
@@ -116,6 +126,7 @@ export const generateBeeThereShipment = (ordersString, pageParams) => {
 export const generateEliteShipment = (ordersString, pageParams) => {
   return async (dispatch) => {
     try {
+      dispatch(setIsShipmentGenerating(true));
       await createEliteShipment({ ordersString });
       NotificationHandler.open({
         operation: "success",
@@ -131,6 +142,8 @@ export const generateEliteShipment = (ordersString, pageParams) => {
           "Something went wrong. Please try again later",
         title: "Unable to create BeeThere Shipment",
       });
+    } finally {
+      dispatch(setIsShipmentGenerating(false));
     }
   };
 };
@@ -153,5 +166,10 @@ const setOrderList = (payload = []) => ({
 
 const setStoresList = (payload = []) => ({
   type: SET_STORE_LIST,
+  payload,
+});
+
+export const setIsShipmentGenerating = (payload = false) => ({
+  type: SET_IS_SHIPMENT_GENERATING,
   payload,
 });

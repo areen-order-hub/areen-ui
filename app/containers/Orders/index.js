@@ -10,7 +10,7 @@ import { Helmet } from "react-helmet";
 import {
   Row,
   Col,
-  Button,
+  Spinner,
   ButtonDropdown,
   DropdownToggle,
   DropdownMenu,
@@ -55,10 +55,16 @@ export default function Orders() {
   const [shippingDropDown, setShippingDropDown] = useState(false);
   const toggleShippingDropDown = () => setShippingDropDown(!shippingDropDown);
 
-  const { orders, paginationDetails, stores } = useSelector((state) => ({
+  const {
+    orders,
+    paginationDetails,
+    stores,
+    isShipmentGenerating,
+  } = useSelector((state) => ({
     orders: selectors.orders(state),
     paginationDetails: selectors.paginationDetails(state),
     stores: selectors.stores(state),
+    isShipmentGenerating: selectors.isShipmentGenerating(state),
   }));
 
   const [selectedStores, setSelectedStores] = useState([]);
@@ -196,6 +202,71 @@ export default function Orders() {
     },
   };
 
+  const getGenerateShipmentButton = () => {
+    if (isShipmentGenerating)
+      return (
+        <ButtonDropdown
+          isOpen={shippingDropDown}
+          toggle={toggleShippingDropDown}
+          className="mb-2"
+          title="Generate Shipping Bill"
+        >
+          <DropdownToggle disabled color="primary" caret>
+            <span className="btn-inner-icon">
+              <Spinner size="sm" className="mr-2" />
+            </span>
+            <span className="btn-inner-text">Generating</span>
+          </DropdownToggle>
+        </ButtonDropdown>
+      );
+    return (
+      <ButtonDropdown
+        isOpen={shippingDropDown}
+        toggle={toggleShippingDropDown}
+        className="mb-2"
+        title="Generate Shipping Bill"
+      >
+        <DropdownToggle
+          disabled={isEmpty(selectedOrders)}
+          color="primary"
+          caret
+        >
+          Generate Shipping Bill
+        </DropdownToggle>
+        <DropdownMenu>
+          <DropdownItem
+            onClick={() => {
+              dispatch(operations.setIsShipmentGenerating(true));
+              generateAreenShippingBills(selectedOrders, generateAreenShipment);
+            }}
+          >
+            Areen Shipping
+          </DropdownItem>
+          <DropdownItem
+            disabled={some(selectedOrders, { paymentMode: "COD" })}
+            onClick={() =>
+              generateBeeThereShipment(
+                map(selectedOrders, (order) => order._id).join(",")
+              )
+            }
+          >
+            BeeThere
+          </DropdownItem>
+          <DropdownItem
+            disabled
+            onClick={() =>
+              generateEliteShipment(
+                map(selectedOrders, (order) => order._id).join(",")
+              )
+            }
+          >
+            Elite
+          </DropdownItem>
+        </DropdownMenu>
+      </ButtonDropdown>
+    );
+  };
+
   return (
     <div className="orders mx-3 mx-md-4 ml-lg-7">
       <Helmet>
@@ -277,52 +348,7 @@ export default function Orders() {
           />
         </Col>
         <div className="d-flex align-items-right ml-auto mr-3">
-          <ButtonDropdown
-            isOpen={shippingDropDown}
-            toggle={toggleShippingDropDown}
-            className="mb-2"
-            title="Generate Shipping Bill"
-          >
-            <DropdownToggle
-              disabled={isEmpty(selectedOrders)}
-              color="primary"
-              caret
-            >
-              Generate Shipping Bill
-            </DropdownToggle>
-            <DropdownMenu>
-              <DropdownItem
-                onClick={() =>
-                  generateAreenShippingBills(
-                    selectedOrders,
-                    generateAreenShipment
-                  )
-                }
-              >
-                Areen Shipping
-              </DropdownItem>
-              <DropdownItem
-                disabled={some(selectedOrders, { paymentMode: "COD" })}
-                onClick={() =>
-                  generateBeeThereShipment(
-                    map(selectedOrders, (order) => order._id).join(",")
-                  )
-                }
-              >
-                BeeThere
-              </DropdownItem>
-              <DropdownItem
-                disabled
-                onClick={() =>
-                  generateEliteShipment(
-                    map(selectedOrders, (order) => order._id).join(",")
-                  )
-                }
-              >
-                Elite
-              </DropdownItem>
-            </DropdownMenu>
-          </ButtonDropdown>
+          {getGenerateShipmentButton()}
           <ButtonDropdown
             isOpen={bulkDropdownOpen}
             toggle={toggleBulkDropdown}
