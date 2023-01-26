@@ -1,7 +1,7 @@
 import { get } from "lodash";
 
-export const shopifyDisplayId = (state) =>
-  get(state, "orderDetails.shopifyDisplayId", "");
+export const shopifyOrderName = (state) =>
+  get(state, "orderDetails.shopifyOrderName", "");
 export const shopifyOrderDate = (state) =>
   get(state, "orderDetails.shopifyOrderDate", "");
 export const syncedAt = (state) => get(state, "orderDetails.syncedAt", "");

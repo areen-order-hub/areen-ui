@@ -13,7 +13,7 @@ import { getDateTimeString } from "utils/dateTimeHelpers";
 
 export const initialState = {
   isLoading: true,
-  shopifyDisplayId: "",
+  shopifyOrderName: "",
   shopifyOrderDate: "",
   billingAddress: {},
   shippingAddress: {},
@@ -35,7 +35,7 @@ const orderDetailsReducer = (state = initialState, action) =>
   produce(state, (draft) => {
     switch (action.type) {
       case SET_ORDER_DETAILS:
-        draft.shopifyDisplayId = action.payload.shopifyDisplayId;
+        draft.shopifyOrderName = action.payload.shopifyOrderName;
         draft.shopifyOrderDate = getDateTimeString(
           action.payload.shopifyOrderDate
         );

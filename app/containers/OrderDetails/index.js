@@ -35,7 +35,7 @@ export default function OrderDetails({ match }) {
   const dispatch = useDispatch();
   const {
     isLoading,
-    shopifyDisplayId,
+    shopifyOrderName,
     shopifyOrderDate,
     syncedAt,
     storeDetails,
@@ -51,7 +51,7 @@ export default function OrderDetails({ match }) {
     paymentMode,
     comments,
   } = useSelector((state) => ({
-    shopifyDisplayId: selectors.shopifyDisplayId(state),
+    shopifyOrderName: selectors.shopifyOrderName(state),
     shopifyOrderDate: selectors.shopifyOrderDate(state),
     syncedAt: selectors.syncedAt(state),
     storeDetails: selectors.storeDetails(state),
@@ -129,7 +129,7 @@ export default function OrderDetails({ match }) {
         <CardHeader>
           <Row className="px-1">
             <Col xs="12" md="10" className="align-items-center">
-              <span className="h1 mr-2 text-primary">#{shopifyDisplayId}</span>
+              <span className="h1 mr-2 text-primary">{shopifyOrderName}</span>
             </Col>
           </Row>
           <Row className="mx-1 mt-3 text-md text-muted">
