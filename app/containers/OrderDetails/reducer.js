@@ -22,8 +22,9 @@ export const initialState = {
   invoiceDetails: {},
   syncedAt: "",
   storeDetails: {},
-  financialStatus: "",
-  fulfillmentStatus: "",
+  carrierService: "",
+  carrierStatus: "",
+  carrierServiceId: "",
   weight: 0,
   paymentMode: "",
   comments: [],
@@ -45,8 +46,9 @@ const orderDetailsReducer = (state = initialState, action) =>
         draft.shopifyOrderItems = action.payload.shopifyOrderItems;
         draft.shopifyPrice = action.payload.shopifyPrice;
         draft.invoiceDetails = action.payload.invoiceDetails;
-        draft.financialStatus = action.payload.financialStatus;
-        draft.fulfillmentStatus = action.payload.fulfillmentStatus;
+        draft.carrierService = action.payload.carrierService;
+        draft.carrierStatus = action.payload.carrierStatus;
+        draft.carrierServiceId = action.payload.carrierServiceId;
         draft.weight = action.payload.weight;
         draft.paymentMode = action.payload.paymentMode;
         draft.isLoading = false;

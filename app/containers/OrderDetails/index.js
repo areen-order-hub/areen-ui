@@ -25,10 +25,6 @@ import Skeleton from "react-loading-skeleton";
 import reducer from "./reducer";
 import history from "utils/history";
 import RtInput from "../../components/RtInput/index";
-import {
-  getFinancialStatusBadge,
-  getFulfillmentStatusBadge,
-} from "utils/componentHelpers";
 import { parseDate } from "utils/dateTimeHelpers";
 import * as operations from "./actions";
 import * as selectors from "./selectors";
@@ -48,8 +44,9 @@ export default function OrderDetails({ match }) {
     shopifyOrderItems,
     shopifyPrice,
     invoiceDetails,
-    financialStatus,
-    fulfillmentStatus,
+    carrierService,
+    carrierStatus,
+    carrierServiceId,
     weight,
     paymentMode,
     comments,
@@ -63,8 +60,9 @@ export default function OrderDetails({ match }) {
     shopifyOrderItems: selectors.shopifyOrderItems(state),
     shopifyPrice: selectors.shopifyPrice(state),
     invoiceDetails: selectors.invoiceDetails(state),
-    financialStatus: selectors.financialStatus(state),
-    fulfillmentStatus: selectors.fulfillmentStatus(state),
+    carrierService: selectors.carrierService(state),
+    carrierStatus: selectors.carrierStatus(state),
+    carrierServiceId: selectors.carrierServiceId(state),
     weight: selectors.weight(state),
     paymentMode: selectors.paymentMode(state),
     comments: selectors.comments(state),
@@ -132,10 +130,6 @@ export default function OrderDetails({ match }) {
           <Row className="px-1">
             <Col xs="12" md="10" className="align-items-center">
               <span className="h1 mr-2 text-primary">#{shopifyDisplayId}</span>
-              <span>{getFinancialStatusBadge(financialStatus)}</span>
-              <span className="ml-1">
-                {getFulfillmentStatusBadge(fulfillmentStatus)}
-              </span>
             </Col>
           </Row>
           <Row className="mx-1 mt-3 text-md text-muted">
@@ -158,6 +152,29 @@ export default function OrderDetails({ match }) {
               {get(storeDetails, "name", "--")}
             </div>
           </Row>
+        </CardHeader>
+        <CardHeader>
+          <div className="mb-3">
+            <span className="h3 text-muted">Carrier Details</span>
+          </div>
+          <p>
+            <span className="text-muted">Service: </span>
+            <span className="text-primary font-weight-bold">
+              {carrierService || "N/A"}
+            </span>
+          </p>
+          <p>
+            <span className="text-muted">Status: </span>
+            <span className="text-primary font-weight-bold">
+              {carrierStatus || "N/A"}
+            </span>
+          </p>
+          <p>
+            <span className="text-muted">Carrier Id: </span>
+            <span className="text-primary font-weight-bold">
+              {carrierServiceId || "N/A"}
+            </span>
+          </p>
         </CardHeader>
         <CardHeader>
           <div className="mb-3">

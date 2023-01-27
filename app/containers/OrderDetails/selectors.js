@@ -17,10 +17,12 @@ export const shopifyPrice = (state) =>
   get(state, "orderDetails.shopifyPrice", "");
 export const invoiceDetails = (state) =>
   get(state, "orderDetails.invoiceDetails", {});
-export const financialStatus = (state) =>
-  get(state, "orderDetails.financialStatus", "");
-export const fulfillmentStatus = (state) =>
-  get(state, "orderDetails.fulfillmentStatus", "");
+export const carrierService = (state) =>
+  get(state, "orderDetails.carrierService", "");
+export const carrierStatus = (state) =>
+  get(state, "orderDetails.carrierStatus", "");
+export const carrierServiceId = (state) =>
+  get(state, "orderDetails.carrierServiceId", "");
 export const weight = (state) => get(state, "orderDetails.weight", 0);
 export const paymentMode = (state) =>
   get(state, "orderDetails.paymentMode", "");
