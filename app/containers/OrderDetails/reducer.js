@@ -20,6 +20,8 @@ export const initialState = {
   storeDetails: {},
   financialStatus: "",
   fulfillmentStatus: "",
+  weight: 0,
+  paymentMode: "",
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -40,6 +42,8 @@ const orderDetailsReducer = (state = initialState, action) =>
         draft.invoiceDetails = action.payload.invoiceDetails;
         draft.financialStatus = action.payload.financialStatus;
         draft.fulfillmentStatus = action.payload.fulfillmentStatus;
+        draft.weight = action.payload.weight;
+        draft.paymentMode = action.payload.paymentMode;
         draft.isLoading = false;
         break;
     }

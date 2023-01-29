@@ -37,6 +37,8 @@ export default function OrderDetails({ match }) {
     invoiceDetails,
     financialStatus,
     fulfillmentStatus,
+    weight,
+    paymentMode,
   } = useSelector((state) => ({
     shopifyDisplayId: selectors.shopifyDisplayId(state),
     shopifyOrderDate: selectors.shopifyOrderDate(state),
@@ -49,6 +51,8 @@ export default function OrderDetails({ match }) {
     invoiceDetails: selectors.invoiceDetails(state),
     financialStatus: selectors.financialStatus(state),
     fulfillmentStatus: selectors.fulfillmentStatus(state),
+    weight: selectors.weight(state),
+    paymentMode: selectors.paymentMode(state),
     isLoading: selectors.isLoading(state),
   }));
 
@@ -130,6 +134,16 @@ export default function OrderDetails({ match }) {
           <div className="mb-3">
             <span className="h3 text-muted">Order Details</span>
           </div>
+          <p>
+            <span className="text-muted">Weight: </span>
+            <span className="text-primary font-weight-bold">
+              {weight || 0} KG
+            </span>
+          </p>
+          <p>
+            <span className="text-muted">Payment Mode: </span>
+            <span className="text-primary font-weight-bold">{paymentMode}</span>
+          </p>
           <p>
             <span className="text-muted">Shopify Price: </span>
             <span className="text-primary font-weight-bold">

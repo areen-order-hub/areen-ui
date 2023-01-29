@@ -21,5 +21,8 @@ export const financialStatus = (state) =>
   get(state, "orderDetails.financialStatus", "");
 export const fulfillmentStatus = (state) =>
   get(state, "orderDetails.fulfillmentStatus", "");
+export const weight = (state) => get(state, "orderDetails.weight", 0);
+export const paymentMode = (state) =>
+  get(state, "orderDetails.paymentMode", "");
 
 export const isLoading = (state) => get(state, "orderDetails.isLoading", "");
