@@ -118,3 +118,20 @@ exports.createBeeThereShipment = async (req, res) => {
     res.status(err.status).json(err.message);
   }
 };
+
+exports.createEliteShipment = async (req, res) => {
+  try {
+    const url = `/v1/order/carrier/elite`;
+    const data = await Request(
+      {
+        url,
+        method: "POST",
+        data: req.body,
+      },
+      req.headers
+    );
+    res.json(data);
+  } catch (err) {
+    res.status(err.status).json(err.message);
+  }
+};

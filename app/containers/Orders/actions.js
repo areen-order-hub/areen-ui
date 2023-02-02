@@ -10,8 +10,9 @@ import {
   triggerProductSync,
   triggerInvoiceSync,
   triggerOrderSync,
-  createBeeThereShipment,
   createAreenShipment,
+  createBeeThereShipment,
+  createEliteShipment,
 } from "api/order";
 import { getStores } from "api/store";
 import NotificationHandler from "../../components/Notifications/NotificationHandler";
@@ -90,14 +91,37 @@ export const generateAreenShipment = (ordersString, pageParams) => {
   };
 };
 
-export const generateBeeThereShipment = (orders) => {
+export const generateBeeThereShipment = (ordersString, pageParams) => {
   return async (dispatch) => {
     try {
-      await createBeeThereShipment(orders);
+      await createBeeThereShipment({ ordersString });
       NotificationHandler.open({
         operation: "success",
         title: "Shipment Created Successfully",
       });
+      dispatch(fetchOrders(pageParams));
+    } catch (err) {
+      console.error(err);
+      NotificationHandler.open({
+        operation: "failure",
+        message:
+          get(err, "response.data", null) ||
+          "Something went wrong. Please try again later",
+        title: "Unable to create BeeThere Shipment",
+      });
+    }
+  };
+};
+
+export const generateEliteShipment = (ordersString, pageParams) => {
+  return async (dispatch) => {
+    try {
+      await createEliteShipment({ ordersString });
+      NotificationHandler.open({
+        operation: "success",
+        title: "Shipment Created Successfully",
+      });
+      dispatch(fetchOrders(pageParams));
     } catch (err) {
       console.error(err);
       NotificationHandler.open({

@@ -27,7 +27,7 @@ import Table from "components/Table";
 import ReactDatetime from "react-datetime";
 import { useInjectReducer } from "utils/injectReducer";
 import moment from "moment-timezone";
-import { isEmpty, get, map, filter } from "lodash";
+import { isEmpty, get, map, filter, some } from "lodash";
 import {
   getStoreFilter,
   getPaymentFilter,
@@ -77,6 +77,20 @@ export default function Orders() {
   const generateAreenShipment = (ordersString) => {
     dispatch(
       operations.generateAreenShipment(ordersString, { page: currentPage })
+    );
+    setSelectedOrders([]);
+  };
+
+  const generateBeeThereShipment = (ordersString) => {
+    dispatch(
+      operations.generateBeeThereShipment(ordersString, { page: currentPage })
+    );
+    setSelectedOrders([]);
+  };
+
+  const generateEliteShipment = (ordersString) => {
+    dispatch(
+      operations.generateEliteShipment(ordersString, { page: currentPage })
     );
     setSelectedOrders([]);
   };
@@ -287,8 +301,26 @@ export default function Orders() {
               >
                 Areen Shipping
               </DropdownItem>
-              <DropdownItem disabled>BeeThere</DropdownItem>
-              <DropdownItem disabled>Elite</DropdownItem>
+              <DropdownItem
+                disabled={some(selectedOrders, { paymentMode: "COD" })}
+                onClick={() =>
+                  generateBeeThereShipment(
+                    map(selectedOrders, (order) => order._id).join(",")
+                  )
+                }
+              >
+                BeeThere
+              </DropdownItem>
+              <DropdownItem
+                disabled
+                onClick={() =>
+                  generateEliteShipment(
+                    map(selectedOrders, (order) => order._id).join(",")
+                  )
+                }
+              >
+                Elite
+              </DropdownItem>
             </DropdownMenu>
           </ButtonDropdown>
           <ButtonDropdown

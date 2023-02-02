@@ -36,6 +36,14 @@ export const triggerOrderSync = async () => {
   });
 };
 
+export const createAreenShipment = async (data) => {
+  return await Request({
+    url: `/api/order/carrier/areen`,
+    method: "POST",
+    data,
+  });
+};
+
 export const createBeeThereShipment = async (data) => {
   return await Request({
     url: `/api/order/carrier/beeThere`,
@@ -44,9 +52,9 @@ export const createBeeThereShipment = async (data) => {
   });
 };
 
-export const createAreenShipment = async (data) => {
+export const createEliteShipment = async (data) => {
   return await Request({
-    url: `/api/order/carrier/areen`,
+    url: `/api/order/carrier/elite`,
     method: "POST",
     data,
   });
