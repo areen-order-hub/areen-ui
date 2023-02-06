@@ -6,7 +6,11 @@ export const userRole = (cookie) => _get(cookie, "user.role", "");
 export const isCountLoading = (state) =>
   _get(state, "dashboard.isCountLoading", true);
 export const noOfStores = (state) => _get(state, "dashboard.noOfStores", 0);
+export const noOfActiveStores = (state) =>
+  _get(state, "dashboard.noOfActiveStores", 0);
 export const noOfOrders = (state) => _get(state, "dashboard.noOfOrders", 0);
+export const noOfUnfulfilledOrders = (state) =>
+  _get(state, "dashboard.noOfUnfulfilledOrders", 0);
 export const noOfPositions = (state) =>
   _get(state, "dashboard.noOfPositions", 0);
 export const noOfRecruiters = (state) =>

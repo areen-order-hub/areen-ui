@@ -39,10 +39,18 @@ export default function Dashboard() {
   const dispatch = useDispatch();
   const [cookie] = useCookies(["user"]);
 
-  const { isCountLoading, noOfStores, noOfOrders } = useSelector((state) => ({
+  const {
+    isCountLoading,
+    noOfStores,
+    noOfActiveStores,
+    noOfOrders,
+    noOfUnfulfilledOrders,
+  } = useSelector((state) => ({
     isCountLoading: selectors.isCountLoading(state),
     noOfStores: selectors.noOfStores(state),
+    noOfActiveStores: selectors.noOfActiveStores(state),
     noOfOrders: selectors.noOfOrders(state),
+    noOfUnfulfilledOrders: selectors.noOfUnfulfilledOrders(state),
   }));
 
   React.useEffect(() => {
@@ -59,12 +67,20 @@ export default function Dashboard() {
         <h1 className="ml-2">Welcome {selectors.userName(cookie)}!</h1>
       </Row>
       <Row>
-        <Col md="4">
+        <Col md="6">
           <p className="text-primary font-weight-bold mb-1">
             Quick Stats{" "}
             <span className="text-sm text-muted">(Total Count)</span>
           </p>
-          <CountComponent {...{ isCountLoading, noOfStores, noOfOrders }} />
+          <CountComponent
+            {...{
+              isCountLoading,
+              noOfStores,
+              noOfActiveStores,
+              noOfOrders,
+              noOfUnfulfilledOrders,
+            }}
+          />
         </Col>
       </Row>
     </div>
