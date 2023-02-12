@@ -59,11 +59,22 @@ export default function Stores() {
     });
   };
 
+  const onClick = (id) =>
+    history.push({
+      pathname: `/store/${id}`,
+      state: { id },
+    });
+
   const getStoreData = () =>
     stores.map(({ _id, name, alias, isActive }) => (
       <React.Fragment key={_id}>
         <tr>
-          <td className="hover-pointer text-primary">{name}</td>
+          <td
+            className="hover-pointer text-primary"
+            onClick={() => onClick(_id)}
+          >
+            {name}
+          </td>
           <td>
             <Badge>{alias}</Badge>
           </td>

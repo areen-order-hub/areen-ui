@@ -24,6 +24,7 @@ import Dashboard from "containers/Dashboard";
 
 import Stores from "containers/Stores";
 import StoreForm from "containers/StoreForm";
+import StoreDetails from "containers/StoreDetails";
 
 import Orders from "containers/Orders";
 
@@ -52,6 +53,13 @@ const routes = {
       path: "/store-form",
       name: "StoreForm",
       component: StoreForm,
+      layout: "",
+    },
+    {
+      redirect: true,
+      path: "/store/:id",
+      name: "Store",
+      component: StoreDetails,
       layout: "",
     },
     // {
