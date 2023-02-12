@@ -8,6 +8,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Helmet } from "react-helmet";
 import { Card, CardHeader, CardBody, Row, Col, Badge } from "reactstrap";
+import AlertPopupHandler from "components/AlertPopup/AlertPopupHandler";
 import Skeleton from "react-loading-skeleton";
 import { useInjectReducer } from "utils/injectReducer";
 import reducer from "./reducer";
@@ -75,6 +76,48 @@ export default function StoreDetails({ match }) {
     );
   };
 
+  const onStoreStatusChange = (id, isActive) => {
+    AlertPopupHandler.open({
+      onConfirm: () =>
+        dispatch(
+          operations.updateStoreStatus(id, {
+            isActive,
+          })
+        ),
+      confirmBtnText: isActive ? "Activate" : "Deactivate",
+      text: `You are about to ${
+        isActive ? "activate" : "deactivate"
+      } this store. Do you want to continue?`,
+      data: {},
+      customClass: "text-xs",
+      btnSize: "sm",
+      ...(isActive
+        ? {
+            success: true,
+            confirmBtnBsStyle: "success",
+            cancelBtnBsStyle: "outline-success",
+          }
+        : { warning: true }),
+    });
+  };
+
+  const getOptions = () => (
+    <>
+      <Col className="text-right">
+        <i
+          className="far fa-edit text-muted hover-pointer hover-color-primary mr-2"
+          onClick={() => history.push(`/store-form?id=${match.params.id}`)}
+        />
+        <i
+          className={`fas ${
+            isActive ? "fa-ban" : "fa-check"
+          } text-muted hover-pointer hover-color-danger`}
+          onClick={() => onStoreStatusChange(match.params.id, !isActive)}
+        />
+      </Col>
+    </>
+  );
+
   const getStoreComponent = () => {
     return (
       <Card>
@@ -88,6 +131,7 @@ export default function StoreDetails({ match }) {
                 </Badge>
               </span>
             </Col>
+            {getOptions()}
           </Row>
           <Row className="mx-1 mt-3 text-md text-muted">
             <div className="mr-3" title="Alias">

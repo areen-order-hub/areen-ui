@@ -111,7 +111,7 @@ export default function Stores() {
                 onClick={() => onStoreStatusChange(_id, true)}
               >
                 <span className="btn-inner--icon">
-                  <i className="fas fa-sign-in-alt" />
+                  <i className="fas fa-check" />
                 </span>
               </Button>
             )}
