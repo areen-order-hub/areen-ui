@@ -19,7 +19,6 @@ import {
   Label,
   InputGroup,
   Input,
-  InputGroupAddon,
   InputGroupText,
 } from "reactstrap";
 import reducer from "./reducer";

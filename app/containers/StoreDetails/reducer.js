@@ -23,7 +23,7 @@ const storeDetailsReducer = (state = initialState, action) =>
       case SET_STORE_DETAILS:
         draft.name = action.payload.name;
         draft.alias = action.payload.alias;
-        draft.shopifyURL = action.payload.shopifyURL;
+        draft.shopifyURL = `https://${action.payload.shopifyURL}.myshopify.com`;
         draft.createdAt = parseDate(action.payload.createdAt, "DD MMM YYYY");
         draft.isActive = action.payload.isActive;
         draft.isLoading = false;
