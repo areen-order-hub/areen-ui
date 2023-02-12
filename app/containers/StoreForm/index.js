@@ -9,7 +9,19 @@ import { useSelector, useDispatch } from "react-redux";
 import qs from "query-string";
 import { Helmet } from "react-helmet";
 import { useInjectReducer } from "utils/injectReducer";
-import { Row, Col, Button, Spinner, Form, FormGroup, Label } from "reactstrap";
+import {
+  Row,
+  Col,
+  Button,
+  Spinner,
+  Form,
+  FormGroup,
+  Label,
+  InputGroup,
+  Input,
+  InputGroupAddon,
+  InputGroupText,
+} from "reactstrap";
 import reducer from "./reducer";
 import * as operations from "./actions";
 import * as selectors from "./selectors";
@@ -161,15 +173,21 @@ export default function StoreForm() {
         </FormGroup>
         <FormGroup row>
           <Label sm={2}>Shopify URL</Label>
-          <Col sm={6}>
-            <RtInput
-              onChange={(e) => dispatch(operations.changeShopifyUrl(e))}
-              type="text"
-              placeholder="Eg: www.mystore.shopify.net"
-              error={validations}
-              name="shopifyURL"
-              value={shopifyURL}
-            />
+          <Col sm={6} className="d-flex">
+            <InputGroup className="rt-input input-group-merge input-group-alternative">
+              <InputGroupText addonType="prepend">https://</InputGroupText>
+              <Input
+                onChange={(e) =>
+                  dispatch(operations.changeShopifyUrl(e.target.value))
+                }
+                type="text"
+                placeholder="Eg: mystore"
+                error={validations}
+                name="shopifyURL"
+                value={shopifyURL}
+              />
+              <InputGroupText addonType="append">.myshopify.com</InputGroupText>
+            </InputGroup>
           </Col>
         </FormGroup>
         <FormGroup row>
