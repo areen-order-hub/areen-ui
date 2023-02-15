@@ -15,8 +15,8 @@ import {
 export const initialState = {
   isCountLoading: true,
   posts: [],
-  noOfClients: 0,
-  noOfCandidates: 0,
+  noOfStores: 0,
+  noOfOrders: 0,
   noOfPositions: 0,
   noOfRecruiters: 0,
   noOfShortlisted: 0,
@@ -38,14 +38,8 @@ const dashboardReducer = (state = initialState, action) =>
         draft.isCountLoading = action.payload;
         break;
       case SET_DASHBOARD_DETAILS:
-        draft.noOfClients = action.payload.noOfClients;
-        draft.noOfCandidates = action.payload.noOfCandidates;
-        draft.noOfPositions = action.payload.noOfPositions;
-        draft.noOfRecruiters = action.payload.noOfRecruiters;
-        draft.noOfShortlisted = action.payload.noOfShortlisted;
-        draft.noOfSelected = action.payload.noOfSelected;
-        draft.noOfOffered = action.payload.noOfOffered;
-        draft.noOfJoined = action.payload.noOfJoined;
+        draft.noOfStores = action.payload.noOfStores;
+        draft.noOfOrders = action.payload.noOfOrders;
         draft.isCountLoading = false;
         break;
       case SET_INTERVIEW_DETAILS:

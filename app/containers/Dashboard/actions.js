@@ -13,13 +13,13 @@ import {
 } from "./constants";
 import { downloadFile, getDashboardDetails } from "./dashboardApi";
 import { getInterviews } from "api/interview";
-import { getEvents } from "api/commonDetail";
+import { getEvents, getDashboardStats } from "api/commonDetail";
 import NotificationHandler from "../../components/Notifications/NotificationHandler";
 
-export const getCount = () => {
+export const fetchDashboardStats = () => {
   return async (dispatch) => {
     try {
-      const { data } = await getDashboardDetails();
+      const { data } = await getDashboardStats();
       dispatch(updateDashboardDetails(data));
     } catch (err) {
       dispatch(updateDashboardDetails());

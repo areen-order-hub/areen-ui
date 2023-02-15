@@ -39,43 +39,15 @@ export default function Dashboard() {
   const dispatch = useDispatch();
   const [cookie] = useCookies(["user"]);
 
-  const {
-    isCountLoading,
-    noOfClients,
-    noOfCandidates,
-    noOfPositions,
-    noOfRecruiters,
-    noOfShortlisted,
-    noOfSelected,
-    noOfOffered,
-    noOfJoined,
-    isInterviewsLoading,
-    todaysInterviews,
-    tomorrowsInterviews,
-    isEventsLoading,
-    events,
-  } = useSelector((state) => ({
+  const { isCountLoading, noOfStores, noOfOrders } = useSelector((state) => ({
     isCountLoading: selectors.isCountLoading(state),
-    noOfClients: selectors.noOfClients(state),
-    noOfCandidates: selectors.noOfCandidates(state),
-    noOfPositions: selectors.noOfPositions(state),
-    noOfRecruiters: selectors.noOfRecruiters(state),
-    noOfShortlisted: selectors.noOfShortlisted(state),
-    noOfSelected: selectors.noOfSelected(state),
-    noOfOffered: selectors.noOfOffered(state),
-    noOfJoined: selectors.noOfJoined(state),
-    isInterviewsLoading: selectors.isInterviewsLoading(state),
-    todaysInterviews: selectors.todaysInterviews(state),
-    tomorrowsInterviews: selectors.tomorrowsInterviews(state),
-    isEventsLoading: selectors.isEventsLoading(state),
-    events: selectors.events(state),
+    noOfStores: selectors.noOfStores(state),
+    noOfOrders: selectors.noOfOrders(state),
   }));
 
-  // React.useEffect(() => {
-  //   dispatch(operations.getCount());
-  //   dispatch(operations.fetchInterviews());
-  //   dispatch(operations.fetchEvents());
-  // }, []);
+  React.useEffect(() => {
+    dispatch(operations.fetchDashboardStats());
+  }, []);
 
   return (
     <div className="dashboard mx-3 mx-md-4 ml-lg-7">
@@ -85,6 +57,15 @@ export default function Dashboard() {
       </Helmet>
       <Row className="mt-3">
         <h1 className="ml-2">Welcome {selectors.userName(cookie)}!</h1>
+      </Row>
+      <Row>
+        <Col md="4">
+          <p className="text-primary font-weight-bold mb-1">
+            Quick Stats{" "}
+            <span className="text-sm text-muted">(Total Count)</span>
+          </p>
+          <CountComponent {...{ isCountLoading, noOfStores, noOfOrders }} />
+        </Col>
       </Row>
     </div>
   );
