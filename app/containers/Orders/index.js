@@ -11,6 +11,7 @@ import { Row, Col, Table, Badge } from "reactstrap";
 import PaginationDetails from "components/PaginationDetails";
 import { useInjectReducer } from "utils/injectReducer";
 import reducer from "./reducer";
+import history from "../../utils/history";
 import { parseDate } from "../../utils/dateTimeHelpers";
 import * as operations from "./actions";
 import * as selectors from "./selectors";
@@ -28,6 +29,12 @@ export default function Orders() {
     dispatch(operations.fetchOrders({ page: 1 }));
   }, []);
 
+  const onClick = (id) =>
+    history.push({
+      pathname: `/order/${id}`,
+      state: { id },
+    });
+
   const getOrderData = () =>
     orders.map(
       ({
@@ -39,7 +46,12 @@ export default function Orders() {
       }) => (
         <React.Fragment key={_id}>
           <tr>
-            <td className="hover-pointer text-primary">{shopifyDisplayId}</td>
+            <td
+              className="hover-pointer text-primary"
+              onClick={() => onClick(_id)}
+            >
+              {shopifyDisplayId}
+            </td>
             <td>
               <Badge>{status}</Badge>
             </td>

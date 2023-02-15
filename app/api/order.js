@@ -7,3 +7,10 @@ export const paginateOrders = async (params) => {
     params,
   });
 };
+
+export const getOrder = async (id) => {
+  return await Request({
+    url: `/api/order/${id}`,
+    method: "GET",
+  });
+};

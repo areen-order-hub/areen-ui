@@ -15,3 +15,21 @@ exports.paginate = async (req, res) => {
     res.status(err.status).json(err.message);
   }
 };
+
+exports.fetch = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const url = `/v1/order/${orderId}`;
+
+    const order = await Request(
+      {
+        url,
+        method: "GET",
+      },
+      req.headers
+    );
+    res.json(order);
+  } catch (err) {
+    res.status(err.status).json(err.message);
+  }
+};

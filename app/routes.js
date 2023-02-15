@@ -27,6 +27,7 @@ import StoreForm from "containers/StoreForm";
 import StoreDetails from "containers/StoreDetails";
 
 import Orders from "containers/Orders";
+import OrderDetails from "containers/OrderDetails";
 
 import WhatsNew from "containers/WhatsNew";
 
@@ -60,6 +61,13 @@ const routes = {
       path: "/store/:id",
       name: "Store",
       component: StoreDetails,
+      layout: "",
+    },
+    {
+      redirect: true,
+      path: "/order/:id",
+      name: "Order",
+      component: OrderDetails,
       layout: "",
     },
     // {

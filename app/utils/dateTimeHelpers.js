@@ -1,11 +1,21 @@
 import moment from "moment-timezone";
 
-export const parseDateTime = (dateTime, dateFormat = "L") => {
+const DEFAULT_DATE_FORMAT = "DD MMM YYYY";
+
+export const parseDateTime = (dateTime, dateFormat = DEFAULT_DATE_FORMAT) => {
   const date = moment(dateTime);
   return {
     date: date.format(dateFormat),
     time: date.format("LT"),
   };
+};
+
+export const getDateTimeString = (
+  dateTime,
+  dateFormat = DEFAULT_DATE_FORMAT
+) => {
+  const date = moment(dateTime);
+  return `${date.format(dateFormat)} ${date.format("LT")}`;
 };
 
 export const getDayFromNumber = (dayNumber) => {
