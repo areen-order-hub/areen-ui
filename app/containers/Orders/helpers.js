@@ -17,3 +17,16 @@ export const getPaymentFilter = () => {
     },
   ];
 };
+
+export const getFulfillmentFilter = () => {
+  return [
+    {
+      value: "fulfilled",
+      label: "Fulfilled",
+    },
+    {
+      value: "unfulfilled",
+      label: "Unfulfilled",
+    },
+  ];
+};

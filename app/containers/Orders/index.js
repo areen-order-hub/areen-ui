@@ -27,7 +27,11 @@ import ReactDatetime from "react-datetime";
 import { useInjectReducer } from "utils/injectReducer";
 import moment from "moment-timezone";
 import { isEmpty, get, map } from "lodash";
-import { getStoreFilter, getPaymentFilter } from "./helpers";
+import {
+  getStoreFilter,
+  getPaymentFilter,
+  getFulfillmentFilter,
+} from "./helpers";
 import reducer from "./reducer";
 import history from "../../utils/history";
 import { parseDate } from "../../utils/dateTimeHelpers";
@@ -48,6 +52,7 @@ export default function Orders() {
   }));
   const [selectedStores, setSelectedStores] = useState([]);
   const [selectedFinStatus, setSelectedFinStatus] = useState([]);
+  const [selectedFulStatus, setSelectedFulStatus] = useState([]);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
@@ -63,11 +68,20 @@ export default function Orders() {
         .filter((x) => x)
         .join(",");
     }
+
     if (!isEmpty(selectedFinStatus)) {
       filter["financialStatus"] = map(selectedFinStatus, ({ value }) => value)
         .filter((x) => x)
         .join(",");
     }
+
+    if (!isEmpty(selectedFulStatus)) {
+      filter["fulfillmentStatus"] = map(
+        selectedFulStatus,
+        ({ value }) => value
+      ).join(",");
+    }
+
     if (startDate && !isEmpty(startDate)) {
       try {
         filter["startDate"] = moment(startDate)
@@ -77,6 +91,7 @@ export default function Orders() {
         console.log("Start Date is invalid");
       }
     }
+
     if (endDate && !isEmpty(endDate)) {
       try {
         filter["endDate"] = moment(endDate)
@@ -86,12 +101,19 @@ export default function Orders() {
         console.log("End Date is invalid");
       }
     }
+
     return filter;
   };
 
   useEffect(() => {
     dispatch(operations.fetchOrders(getFilterParams()));
-  }, [selectedStores, selectedFinStatus, startDate, endDate]);
+  }, [
+    selectedStores,
+    selectedFinStatus,
+    selectedFulStatus,
+    startDate,
+    endDate,
+  ]);
 
   const onClick = (id) =>
     history.push({
@@ -148,6 +170,7 @@ export default function Orders() {
           <RtCreatableSelect
             name="description"
             placeholder="Select Stores"
+            isValidNewOption={() => false}
             isMulti
             options={getStoreFilter(stores)}
             value={selectedStores}
@@ -165,6 +188,18 @@ export default function Orders() {
             value={selectedFinStatus}
             onChange={(e) => {
               setSelectedFinStatus(e);
+            }}
+          />
+        </Col>
+        <Col>
+          <RtCreatableSelect
+            name="description"
+            placeholder="Fulfillment Status"
+            isMulti
+            options={getFulfillmentFilter()}
+            value={selectedFulStatus}
+            onChange={(e) => {
+              setSelectedFulStatus(e);
             }}
           />
         </Col>
