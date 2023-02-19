@@ -4,3 +4,16 @@ export const getStoreFilter = (stores = []) => {
     label: name,
   }));
 };
+
+export const getPaymentFilter = () => {
+  return [
+    {
+      value: "paid",
+      label: "Paid",
+    },
+    {
+      value: "pending",
+      label: "Pending",
+    },
+  ];
+};

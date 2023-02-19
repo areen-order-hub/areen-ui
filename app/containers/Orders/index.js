@@ -27,7 +27,7 @@ import ReactDatetime from "react-datetime";
 import { useInjectReducer } from "utils/injectReducer";
 import moment from "moment-timezone";
 import { isEmpty, get, map } from "lodash";
-import { getStoreFilter } from "./helpers";
+import { getStoreFilter, getPaymentFilter } from "./helpers";
 import reducer from "./reducer";
 import history from "../../utils/history";
 import { parseDate } from "../../utils/dateTimeHelpers";
@@ -47,6 +47,7 @@ export default function Orders() {
     stores: selectors.stores(state),
   }));
   const [selectedStores, setSelectedStores] = useState([]);
+  const [selectedFinStatus, setSelectedFinStatus] = useState([]);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
@@ -59,6 +60,11 @@ export default function Orders() {
     let filter = { page: 1 };
     if (!isEmpty(selectedStores)) {
       filter["store"] = map(selectedStores, ({ value }) => value)
+        .filter((x) => x)
+        .join(",");
+    }
+    if (!isEmpty(selectedFinStatus)) {
+      filter["financialStatus"] = map(selectedFinStatus, ({ value }) => value)
         .filter((x) => x)
         .join(",");
     }
@@ -85,7 +91,7 @@ export default function Orders() {
 
   useEffect(() => {
     dispatch(operations.fetchOrders(getFilterParams()));
-  }, [selectedStores, startDate, endDate]);
+  }, [selectedStores, selectedFinStatus, startDate, endDate]);
 
   const onClick = (id) =>
     history.push({
@@ -141,12 +147,24 @@ export default function Orders() {
         <Col md="3">
           <RtCreatableSelect
             name="description"
+            placeholder="Select Stores"
             isMulti
             options={getStoreFilter(stores)}
             value={selectedStores}
             onChange={(e) => {
-              console.log("E", e);
               setSelectedStores(e);
+            }}
+          />
+        </Col>
+        <Col>
+          <RtCreatableSelect
+            name="description"
+            placeholder="Payment Status"
+            isMulti
+            options={getPaymentFilter()}
+            value={selectedFinStatus}
+            onChange={(e) => {
+              setSelectedFinStatus(e);
             }}
           />
         </Col>
