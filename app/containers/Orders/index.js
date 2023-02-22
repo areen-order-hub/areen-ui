@@ -11,8 +11,7 @@ import { Row, Col, Table, Badge, Button } from "reactstrap";
 import PaginationDetails from "components/PaginationDetails";
 import RtCreatableSelect from "components/RtCreatableSelect";
 import { useInjectReducer } from "utils/injectReducer";
-import { getIsInvoiceGeneratedBadge } from "utils/componentHelpers";
-import { isEmpty } from "lodash";
+import { isEmpty, get } from "lodash";
 import { getStoreFilter } from "./helpers";
 import reducer from "./reducer";
 import history from "../../utils/history";
@@ -58,11 +57,15 @@ export default function Orders() {
     orders.map(
       ({
         _id,
-        shopifyDisplayId,
+        shopifyOrderName,
+        customerName,
         status,
         shopifyOrderDate,
+        shopifyPrice,
+        weight,
         storeId: { alias: storeAlias },
         invoiceDetails,
+        shippingAddress,
       }) => (
         <React.Fragment key={_id}>
           <tr>
@@ -70,16 +73,19 @@ export default function Orders() {
               className="hover-pointer text-primary"
               onClick={() => onClick(_id)}
             >
-              {shopifyDisplayId}
+              {shopifyOrderName}
             </td>
+            <td>{customerName}</td>
+            <td>{get(shippingAddress, "phone", "N/A")}</td>
             <td>
               <Badge>{status}</Badge>
             </td>
             <td>{parseDate(shopifyOrderDate)}</td>
-            <td>
-              <Badge>{storeAlias}</Badge>
-            </td>
-            <td>{getIsInvoiceGeneratedBadge(isEmpty(invoiceDetails))}</td>
+            <td>{shopifyPrice} AED</td>
+            <td>{get(invoiceDetails, "price", "N/A")}</td>
+            <td>{weight} KG</td>
+            <td>{storeAlias}</td>
+            <td>{get(invoiceDetails, "orderNo", "N/A")}</td>
           </tr>
         </React.Fragment>
       )
@@ -128,10 +134,15 @@ export default function Orders() {
           <thead className="thead-light">
             <tr>
               <th scope="col">Shopify Order ID</th>
+              <th scope="col">Cust. Name</th>
+              <th scope="col">Cust. Phone</th>
               <th scope="col">Status</th>
-              <th scope="col">Order Date</th>
+              <th scope="col">Date</th>
+              <th scope="col">Shopify Price</th>
+              <th scope="col">Inv. Price</th>
+              <th scope="col">Weight</th>
               <th scope="col">Store</th>
-              <th scope="col">Inv. Generated</th>
+              <th scope="col">Inv. No.</th>
             </tr>
           </thead>
           <tbody>{getOrderData()}</tbody>
