@@ -8,8 +8,8 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Helmet } from "react-helmet";
 import { useInjectReducer } from "utils/injectReducer";
-import { Card, CardHeader, CardBody, Row, Col, Badge } from "reactstrap";
-import { get } from "lodash";
+import { Card, CardHeader, CardBody, Row, Col, Badge, Table } from "reactstrap";
+import { get, map } from "lodash";
 import Skeleton from "react-loading-skeleton";
 import reducer from "./reducer";
 import history from "utils/history";
@@ -27,12 +27,16 @@ export default function OrderDetails({ match }) {
     status,
     syncedAt,
     storeDetails,
+    billingAddress,
+    invoiceDetails,
   } = useSelector((state) => ({
     shopifyDisplayId: selectors.shopifyDisplayId(state),
     shopifyOrderDate: selectors.shopifyOrderDate(state),
     status: selectors.status(state),
     syncedAt: selectors.syncedAt(state),
     storeDetails: selectors.storeDetails(state),
+    billingAddress: selectors.billingAddress(state),
+    invoiceDetails: selectors.invoiceDetails(state),
     isLoading: selectors.isLoading(state),
   }));
 
@@ -109,6 +113,46 @@ export default function OrderDetails({ match }) {
             </div>
           </Row>
         </CardHeader>
+        <CardHeader>
+          <div className="mb-3">
+            <span className="h3 text-muted">Invoice Details</span>
+          </div>
+          <p>
+            <span className="text-muted">Price: </span>
+            <span className="text-primary font-weight-bold">
+              {get(invoiceDetails, "price", "0.00")}
+            </span>
+          </p>
+          <div className="w-100">
+            <div className="table-responsive">
+              <Table className="align-items-center responsive">
+                <thead className="thead-light">
+                  <tr>
+                    <th scope="col">Item Code</th>
+                    <th scope="col">Ordered Quantity</th>
+                    <th scope="col">Fulfilled Quantity</th>
+                    <th scope="col">Unit Price</th>
+                    <th scope="col">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {map(
+                    get(invoiceDetails, "items", []),
+                    ({ itemCode, quantity, unitPrice, price }, index) => (
+                      <tr key={index}>
+                        <td>{itemCode}</td>
+                        <td>{quantity}</td>
+                        <td>{quantity}</td>
+                        <td>{unitPrice}</td>
+                        <td>{price}</td>
+                      </tr>
+                    )
+                  )}
+                </tbody>
+              </Table>
+            </div>
+          </div>
+        </CardHeader>
       </Card>
     );
   };
@@ -120,8 +164,36 @@ export default function OrderDetails({ match }) {
         <meta name="description" content="Description of Order Details" />
       </Helmet>
       <Row className="mt-4">
-        <Col xs="12" md="12">
+        <Col md="8" sm="12">
           {isLoading ? getOrderLoading() : getOrderComponent()}
+        </Col>
+        <Col md="4" sm="12">
+          <Card>
+            <CardHeader>Billing Address</CardHeader>
+            <CardBody>
+              <Row>
+                <Col>
+                  <span className="text-primary font-weight-bold">
+                    {get(billingAddress, "name", "--")}
+                  </span>
+                  <div>
+                    <div>
+                      {get(billingAddress, "address1", "--")},{" "}
+                      {get(billingAddress, "address2", "--")}
+                    </div>
+                    <div>
+                      {get(billingAddress, "city", "--")},{" "}
+                      {get(billingAddress, "province", "--")}
+                    </div>
+                    <div>
+                      {get(billingAddress, "country", "--")} -{" "}
+                      {get(billingAddress, "phone", "--")}
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+            </CardBody>
+          </Card>
         </Col>
       </Row>
     </div>

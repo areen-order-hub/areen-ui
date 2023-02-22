@@ -213,7 +213,7 @@ function Sidebar({ toggleSidenav, sidenavOpen, routes, logo, rtlActive }) {
   const scrollBarInner = (
     <div className="scrollbar-inner">
       <div className="sidenav-header d-flex align-items-center">
-        {logo ? (
+        {/* {logo ? (
           <NavbarBrand {...navbarBrandProps}>
             <img
               alt={logo.imgAlt}
@@ -221,7 +221,7 @@ function Sidebar({ toggleSidenav, sidenavOpen, routes, logo, rtlActive }) {
               src={logo.imgSrc}
             />
           </NavbarBrand>
-        ) : null}
+        ) : null} */}
         <div className="ml-auto">
           <div
             className={classnames("sidenav-toggler d-none d-xl-block", {

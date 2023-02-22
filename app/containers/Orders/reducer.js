@@ -4,10 +4,11 @@
  *
  */
 import produce from "immer";
-import { SET_ORDER_LIST } from "./constants";
+import { SET_ORDER_LIST, SET_STORE_LIST } from "./constants";
 
 export const initialState = {
   orders: [],
+  stores: [],
   paginationDetails: {},
 };
 
@@ -26,6 +27,9 @@ const ordersReducer = (state = initialState, action) =>
           ),
           ...rest,
         };
+        break;
+      case SET_STORE_LIST:
+        draft.stores = action.payload;
         break;
     }
   });

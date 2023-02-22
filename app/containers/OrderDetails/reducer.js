@@ -11,6 +11,8 @@ export const initialState = {
   isLoading: true,
   shopifyDisplayId: "",
   shopifyOrderDate: "",
+  billingAddress: {},
+  invoiceDetails: {},
   status: "",
   syncedAt: "",
   storeDetails: {},
@@ -28,6 +30,8 @@ const orderDetailsReducer = (state = initialState, action) =>
         );
         draft.syncedAt = getDateTimeString(action.payload.updatedAt);
         draft.storeDetails = action.payload.storeId;
+        draft.billingAddress = action.payload.billingAddress;
+        draft.invoiceDetails = action.payload.invoiceDetails;
         draft.isLoading = false;
         break;
     }
