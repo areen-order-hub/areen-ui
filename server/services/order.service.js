@@ -33,3 +33,54 @@ exports.fetch = async (req, res) => {
     res.status(err.status).json(err.message);
   }
 };
+
+exports.syncProducts = async (req, res) => {
+  try {
+    const url = `/v1/order/trigger/productSync`;
+
+    const order = await Request(
+      {
+        url,
+        method: "POST",
+      },
+      req.headers
+    );
+    res.json(order);
+  } catch (err) {
+    res.status(err.status).json(err.message);
+  }
+};
+
+exports.syncInvoices = async (req, res) => {
+  try {
+    const url = `/v1/order/trigger/invoiceSync`;
+
+    const order = await Request(
+      {
+        url,
+        method: "POST",
+      },
+      req.headers
+    );
+    res.json(order);
+  } catch (err) {
+    res.status(err.status).json(err.message);
+  }
+};
+
+exports.syncOrders = async (req, res) => {
+  try {
+    const url = `/v1/order/trigger/orderSync`;
+
+    const order = await Request(
+      {
+        url,
+        method: "POST",
+      },
+      req.headers
+    );
+    res.json(order);
+  } catch (err) {
+    res.status(err.status).json(err.message);
+  }
+};

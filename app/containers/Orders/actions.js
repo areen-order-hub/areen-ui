@@ -5,8 +5,14 @@
  */
 
 import { SET_ORDER_LIST, SET_STORE_LIST } from "./constants";
-import { paginateOrders } from "api/order";
+import {
+  paginateOrders,
+  triggerProductSync,
+  triggerInvoiceSync,
+  triggerOrderSync,
+} from "api/order";
 import { getStores } from "api/store";
+import NotificationHandler from "../../components/Notifications/NotificationHandler";
 
 export const fetchOrders = (params) => {
   return async (dispatch) => {
@@ -15,6 +21,48 @@ export const fetchOrders = (params) => {
       dispatch(setOrderList(data));
     } catch (err) {
       dispatch(setOrderList());
+    }
+  };
+};
+
+export const syncProducts = () => {
+  return async (dispatch) => {
+    try {
+      await triggerProductSync();
+      NotificationHandler.open({
+        operation: "success",
+        title: "Product Sync Started Successfully",
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+};
+
+export const syncInvoices = () => {
+  return async (dispatch) => {
+    try {
+      await triggerInvoiceSync();
+      NotificationHandler.open({
+        operation: "success",
+        title: "Invoice Sync Started Successfully",
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+};
+
+export const syncOrders = () => {
+  return async (dispatch) => {
+    try {
+      await triggerOrderSync();
+      NotificationHandler.open({
+        operation: "success",
+        title: "Order Sync Started Successfully",
+      });
+    } catch (err) {
+      console.error(err);
     }
   };
 };

@@ -7,7 +7,17 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Helmet } from "react-helmet";
-import { Row, Col, Table, Badge, Button } from "reactstrap";
+import {
+  Row,
+  Col,
+  Table,
+  Badge,
+  Button,
+  ButtonDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from "reactstrap";
 import PaginationDetails from "components/PaginationDetails";
 import RtCreatableSelect from "components/RtCreatableSelect";
 import { useInjectReducer } from "utils/injectReducer";
@@ -23,6 +33,9 @@ import "./ordersStyle.scss";
 export default function Orders() {
   useInjectReducer({ key: "orders", reducer });
   const dispatch = useDispatch();
+  const [dropdownOpen, setOpen] = useState(false);
+  const toggle = () => setOpen(!dropdownOpen);
+
   const { orders, paginationDetails, stores } = useSelector((state) => ({
     orders: selectors.orders(state),
     paginationDetails: selectors.paginationDetails(state),
@@ -114,7 +127,7 @@ export default function Orders() {
             }}
           />
         </Col>
-        <div className="align-items-right ml-auto mr-3 mr-md-5">
+        <div className="align-items-right ml-auto mr-2">
           <Button
             color="primary"
             className="btn-icon btn-3"
@@ -127,6 +140,28 @@ export default function Orders() {
             </span>
             <span className="btn-inner--text">Export Orders</span>
           </Button>
+        </div>
+        <div className="align-items-right mr-3 mr-md-5">
+          <ButtonDropdown
+            isOpen={dropdownOpen}
+            toggle={toggle}
+            className="mb-2"
+          >
+            <DropdownToggle color="primary" caret>
+              Trigger Sync
+            </DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem onClick={() => dispatch(operations.syncOrders())}>
+                Sync Orders
+              </DropdownItem>
+              <DropdownItem onClick={() => dispatch(operations.syncInvoices())}>
+                Sync Invoices
+              </DropdownItem>
+              <DropdownItem onClick={() => dispatch(operations.syncProducts())}>
+                Sync Products
+              </DropdownItem>
+            </DropdownMenu>
+          </ButtonDropdown>
         </div>
       </Row>
       <div className="table-responsive">

@@ -5,5 +5,8 @@ const router = express.Router();
 
 router.get("/paginate", services.paginate);
 router.get("/:orderId", services.fetch);
+router.post("/trigger/productSync", services.syncProducts);
+router.post("/trigger/invoiceSync", services.syncInvoices);
+router.post("/trigger/orderSync", services.syncOrders);
 
 module.exports = router;
