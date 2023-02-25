@@ -10,7 +10,6 @@ import { Helmet } from "react-helmet";
 import {
   Row,
   Col,
-  Table,
   Button,
   ButtonDropdown,
   DropdownToggle,
@@ -23,6 +22,7 @@ import {
 } from "utils/componentHelpers";
 import PaginationDetails from "components/PaginationDetails";
 import RtCreatableSelect from "components/RtCreatableSelect";
+import Table from "components/Table";
 import ReactDatetime from "react-datetime";
 import { useInjectReducer } from "utils/injectReducer";
 import moment from "moment-timezone";
@@ -223,26 +223,81 @@ export default function Orders() {
           </ButtonDropdown>
         </div>
       </Row>
-      <div className="table-responsive">
-        <Table className="mt-3 align-items-center">
-          <thead className="thead-light">
-            <tr>
-              <th scope="col">Shopify Order ID</th>
-              <th scope="col">Cust. Name</th>
-              <th scope="col">Cust. Phone</th>
-              <th scope="col">Financial Status</th>
-              <th scope="col">Fulfillment Status</th>
-              <th scope="col">Date</th>
-              <th scope="col">Shopify Price</th>
-              <th scope="col">Inv. Price</th>
-              <th scope="col">Weight</th>
-              <th scope="col">Store</th>
-              <th scope="col">Inv. No.</th>
-            </tr>
-          </thead>
-          <tbody>{getOrderData()}</tbody>
-        </Table>
-      </div>
+      <Table
+        bootstrap4
+        striped
+        search={false}
+        bordered={false}
+        keyField="_id"
+        data={orders}
+        paginationOptions={null}
+        columns={[
+          {
+            text: "Shopify Order ID",
+            dataField: "shopifyOrderName",
+            formatter: (cell, { _id }) => (
+              <span
+                className="text-primary hover-pointer"
+                onClick={() => onClick(_id)}
+                aria-hidden="true"
+              >
+                {cell}
+              </span>
+            ),
+          },
+          {
+            text: "Cust. Name",
+            dataField: "customerName",
+            formatter: (cell) => cell || "-",
+          },
+          {
+            text: "Cust. Name",
+            dataField: "shippingAddress.phone",
+            formatter: (cell) => cell || "N/A",
+          },
+          {
+            text: "Financial Status",
+            dataField: "financialStatus",
+            formatter: (cell) => getFinancialStatusBadge(cell),
+          },
+          {
+            text: "Fulfillment Status",
+            dataField: "fulfillmentStatus",
+            formatter: (cell) => getFulfillmentStatusBadge(cell),
+          },
+          {
+            text: "Date",
+            dataField: "shopifyOrderDate",
+            sort: true,
+            formatter: (cell) => parseDate(cell),
+          },
+          {
+            text: "Shopify Price",
+            dataField: "shopifyPrice",
+            formatter: (cell) => `${cell} AED`,
+          },
+          {
+            text: "Inv. Price",
+            dataField: "invoiceDetails.price",
+            formatter: (cell) => cell || "N/A",
+          },
+          {
+            text: "Weight",
+            dataField: "weight",
+            formatter: (cell) => cell || "N/A",
+          },
+          {
+            text: "Store",
+            dataField: "storeId.alias",
+            formatter: (cell) => cell || "N/A",
+          },
+          {
+            text: "Inv. No.",
+            dataField: "invoiceDetails.orderNo",
+            formatter: (cell) => cell || "N/A",
+          },
+        ]}
+      />
       <Row>
         <Col className="text-end ms-auto">
           <PaginationDetails
