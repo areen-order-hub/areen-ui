@@ -11,13 +11,16 @@ import {
   Row,
   Col,
   Table,
-  Badge,
   Button,
   ButtonDropdown,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
 } from "reactstrap";
+import {
+  getFinancialStatusBadge,
+  getFulfillmentStatusBadge,
+} from "utils/componentHelpers";
 import PaginationDetails from "components/PaginationDetails";
 import RtCreatableSelect from "components/RtCreatableSelect";
 import { useInjectReducer } from "utils/injectReducer";
@@ -72,7 +75,8 @@ export default function Orders() {
         _id,
         shopifyOrderName,
         customerName,
-        status,
+        financialStatus,
+        fulfillmentStatus,
         shopifyOrderDate,
         shopifyPrice,
         weight,
@@ -90,9 +94,8 @@ export default function Orders() {
             </td>
             <td>{customerName}</td>
             <td>{get(shippingAddress, "phone", "N/A")}</td>
-            <td>
-              <Badge>{status}</Badge>
-            </td>
+            <td>{getFinancialStatusBadge(financialStatus)}</td>
+            <td>{getFulfillmentStatusBadge(fulfillmentStatus)}</td>
             <td>{parseDate(shopifyOrderDate)}</td>
             <td>{shopifyPrice} AED</td>
             <td>{get(invoiceDetails, "price", "N/A")}</td>
@@ -171,7 +174,8 @@ export default function Orders() {
               <th scope="col">Shopify Order ID</th>
               <th scope="col">Cust. Name</th>
               <th scope="col">Cust. Phone</th>
-              <th scope="col">Status</th>
+              <th scope="col">Financial Status</th>
+              <th scope="col">Fulfillment Status</th>
               <th scope="col">Date</th>
               <th scope="col">Shopify Price</th>
               <th scope="col">Inv. Price</th>

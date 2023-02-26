@@ -12,10 +12,14 @@ export const initialState = {
   shopifyDisplayId: "",
   shopifyOrderDate: "",
   billingAddress: {},
+  shippingAddress: {},
+  shopifyOrderItems: {},
+  shopifyPrice: "",
   invoiceDetails: {},
-  status: "",
   syncedAt: "",
   storeDetails: {},
+  financialStatus: "",
+  fulfillmentStatus: "",
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -24,14 +28,18 @@ const orderDetailsReducer = (state = initialState, action) =>
     switch (action.type) {
       case SET_ORDER_DETAILS:
         draft.shopifyDisplayId = action.payload.shopifyDisplayId;
-        draft.status = action.payload.status;
         draft.shopifyOrderDate = getDateTimeString(
           action.payload.shopifyOrderDate
         );
         draft.syncedAt = getDateTimeString(action.payload.updatedAt);
         draft.storeDetails = action.payload.storeId;
         draft.billingAddress = action.payload.billingAddress;
+        draft.shippingAddress = action.payload.shippingAddress;
+        draft.shopifyOrderItems = action.payload.shopifyOrderItems;
+        draft.shopifyPrice = action.payload.shopifyPrice;
         draft.invoiceDetails = action.payload.invoiceDetails;
+        draft.financialStatus = action.payload.financialStatus;
+        draft.fulfillmentStatus = action.payload.fulfillmentStatus;
         draft.isLoading = false;
         break;
     }
