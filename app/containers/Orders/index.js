@@ -24,7 +24,7 @@ import {
 import PaginationDetails from "components/PaginationDetails";
 import RtCreatableSelect from "components/RtCreatableSelect";
 import { useInjectReducer } from "utils/injectReducer";
-import { isEmpty, get } from "lodash";
+import { isEmpty, get, map } from "lodash";
 import { getStoreFilter } from "./helpers";
 import reducer from "./reducer";
 import history from "../../utils/history";
@@ -55,8 +55,7 @@ export default function Orders() {
     dispatch(
       operations.fetchOrders({
         page: 1,
-        store: selectedStores
-          .map(({ value }) => value)
+        store: map(selectedStores, ({ value }) => value)
           .filter((x) => x)
           .join(","),
       })
@@ -118,15 +117,11 @@ export default function Orders() {
           <RtCreatableSelect
             name="description"
             isMulti
-            options={getStoreFilter(selectedStores, stores)}
+            options={getStoreFilter(stores)}
             value={selectedStores}
             onChange={(e) => {
               console.log("E", e);
-              if (isEmpty(e) || e == null) {
-                setSelectedStores([{ value: undefined, label: "All" }]);
-              } else {
-                setSelectedStores(e);
-              }
+              setSelectedStores(e);
             }}
           />
         </Col>
