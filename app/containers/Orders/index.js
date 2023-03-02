@@ -4,7 +4,7 @@
  *
  */
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Helmet } from "react-helmet";
 import {
@@ -15,6 +15,7 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
+  Input,
 } from "reactstrap";
 import {
   getFinancialStatusBadge,
@@ -26,7 +27,7 @@ import Table from "components/Table";
 import ReactDatetime from "react-datetime";
 import { useInjectReducer } from "utils/injectReducer";
 import moment from "moment-timezone";
-import { isEmpty, get, map } from "lodash";
+import { isEmpty, get, map, filter } from "lodash";
 import {
   getStoreFilter,
   getPaymentFilter,
@@ -56,10 +57,21 @@ export default function Orders() {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
+  const [selectedInvoices, setSelectedInvoices] = useState([]);
   useEffect(() => {
     dispatch(operations.fetchOrders({ page: 1 }));
     dispatch(operations.fetchStores());
   }, []);
+
+  const nonSelectableRows = useMemo(() => {
+    const rowsWithNoInvoice = map(orders, (order, index) => {
+      if (isEmpty(get(order, "invoiceDetails", {}))) {
+        return order._id;
+      }
+    });
+    const filteredRows = filter(rowsWithNoInvoice, (val) => !_.isNil(val));
+    return filteredRows;
+  }, [orders]);
 
   const getFilterParams = () => {
     let filter = { page: 1 };
@@ -121,43 +133,37 @@ export default function Orders() {
       state: { id },
     });
 
-  const getOrderData = () =>
-    orders.map(
-      ({
-        _id,
-        shopifyOrderName,
-        customerName,
-        financialStatus,
-        fulfillmentStatus,
-        shopifyOrderDate,
-        shopifyPrice,
-        weight,
-        storeId: { alias: storeAlias },
-        invoiceDetails,
-        shippingAddress,
-      }) => (
-        <React.Fragment key={_id}>
-          <tr>
-            <td
-              className="hover-pointer text-primary"
-              onClick={() => onClick(_id)}
-            >
-              {shopifyOrderName}
-            </td>
-            <td>{customerName}</td>
-            <td>{get(shippingAddress, "phone", "N/A")}</td>
-            <td>{getFinancialStatusBadge(financialStatus)}</td>
-            <td>{getFulfillmentStatusBadge(fulfillmentStatus)}</td>
-            <td>{parseDate(shopifyOrderDate)}</td>
-            <td>{shopifyPrice} AED</td>
-            <td>{get(invoiceDetails, "price", "N/A")}</td>
-            <td>{weight} KG</td>
-            <td>{storeAlias}</td>
-            <td>{get(invoiceDetails, "orderNo", "N/A")}</td>
-          </tr>
-        </React.Fragment>
-      )
-    );
+  const isSelectable = (row) => {
+    return !isEmpty(get(row, "invoiceDetails", {}));
+  };
+
+  const onSelect = (row) => {
+    if (!isSelectable(row)) return false;
+    setSelectedInvoices((prev) => [...prev, row]);
+  };
+
+  const onUnSelect = (row) => {
+    setSelectedInvoices((prev) => filter(prev, (item) => row._id !== item._id));
+  };
+
+  const handleOnSelect = (row, isSelect) => {
+    return (isSelect ? onSelect : onUnSelect)(row);
+  };
+
+  const selectRowProp = {
+    mode: "checkbox",
+    clickToSelect: true,
+    bgColor: "#f7f8fe",
+    onSelect: handleOnSelect,
+    hideSelectAll: true,
+    nonSelectable: nonSelectableRows,
+    nonSelectableClasses: "salesReturnDisabledChecboxTableRow",
+    selectionRenderer: ({ mode, checked, disabled }) => {
+      return disabled ? null : (
+        <Input type="checkbox" checked={checked} className={"m-0"} />
+      );
+    },
+  };
 
   return (
     <div className="orders mx-3 mx-md-4 ml-lg-7">
@@ -286,6 +292,7 @@ export default function Orders() {
         bordered={false}
         keyField="_id"
         data={orders}
+        selectRow={selectRowProp}
         columns={[
           {
             text: "Shopify Order ID",
