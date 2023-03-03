@@ -166,7 +166,7 @@ export default function Orders() {
         <meta name="description" content="Description of Orders" />
       </Helmet>
       <Row className="mt-4">
-        <Col md="3">
+        <Col md="2">
           <RtCreatableSelect
             name="description"
             placeholder="Select Stores"
@@ -179,7 +179,7 @@ export default function Orders() {
             }}
           />
         </Col>
-        <Col>
+        <Col md="2">
           <RtCreatableSelect
             name="description"
             placeholder="Payment Status"
@@ -191,7 +191,7 @@ export default function Orders() {
             }}
           />
         </Col>
-        <Col>
+        <Col md="2">
           <RtCreatableSelect
             name="description"
             placeholder="Fulfillment Status"
@@ -203,7 +203,7 @@ export default function Orders() {
             }}
           />
         </Col>
-        <Col md="1">
+        <Col md="2">
           <ReactDatetime
             inputProps={{
               placeholder: "Start Date",
@@ -221,7 +221,7 @@ export default function Orders() {
             value={startDate}
           />
         </Col>
-        <Col md="1">
+        <Col md="2">
           <ReactDatetime
             inputProps={{
               placeholder: "End Date",
@@ -245,12 +245,12 @@ export default function Orders() {
             className="btn-icon btn-3"
             type="button"
             disabled
+            title="Export Orders"
             // onClick={() => history.push("/store-form")}
           >
             <span className="btn-inner--icon">
-              <i className="fas fa-plus" />
+              <i className="fas fa-file-export" />
             </span>
-            <span className="btn-inner--text">Export Orders</span>
           </Button>
         </div>
         <div className="align-items-right mr-3 mr-md-5">
@@ -258,9 +258,12 @@ export default function Orders() {
             isOpen={dropdownOpen}
             toggle={toggle}
             className="mb-2"
+            title="Trigger Sync"
           >
             <DropdownToggle color="primary" caret>
-              Trigger Sync
+              <span className="btn-inner--icon">
+                <i className="fas fa-sync" />
+              </span>
             </DropdownToggle>
             <DropdownMenu>
               <DropdownItem onClick={() => dispatch(operations.syncOrders())}>
@@ -283,7 +286,6 @@ export default function Orders() {
         bordered={false}
         keyField="_id"
         data={orders}
-        paginationOptions={null}
         columns={[
           {
             text: "Shopify Order ID",
@@ -301,7 +303,7 @@ export default function Orders() {
           {
             text: "Cust. Name",
             dataField: "customerName",
-            formatter: (cell) => cell || "-",
+            formatter: (cell) => cell || "N/A",
           },
           {
             text: "Cust. Name",
