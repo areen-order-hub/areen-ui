@@ -483,6 +483,14 @@ export default function Orders() {
             formatter: (cell) => getCarrierStatusBadge(cell),
           },
           {
+            text: "Carrier ID",
+            dataField: "carrierServiceId",
+            formatter: (cell, row) =>
+              get(row, "carrierService") == "Areen"
+                ? get(row, "invoiceDetails.orderNo")
+                : cell || "N/A",
+          },
+          {
             text: "Date",
             dataField: "shopifyOrderDate",
             sort: true,
