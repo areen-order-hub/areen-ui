@@ -46,11 +46,15 @@ export default function Orders() {
   const [dropdownOpen, setOpen] = useState(false);
   const toggle = () => setOpen(!dropdownOpen);
 
+  const [shippingDropDown, setShippingDropDown] = useState(false);
+  const toggleShippingDropDown = () => setShippingDropDown(!shippingDropDown);
+
   const { orders, paginationDetails, stores } = useSelector((state) => ({
     orders: selectors.orders(state),
     paginationDetails: selectors.paginationDetails(state),
     stores: selectors.stores(state),
   }));
+
   const [selectedStores, setSelectedStores] = useState([]);
   const [selectedFinStatus, setSelectedFinStatus] = useState([]);
   const [selectedFulStatus, setSelectedFulStatus] = useState([]);
@@ -361,7 +365,40 @@ export default function Orders() {
           },
         ]}
       />
-      <Row>
+      <Row className="mt-2">
+        <Col>
+          {!isEmpty(selectedOrders) && (
+            // <Button
+            //   color="primary"
+            //   // onClick={() => generateAreenShippingBills(selectedOrders)}
+            //   onClick={() =>
+            //     dispatch(operations.generateBeeThereShipment(selectedOrders))
+            //   }
+            // >
+            //   Generate Shipping Bill
+            // </Button>
+            <ButtonDropdown
+              isOpen={shippingDropDown}
+              toggle={toggleShippingDropDown}
+              className="mb-2"
+              title="Generate Shipping Bill"
+            >
+              <DropdownToggle color="primary" caret>
+                Generate Shipping Bill
+              </DropdownToggle>
+              <DropdownMenu>
+                <DropdownItem
+                  disabled
+                  // onClick={() => generateAreenShippingBills(selectedOrders)}
+                >
+                  Areen Shipping
+                </DropdownItem>
+                <DropdownItem disabled>BeeThere</DropdownItem>
+                <DropdownItem disabled>Elite</DropdownItem>
+              </DropdownMenu>
+            </ButtonDropdown>
+          )}
+        </Col>
         <Col className="text-end ms-auto">
           <PaginationDetails
             paginationDetails={paginationDetails}
