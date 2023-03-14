@@ -10,6 +10,7 @@ import {
   triggerProductSync,
   triggerInvoiceSync,
   triggerOrderSync,
+  createBeeThereShipment,
 } from "api/order";
 import { getStores } from "api/store";
 import NotificationHandler from "../../components/Notifications/NotificationHandler";
@@ -63,6 +64,27 @@ export const syncOrders = () => {
       });
     } catch (err) {
       console.error(err);
+    }
+  };
+};
+
+export const generateBeeThereShipment = (orders) => {
+  return async (dispatch) => {
+    await createBeeThereShipment(orders);
+    NotificationHandler.open({
+      operation: "success",
+      title: "Shipment Created Successfully",
+    });
+    try {
+    } catch (err) {
+      console.error(err);
+      NotificationHandler.open({
+        operation: "failure",
+        message:
+          get(err, "response.data", null) ||
+          "Something went wrong. Please try again later",
+        title: "Unable to create BeeThere Shipment",
+      });
     }
   };
 };

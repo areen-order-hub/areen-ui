@@ -35,3 +35,11 @@ export const triggerOrderSync = async () => {
     method: "POST",
   });
 };
+
+export const createBeeThereShipment = async (data) => {
+  return await Request({
+    url: `/api/order/carrier/beeThere`,
+    method: "POST",
+    data,
+  });
+};
