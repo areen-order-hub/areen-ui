@@ -57,7 +57,8 @@ export default function Orders() {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
-  const [selectedInvoices, setSelectedInvoices] = useState([]);
+  const [selectedOrders, setSelectedOrders] = useState([]);
+
   useEffect(() => {
     dispatch(operations.fetchOrders({ page: 1 }));
     dispatch(operations.fetchStores());
@@ -139,11 +140,11 @@ export default function Orders() {
 
   const onSelect = (row) => {
     if (!isSelectable(row)) return false;
-    setSelectedInvoices((prev) => [...prev, row]);
+    setSelectedOrders((prev) => [...prev, row]);
   };
 
   const onUnSelect = (row) => {
-    setSelectedInvoices((prev) => filter(prev, (item) => row._id !== item._id));
+    setSelectedOrders((prev) => filter(prev, (item) => row._id !== item._id));
   };
 
   const handleOnSelect = (row, isSelect) => {
@@ -197,7 +198,7 @@ export default function Orders() {
             }}
           />
         </Col>
-        <Col md="2">
+        {/* <Col md="2">
           <RtCreatableSelect
             name="description"
             placeholder="Fulfillment Status"
@@ -208,7 +209,7 @@ export default function Orders() {
               setSelectedFulStatus(e);
             }}
           />
-        </Col>
+        </Col> */}
         <Col md="2">
           <ReactDatetime
             inputProps={{
@@ -313,20 +314,20 @@ export default function Orders() {
             formatter: (cell) => cell || "N/A",
           },
           {
-            text: "Cust. Name",
+            text: "Cust. Phone",
             dataField: "shippingAddress.phone",
             formatter: (cell) => cell || "N/A",
           },
           {
-            text: "Financial Status",
-            dataField: "financialStatus",
+            text: "Payment Mode",
+            dataField: "paymentMode",
             formatter: (cell) => getFinancialStatusBadge(cell),
           },
-          {
-            text: "Fulfillment Status",
-            dataField: "fulfillmentStatus",
-            formatter: (cell) => getFulfillmentStatusBadge(cell),
-          },
+          // {
+          //   text: "Fulfillment Status",
+          //   dataField: "fulfillmentStatus",
+          //   formatter: (cell) => getFulfillmentStatusBadge(cell),
+          // },
           {
             text: "Date",
             dataField: "shopifyOrderDate",

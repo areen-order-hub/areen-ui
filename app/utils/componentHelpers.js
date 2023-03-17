@@ -10,10 +10,10 @@ export const getIsInvoiceGeneratedBadge = (isInvoiceEmpty) => {
 };
 
 export const getFinancialStatusBadge = (financialStatus) => {
-  return financialStatus === "paid" ? (
-    <Badge color="success">Paid</Badge>
+  return financialStatus === "Prepaid" ? (
+    <Badge color="success">Prepaid</Badge>
   ) : (
-    <Badge color="danger">Pending</Badge>
+    <Badge color="danger">COD</Badge>
   );
 };
 
