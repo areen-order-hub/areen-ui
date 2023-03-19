@@ -4,7 +4,11 @@
  *
  */
 import produce from "immer";
-import { INIT_ORDER_DETAILS, SET_ORDER_DETAILS } from "./constants";
+import {
+  INIT_ORDER_DETAILS,
+  SET_ORDER_DETAILS,
+  SET_COMMENT_DETAILS,
+} from "./constants";
 import { getDateTimeString } from "utils/dateTimeHelpers";
 
 export const initialState = {
@@ -22,6 +26,7 @@ export const initialState = {
   fulfillmentStatus: "",
   weight: 0,
   paymentMode: "",
+  comments: [],
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -46,6 +51,11 @@ const orderDetailsReducer = (state = initialState, action) =>
         draft.paymentMode = action.payload.paymentMode;
         draft.isLoading = false;
         break;
+      case SET_COMMENT_DETAILS:
+        draft.comments = action.payload;
+        break;
+      case INIT_ORDER_DETAILS:
+        return initialState;
     }
   });
 

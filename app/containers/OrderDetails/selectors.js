@@ -24,5 +24,6 @@ export const fulfillmentStatus = (state) =>
 export const weight = (state) => get(state, "orderDetails.weight", 0);
 export const paymentMode = (state) =>
   get(state, "orderDetails.paymentMode", "");
+export const comments = (state) => get(state, "orderDetails.comments", []);
 
 export const isLoading = (state) => get(state, "orderDetails.isLoading", "");

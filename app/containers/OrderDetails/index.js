@@ -4,19 +4,32 @@
  *
  */
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Helmet } from "react-helmet";
 import { useInjectReducer } from "utils/injectReducer";
-import { Card, CardHeader, CardBody, Row, Col, Table } from "reactstrap";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Row,
+  Col,
+  Table,
+  Form,
+  FormGroup,
+  Label,
+  Button,
+} from "reactstrap";
 import { get, map } from "lodash";
 import Skeleton from "react-loading-skeleton";
 import reducer from "./reducer";
 import history from "utils/history";
+import RtInput from "../../components/RtInput/index";
 import {
   getFinancialStatusBadge,
   getFulfillmentStatusBadge,
 } from "utils/componentHelpers";
+import { parseDate } from "utils/dateTimeHelpers";
 import * as operations from "./actions";
 import * as selectors from "./selectors";
 import "./orderDetailsStyle.scss";
@@ -39,6 +52,7 @@ export default function OrderDetails({ match }) {
     fulfillmentStatus,
     weight,
     paymentMode,
+    comments,
   } = useSelector((state) => ({
     shopifyDisplayId: selectors.shopifyDisplayId(state),
     shopifyOrderDate: selectors.shopifyOrderDate(state),
@@ -53,8 +67,11 @@ export default function OrderDetails({ match }) {
     fulfillmentStatus: selectors.fulfillmentStatus(state),
     weight: selectors.weight(state),
     paymentMode: selectors.paymentMode(state),
+    comments: selectors.comments(state),
     isLoading: selectors.isLoading(state),
   }));
+
+  const [commentText, setCommentText] = useState("");
 
   useEffect(() => {
     const { id } = match.params;
@@ -62,9 +79,21 @@ export default function OrderDetails({ match }) {
       history.push("/orders");
     } else {
       dispatch(operations.fetchOrder(id));
+      dispatch(operations.fetchComments(id));
     }
     return () => dispatch(operations.orderDetailsInit());
   }, []);
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    dispatch(
+      operations.addComment({
+        text: commentText,
+        orderId: match.params.id,
+      })
+    );
+    setCommentText("");
+  };
 
   const getOrderLoading = () => {
     return (
@@ -257,6 +286,46 @@ export default function OrderDetails({ match }) {
                   </div>
                 </Col>
               </Row>
+            </CardBody>
+          </Card>
+          <Card>
+            <CardHeader>
+              <Form role="form" onSubmit={(e) => onSubmit(e)}>
+                <FormGroup>
+                  <Label>Add a Comment</Label>
+                  <Row>
+                    <Col>
+                      <RtInput
+                        onChange={(e) => setCommentText(e)}
+                        type="text"
+                        placeholder="Eg: High Priority"
+                        name="comment"
+                        value={commentText}
+                      />
+                    </Col>
+                    <Button
+                      color="primary"
+                      onClick={(e) => onSubmit(e)}
+                      disabled={commentText == ""}
+                    >
+                      Add
+                    </Button>
+                  </Row>
+                </FormGroup>
+              </Form>
+            </CardHeader>
+            <CardBody className="comments-box">
+              {comments.map(({ text, userId: { name }, createdAt }, index) => (
+                <Row key={index} className="mt-3 text-left ml-1">
+                  <Col className="border rounded bg-gradient-secondary">
+                    <div className="text-xs d-flex justify-content-between">
+                      <span>{name}</span>
+                      <span>{parseDate(createdAt, "DD/MM")}</span>
+                    </div>
+                    <div>{text}</div>
+                  </Col>
+                </Row>
+              ))}
             </CardBody>
           </Card>
         </Col>
