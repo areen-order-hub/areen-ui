@@ -47,6 +47,9 @@ export default function Orders() {
   const [dropdownOpen, setOpen] = useState(false);
   const toggle = () => setOpen(!dropdownOpen);
 
+  const [bulkDropdownOpen, setBulkDropdownOpen] = useState(false);
+  const toggleBulkDropdown = () => setBulkDropdownOpen(!bulkDropdownOpen);
+
   const [currentPage, setCurrentPage] = useState(1);
 
   const [shippingDropDown, setShippingDropDown] = useState(false);
@@ -259,33 +262,79 @@ export default function Orders() {
             value={endDate}
           />
         </Col>
-        <div className="align-items-right ml-auto mr-2">
-          <Button
-            color="primary"
-            className="btn-icon btn-3"
-            type="button"
-            disabled
-            title="Export Orders"
-            // onClick={() => history.push("/store-form")}
+        <div className="d-flex align-items-right ml-auto mr-3">
+          <ButtonDropdown
+            isOpen={shippingDropDown}
+            toggle={toggleShippingDropDown}
+            className="mb-2"
+            title="Generate Shipping Bill"
           >
-            <span className="btn-inner--icon">
-              <i className="fas fa-file-export" />
-            </span>
-          </Button>
-        </div>
-        <div className="align-items-right mr-3 mr-md-5">
+            <DropdownToggle
+              disabled={isEmpty(selectedOrders)}
+              color="primary"
+              caret
+            >
+              Generate Shipping Bill
+            </DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem
+                onClick={() =>
+                  generateAreenShippingBills(
+                    selectedOrders,
+                    generateAreenShipment
+                  )
+                }
+              >
+                Areen Shipping
+              </DropdownItem>
+              <DropdownItem disabled>BeeThere</DropdownItem>
+              <DropdownItem disabled>Elite</DropdownItem>
+            </DropdownMenu>
+          </ButtonDropdown>
+          <ButtonDropdown
+            isOpen={bulkDropdownOpen}
+            toggle={toggleBulkDropdown}
+            className="mb-2"
+            title="Trigger Sync"
+          >
+            <DropdownToggle color="primary" caret>
+              <span className="btn-inner--icon">
+                <i className="fas fa-file-export" />
+              </span>
+            </DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem
+                disabled
+                onClick={() => dispatch(operations.syncOrders())}
+              >
+                Export Orders
+              </DropdownItem>
+              <DropdownItem
+                disabled
+                onClick={() => dispatch(operations.syncInvoices())}
+              >
+                Download Template
+              </DropdownItem>
+              <DropdownItem
+                disabled
+                onClick={() => dispatch(operations.syncProducts())}
+              >
+                Upload Orders
+              </DropdownItem>
+            </DropdownMenu>
+          </ButtonDropdown>
           <ButtonDropdown
             isOpen={dropdownOpen}
             toggle={toggle}
             className="mb-2"
-            title="Trigger Sync"
+            title="Bulk Actions"
           >
             <DropdownToggle color="primary" caret>
               <span className="btn-inner--icon">
                 <i className="fas fa-sync" />
               </span>
             </DropdownToggle>
-            <DropdownMenu>
+            <DropdownMenu className="mr-4">
               <DropdownItem onClick={() => dispatch(operations.syncOrders())}>
                 Sync Orders
               </DropdownItem>
@@ -380,48 +429,6 @@ export default function Orders() {
         ]}
       />
       <Row className="mt-2">
-        <Col>
-          {!isEmpty(selectedOrders) && (
-            // <Button
-            //   color="primary"
-            //   onClick={() =>
-            //     generateAreenShippingBills(
-            //       selectedOrders,
-            //       generateAreenShipment
-            //     )
-            //   }
-            //   // onClick={() =>
-            //   //   dispatch(operations.generateBeeThereShipment(selectedOrders))
-            //   // }
-            // >
-            //   Generate Shipping Bill
-            // </Button>
-            <ButtonDropdown
-              isOpen={shippingDropDown}
-              toggle={toggleShippingDropDown}
-              className="mb-2"
-              title="Generate Shipping Bill"
-            >
-              <DropdownToggle color="primary" caret>
-                Generate Shipping Bill
-              </DropdownToggle>
-              <DropdownMenu>
-                <DropdownItem
-                  onClick={() =>
-                    generateAreenShippingBills(
-                      selectedOrders,
-                      generateAreenShipment
-                    )
-                  }
-                >
-                  Areen Shipping
-                </DropdownItem>
-                <DropdownItem disabled>BeeThere</DropdownItem>
-                <DropdownItem disabled>Elite</DropdownItem>
-              </DropdownMenu>
-            </ButtonDropdown>
-          )}
-        </Col>
         <Col className="text-end ms-auto">
           <PaginationDetails
             paginationDetails={paginationDetails}
