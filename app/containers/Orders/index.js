@@ -31,7 +31,7 @@ import { isEmpty, get, map, filter } from "lodash";
 import {
   getStoreFilter,
   getPaymentFilter,
-  getFulfillmentFilter,
+  getCarrierStatusFiler,
   generateAreenShippingBills,
 } from "./helpers";
 import reducer from "./reducer";
@@ -60,6 +60,7 @@ export default function Orders() {
 
   const [selectedStores, setSelectedStores] = useState([]);
   const [selectedPaymentMode, setSelectedPaymentMode] = useState([]);
+  const [selectedCarrierStatus, setSelectedCarrierStatus] = useState([]);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
@@ -101,6 +102,12 @@ export default function Orders() {
         .join(",");
     }
 
+    if (!isEmpty(selectedCarrierStatus)) {
+      filter["carrierStatus"] = map(selectedCarrierStatus, ({ value }) => value)
+        .filter((x) => x)
+        .join(",");
+    }
+
     if (startDate && !isEmpty(startDate)) {
       try {
         filter["startDate"] = moment(startDate)
@@ -126,7 +133,13 @@ export default function Orders() {
 
   useEffect(() => {
     dispatch(operations.fetchOrders(getFilterParams()));
-  }, [selectedStores, selectedPaymentMode, startDate, endDate]);
+  }, [
+    selectedStores,
+    selectedPaymentMode,
+    selectedCarrierStatus,
+    startDate,
+    endDate,
+  ]);
 
   const onClick = (id) =>
     history.push({
@@ -199,6 +212,18 @@ export default function Orders() {
           />
         </Col>
         <Col md="2">
+          <RtCreatableSelect
+            name="description"
+            placeholder="Carrier Status"
+            isMulti
+            options={getCarrierStatusFiler()}
+            value={selectedCarrierStatus}
+            onChange={(e) => {
+              setSelectedCarrierStatus(e);
+            }}
+          />
+        </Col>
+        <Col md="1">
           <ReactDatetime
             inputProps={{
               placeholder: "Start Date",
@@ -216,7 +241,7 @@ export default function Orders() {
             value={startDate}
           />
         </Col>
-        <Col md="2">
+        <Col md="1">
           <ReactDatetime
             inputProps={{
               placeholder: "End Date",
@@ -317,7 +342,7 @@ export default function Orders() {
             formatter: (cell) => cell || "N/A",
           },
           {
-            text: "Carrier Stataus",
+            text: "Carrier Status",
             dataField: "carrierStatus",
             formatter: (cell) => getCarrierStatusBadge(cell),
           },

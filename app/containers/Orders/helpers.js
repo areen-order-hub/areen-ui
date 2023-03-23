@@ -26,6 +26,15 @@ export const getPaymentFilter = () => {
   ];
 };
 
+export const getCarrierStatusFiler = () => {
+  return [
+    {
+      value: "AWB Generated",
+      label: "AWB Generated",
+    },
+  ];
+};
+
 function textToBase64Barcode(text) {
   var canvas = document.createElement("canvas");
   JsBarcode(canvas, text, { format: "CODE39" });
