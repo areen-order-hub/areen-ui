@@ -9,19 +9,11 @@ export const getIsInvoiceGeneratedBadge = (isInvoiceEmpty) => {
   );
 };
 
-export const getFinancialStatusBadge = (financialStatus) => {
-  return financialStatus === "Prepaid" ? (
+export const getPaymentModeBadge = (paymentMode) => {
+  return paymentMode === "Prepaid" ? (
     <Badge color="success">Prepaid</Badge>
   ) : (
     <Badge color="danger">COD</Badge>
-  );
-};
-
-export const getFulfillmentStatusBadge = (fulfillmentStatus) => {
-  return fulfillmentStatus === "fulfilled" ? (
-    <Badge color="success">Fulfilled</Badge>
-  ) : (
-    <Badge color="warning">Unfulfilled</Badge>
   );
 };
 

@@ -18,7 +18,7 @@ import {
   Input,
 } from "reactstrap";
 import {
-  getFinancialStatusBadge,
+  getPaymentModeBadge,
   getCarrierStatusBadge,
 } from "utils/componentHelpers";
 import PaginationDetails from "components/PaginationDetails";
@@ -59,8 +59,7 @@ export default function Orders() {
   }));
 
   const [selectedStores, setSelectedStores] = useState([]);
-  const [selectedFinStatus, setSelectedFinStatus] = useState([]);
-  const [selectedFulStatus, setSelectedFulStatus] = useState([]);
+  const [selectedPaymentMode, setSelectedPaymentMode] = useState([]);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
@@ -96,17 +95,10 @@ export default function Orders() {
         .join(",");
     }
 
-    if (!isEmpty(selectedFinStatus)) {
-      filter["financialStatus"] = map(selectedFinStatus, ({ value }) => value)
+    if (!isEmpty(selectedPaymentMode)) {
+      filter["paymentMode"] = map(selectedPaymentMode, ({ value }) => value)
         .filter((x) => x)
         .join(",");
-    }
-
-    if (!isEmpty(selectedFulStatus)) {
-      filter["fulfillmentStatus"] = map(
-        selectedFulStatus,
-        ({ value }) => value
-      ).join(",");
     }
 
     if (startDate && !isEmpty(startDate)) {
@@ -134,13 +126,7 @@ export default function Orders() {
 
   useEffect(() => {
     dispatch(operations.fetchOrders(getFilterParams()));
-  }, [
-    selectedStores,
-    selectedFinStatus,
-    selectedFulStatus,
-    startDate,
-    endDate,
-  ]);
+  }, [selectedStores, selectedPaymentMode, startDate, endDate]);
 
   const onClick = (id) =>
     history.push({
@@ -203,27 +189,15 @@ export default function Orders() {
         <Col md="2">
           <RtCreatableSelect
             name="description"
-            placeholder="Payment Status"
+            placeholder="Payment Mode"
             isMulti
             options={getPaymentFilter()}
-            value={selectedFinStatus}
+            value={selectedPaymentMode}
             onChange={(e) => {
-              setSelectedFinStatus(e);
+              setSelectedPaymentMode(e);
             }}
           />
         </Col>
-        {/* <Col md="2">
-          <RtCreatableSelect
-            name="description"
-            placeholder="Fulfillment Status"
-            isMulti
-            options={getFulfillmentFilter()}
-            value={selectedFulStatus}
-            onChange={(e) => {
-              setSelectedFulStatus(e);
-            }}
-          />
-        </Col> */}
         <Col md="2">
           <ReactDatetime
             inputProps={{
@@ -335,7 +309,7 @@ export default function Orders() {
           {
             text: "Payment Mode",
             dataField: "paymentMode",
-            formatter: (cell) => getFinancialStatusBadge(cell),
+            formatter: (cell) => getPaymentModeBadge(cell),
           },
           {
             text: "Carrier",

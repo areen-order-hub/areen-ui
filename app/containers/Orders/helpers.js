@@ -16,25 +16,12 @@ export const getStoreFilter = (stores = []) => {
 export const getPaymentFilter = () => {
   return [
     {
-      value: "paid",
-      label: "Paid",
+      value: "COD",
+      label: "COD",
     },
     {
-      value: "pending",
-      label: "Pending",
-    },
-  ];
-};
-
-export const getFulfillmentFilter = () => {
-  return [
-    {
-      value: "fulfilled",
-      label: "Fulfilled",
-    },
-    {
-      value: "unfulfilled",
-      label: "Unfulfilled",
+      value: "Prepaid",
+      label: "Prepaid",
     },
   ];
 };
