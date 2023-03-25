@@ -24,3 +24,12 @@ export const getFulfillmentStatusBadge = (fulfillmentStatus) => {
     <Badge color="warning">Unfulfilled</Badge>
   );
 };
+
+export const getCarrierStatusBadge = (carrierStatus) => {
+  switch (carrierStatus) {
+    case "AWB Generated":
+      return <Badge>AWB Generated</Badge>;
+    default:
+      return "N/A";
+  }
+};

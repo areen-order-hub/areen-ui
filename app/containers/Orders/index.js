@@ -19,7 +19,7 @@ import {
 } from "reactstrap";
 import {
   getFinancialStatusBadge,
-  getFulfillmentStatusBadge,
+  getCarrierStatusBadge,
 } from "utils/componentHelpers";
 import PaginationDetails from "components/PaginationDetails";
 import RtCreatableSelect from "components/RtCreatableSelect";
@@ -32,6 +32,7 @@ import {
   getStoreFilter,
   getPaymentFilter,
   getFulfillmentFilter,
+  generateAreenShippingBills,
 } from "./helpers";
 import reducer from "./reducer";
 import history from "../../utils/history";
@@ -45,6 +46,8 @@ export default function Orders() {
   const dispatch = useDispatch();
   const [dropdownOpen, setOpen] = useState(false);
   const toggle = () => setOpen(!dropdownOpen);
+
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [shippingDropDown, setShippingDropDown] = useState(false);
   const toggleShippingDropDown = () => setShippingDropDown(!shippingDropDown);
@@ -68,9 +71,16 @@ export default function Orders() {
     dispatch(operations.fetchStores());
   }, []);
 
+  const generateAreenShipment = (ordersString) => {
+    dispatch(
+      operations.generateAreenShipment(ordersString, { page: currentPage })
+    );
+    setSelectedOrders([]);
+  };
+
   const nonSelectableRows = useMemo(() => {
     const rowsWithNoInvoice = map(orders, (order, index) => {
-      if (isEmpty(get(order, "invoiceDetails", {}))) {
+      if (isEmpty(get(order, "invoiceDetails", {})) || order.carrierService) {
         return order._id;
       }
     });
@@ -327,11 +337,16 @@ export default function Orders() {
             dataField: "paymentMode",
             formatter: (cell) => getFinancialStatusBadge(cell),
           },
-          // {
-          //   text: "Fulfillment Status",
-          //   dataField: "fulfillmentStatus",
-          //   formatter: (cell) => getFulfillmentStatusBadge(cell),
-          // },
+          {
+            text: "Carrier",
+            dataField: "carrierService",
+            formatter: (cell) => cell || "N/A",
+          },
+          {
+            text: "Carrier Stataus",
+            dataField: "carrierStatus",
+            formatter: (cell) => getCarrierStatusBadge(cell),
+          },
           {
             text: "Date",
             dataField: "shopifyOrderDate",
@@ -370,10 +385,15 @@ export default function Orders() {
           {!isEmpty(selectedOrders) && (
             // <Button
             //   color="primary"
-            //   // onClick={() => generateAreenShippingBills(selectedOrders)}
             //   onClick={() =>
-            //     dispatch(operations.generateBeeThereShipment(selectedOrders))
+            //     generateAreenShippingBills(
+            //       selectedOrders,
+            //       generateAreenShipment
+            //     )
             //   }
+            //   // onClick={() =>
+            //   //   dispatch(operations.generateBeeThereShipment(selectedOrders))
+            //   // }
             // >
             //   Generate Shipping Bill
             // </Button>
@@ -388,8 +408,12 @@ export default function Orders() {
               </DropdownToggle>
               <DropdownMenu>
                 <DropdownItem
-                  disabled
-                  // onClick={() => generateAreenShippingBills(selectedOrders)}
+                  onClick={() =>
+                    generateAreenShippingBills(
+                      selectedOrders,
+                      generateAreenShipment
+                    )
+                  }
                 >
                   Areen Shipping
                 </DropdownItem>
@@ -403,6 +427,7 @@ export default function Orders() {
           <PaginationDetails
             paginationDetails={paginationDetails}
             onClick={(page) => {
+              setCurrentPage(page);
               dispatch(operations.fetchOrders({ page }));
             }}
           />

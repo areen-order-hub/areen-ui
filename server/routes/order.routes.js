@@ -10,5 +10,6 @@ router.post("/trigger/invoiceSync", services.syncInvoices);
 router.post("/trigger/orderSync", services.syncOrders);
 
 router.post("/carrier/beeThere", services.createBeeThereShipment);
+router.post("/carrier/areen", services.createAreenShipment);
 
 module.exports = router;

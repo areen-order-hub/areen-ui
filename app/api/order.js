@@ -43,3 +43,11 @@ export const createBeeThereShipment = async (data) => {
     data,
   });
 };
+
+export const createAreenShipment = async (data) => {
+  return await Request({
+    url: `/api/order/carrier/areen`,
+    method: "POST",
+    data,
+  });
+};
