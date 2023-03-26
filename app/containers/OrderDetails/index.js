@@ -22,6 +22,7 @@ import {
 } from "reactstrap";
 import { get, map } from "lodash";
 import Skeleton from "react-loading-skeleton";
+import AlertPopupHandler from "components/AlertPopup/AlertPopupHandler";
 import reducer from "./reducer";
 import history from "utils/history";
 import RtInput from "../../components/RtInput/index";
@@ -123,14 +124,40 @@ export default function OrderDetails({ match }) {
     );
   };
 
+  const onCancelShipment = () => {
+    AlertPopupHandler.open({
+      onConfirm: () => dispatch(operations.deleteShipment(match.params.id)),
+      confirmBtnText: "Yes, Cancel",
+      cancelBtnText: "No, Go Back",
+      text: `You are about to cancel the shipment. Do you want to continue?`,
+      data: {},
+      type: "danger",
+      customClass: "text-xs",
+      btnSize: "sm",
+      confirmBtnBsStyle: "danger",
+      cancelBtnBsStyle: "outline-danger",
+    });
+  };
+
   const getOrderComponent = () => {
     return (
       <Card>
         <CardHeader>
-          <Row className="px-1">
+          <Row className="px-1 align-items-center">
             <Col xs="12" md="10" className="align-items-center">
               <span className="h1 mr-2 text-primary">{shopifyOrderName}</span>
             </Col>
+            {carrierService && carrierStatus != "Shipment cancelled" && (
+              <Col className="text-right">
+                <Button
+                  size="sm"
+                  color="danger"
+                  onClick={() => onCancelShipment()}
+                >
+                  Cancel Shipment
+                </Button>
+              </Col>
+            )}
           </Row>
           <Row className="mx-1 mt-3 text-md text-muted">
             <div className="mr-3" title="Shopify Order Date">

@@ -12,5 +12,6 @@ router.post("/trigger/orderSync", services.syncOrders);
 router.post("/carrier/areen", services.createAreenShipment);
 router.post("/carrier/beeThere", services.createBeeThereShipment);
 router.post("/carrier/elite", services.createEliteShipment);
+router.delete("/carrier/:orderId", services.cancelShipment);
 
 module.exports = router;

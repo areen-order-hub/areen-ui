@@ -10,7 +10,7 @@ import {
   SET_ORDER_DETAILS,
   SET_COMMENT_DETAILS,
 } from "./constants";
-import { getOrder } from "api/order";
+import { getOrder, cancelShipment } from "api/order";
 import { saveComment, getComments } from "api/comment";
 import NotificationHandler from "../../components/Notifications/NotificationHandler";
 
@@ -26,6 +26,27 @@ export const fetchOrder = (orderId) => {
           get(err, "response.data", null) ||
           "Something went wrong. Please try again later",
         title: "Unable to fetch Order details",
+      });
+    }
+  };
+};
+
+export const deleteShipment = (orderId) => {
+  return async (dispatch) => {
+    try {
+      await cancelShipment(orderId);
+      NotificationHandler.open({
+        operation: "success",
+        title: "Shipment cancelled successfully",
+      });
+      dispatch(fetchOrder(orderId));
+    } catch (err) {
+      NotificationHandler.open({
+        operation: "failure",
+        message:
+          get(err, "response.data", null) ||
+          "Something went wrong. Please try again later",
+        title: "Unable to cancel shipment",
       });
     }
   };

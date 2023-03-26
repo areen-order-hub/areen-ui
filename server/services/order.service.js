@@ -135,3 +135,21 @@ exports.createEliteShipment = async (req, res) => {
     res.status(err.status).json(err.message);
   }
 };
+
+exports.cancelShipment = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const url = `/v1/order/carrier/${orderId}`;
+    const data = await Request(
+      {
+        url,
+        method: "DELETE",
+        data: req.body,
+      },
+      req.headers
+    );
+    res.json(data);
+  } catch (err) {
+    res.status(err.status).json(err.message);
+  }
+};

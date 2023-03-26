@@ -59,3 +59,10 @@ export const createEliteShipment = async (data) => {
     data,
   });
 };
+
+export const cancelShipment = async (orderId) => {
+  return await Request({
+    url: `/api/order/carrier/${orderId}`,
+    method: "DELETE",
+  });
+};
