@@ -2,5 +2,5 @@ node_modules
 .env
 .vercel
 build
-dev-hikers.pem
+areen-order-hub.pem
 build-and-send-aws.sh
