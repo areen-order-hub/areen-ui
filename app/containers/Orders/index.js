@@ -28,6 +28,7 @@ import Table from "components/Table";
 import ReactDatetime from "react-datetime";
 import { useInjectReducer } from "utils/injectReducer";
 import moment from "moment-timezone";
+import * as XLSX from "xlsx/xlsx.mjs";
 import { isEmpty, get, map, filter, some, isNil } from "lodash";
 import {
   getStoreFilter,
@@ -105,36 +106,55 @@ export default function Orders() {
   };
 
   // Bulk Import and Export Orders
-  // const downloadImportTemplate = () => {
-  //   let data = [];
-  //   data.push({
-  //     customerName: "",
-  //     customerPhone: "",
-  //     paymentMode: "",
-  //     shopifyDisplayId: "",
-  //     shopifyOrderDate: "",
-  //     shopifyOrderName: "",
-  //     shopifyPrice: "",
-  //     weight: "",
-  //   });
+  const downloadImportTemplate = () => {
+    let data = [];
+    data.push({
+      customerName: "",
+      customerPhone: "",
+      paymentMode: "",
+      shopifyDisplayId: "",
+      shopifyOrderDate: "",
+      shopifyOrderName: "",
+      shopifyPrice: "",
+      weight: "",
+      "billingAddress.name": "",
+      "billingAddress.address1": "",
+      "billingAddress.address2": "",
+      "billingAddress.city": "",
+      "billingAddress.province": "",
+      "billingAddress.country": "",
+      "billingAddress.phone": "",
+      "shippingAddress.name": "",
+      "shippingAddress.address1": "",
+      "shippingAddress.address2": "",
+      "shippingAddress.city": "",
+      "shippingAddress.province": "",
+      "shippingAddress.country": "",
+      "shippingAddress.phone": "",
+      "shippingAddress.latitude": "",
+      "shippingAddress.longitude": "",
+      itemTitle: "",
+      itemQuantity: "",
+      itemSKU: "",
+    });
 
-  //   var ws = XLSX.utils.json_to_sheet(data);
-  //   var wb = XLSX.utils.book_new();
-  //   XLSX.utils.book_append_sheet(wb, ws, "Orders");
-  //   var wbout = XLSX.write(wb, { bookType: "xlsx", type: "binary" });
+    var ws = XLSX.utils.json_to_sheet(data);
+    var wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Orders");
+    var wbout = XLSX.write(wb, { bookType: "xlsx", type: "binary" });
 
-  //   function s2ab(s) {
-  //     var buf = new ArrayBuffer(s.length);
-  //     var view = new Uint8Array(buf);
-  //     for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xff;
-  //     return buf;
-  //   }
+    function s2ab(s) {
+      var buf = new ArrayBuffer(s.length);
+      var view = new Uint8Array(buf);
+      for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xff;
+      return buf;
+    }
 
-  //   saveAs(
-  //     new Blob([s2ab(wbout)], { type: "application/octet-stream" }),
-  //     `aoh-import-orders-template.xlsx`
-  //   );
-  // };
+    saveAs(
+      new Blob([s2ab(wbout)], { type: "application/octet-stream" }),
+      `aoh-import-orders-template.xlsx`
+    );
+  };
 
   const nonSelectableRows = useMemo(() => {
     const rowsWithNoInvoice = map(orders, (order, index) => {
@@ -429,10 +449,7 @@ export default function Orders() {
               >
                 Export Orders
               </DropdownItem>
-              <DropdownItem
-                disabled
-                onClick={() => dispatch(operations.syncInvoices())}
-              >
+              <DropdownItem onClick={() => downloadImportTemplate()}>
                 Download Template
               </DropdownItem>
               <DropdownItem
