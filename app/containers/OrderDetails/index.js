@@ -49,6 +49,7 @@ export default function OrderDetails({ match }) {
     carrierService,
     carrierStatus,
     carrierServiceId,
+    carrierTrackingLink,
     weight,
     paymentMode,
     comments,
@@ -66,6 +67,7 @@ export default function OrderDetails({ match }) {
     carrierService: selectors.carrierService(state),
     carrierStatus: selectors.carrierStatus(state),
     carrierServiceId: selectors.carrierServiceId(state),
+    carrierTrackingLink: selectors.carrierTrackingLink(state),
     weight: selectors.weight(state),
     paymentMode: selectors.paymentMode(state),
     comments: selectors.comments(state),
@@ -132,7 +134,10 @@ export default function OrderDetails({ match }) {
       onConfirm: () => dispatch(operations.deleteShipment(match.params.id)),
       confirmBtnText: "Yes, Cancel",
       cancelBtnText: "No, Go Back",
-      text: `You are about to cancel the shipment. Do you want to continue?`,
+      text:
+        carrierService == "Elite"
+          ? `This only marks the shipment as cancelled and doesn't cancel the actual Elite Shipment. Do you want to continue?`
+          : `You are about to cancel the shipment. Do you want to continue?`,
       data: {},
       type: "danger",
       customClass: "text-xs",
@@ -215,6 +220,19 @@ export default function OrderDetails({ match }) {
               {carrierServiceId || "N/A"}
             </span>
           </p>
+          {carrierService == "Elite" && (
+            <p>
+              <span className="text-muted">Carrier Tracking Link: </span>
+              <span
+                className="text-primary font-weight-bold text-underline hover-pointer"
+                onClick={() => {
+                  window.open(carrierTrackingLink, "_blank");
+                }}
+              >
+                {carrierTrackingLink || "N/A"}
+              </span>
+            </p>
+          )}
         </CardHeader>
         <CardHeader>
           <div className="mb-3">

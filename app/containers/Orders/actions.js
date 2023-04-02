@@ -141,7 +141,7 @@ export const generateEliteShipment = (ordersString, pageParams) => {
         message:
           get(err, "response.data", null) ||
           "Something went wrong. Please try again later",
-        title: "Unable to create BeeThere Shipment",
+        title: "Unable to create Elite Shipment",
       });
     } finally {
       dispatch(setIsShipmentGenerating(false));

@@ -341,7 +341,7 @@ export default function Orders() {
           >
             BeeThere
           </DropdownItem>
-          <DropdownItem disabled onClick={() => onGenerateShipment("Elite")}>
+          <DropdownItem onClick={() => onGenerateShipment("Elite")}>
             Elite
           </DropdownItem>
         </DropdownMenu>
@@ -541,9 +541,27 @@ export default function Orders() {
             text: "Carrier ID",
             dataField: "carrierServiceId",
             formatter: (cell, row) =>
-              get(row, "carrierService") == "Areen"
-                ? get(row, "invoiceDetails.orderNo")
-                : cell || "N/A",
+              get(row, "carrierService") == "Areen" ? (
+                <span
+                  className="text-primary hover-pointer text-underline"
+                  title="Download AWB"
+                  onClick={() => generateAreenShippingBills([row], () => {})}
+                >
+                  {get(row, "invoiceDetails.orderNo")}
+                </span>
+              ) : cell ? (
+                <span
+                  className="text-primary hover-pointer text-underline"
+                  title="Download AWB"
+                  onClick={() =>
+                    window.open(get(row, "carrierAWBLink", ""), "_blank")
+                  }
+                >
+                  {cell}
+                </span>
+              ) : (
+                "N/A"
+              ),
           },
           {
             text: "Date",
