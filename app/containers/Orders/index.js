@@ -12,15 +12,21 @@ import {
   Col,
   Spinner,
   ButtonDropdown,
+  Button,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
   Input,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "reactstrap";
 import {
   getPaymentModeBadge,
   getCarrierStatusBadge,
 } from "utils/componentHelpers";
+import RSelectAsync from "components/RSelectAsync";
 import PaginationDetails from "components/PaginationDetails";
 import RtCreatableSelect from "components/RtCreatableSelect";
 import AlertPopupHandler from "components/AlertPopup/AlertPopupHandler";
@@ -57,6 +63,11 @@ export default function Orders() {
 
   const [shippingDropDown, setShippingDropDown] = useState(false);
   const toggleShippingDropDown = () => setShippingDropDown(!shippingDropDown);
+
+  const [showExportModal, setShowExportModal] = useState(false);
+  const toggleExportModal = () => setShowExportModal((v) => !v);
+
+  const [ordersForExport, setOrdersForExport] = useState([]);
 
   const {
     orders,
@@ -154,6 +165,66 @@ export default function Orders() {
       new Blob([s2ab(wbout)], { type: "application/octet-stream" }),
       `aoh-import-orders-template.xlsx`
     );
+  };
+
+  const shapeAndExportOrders = () => {
+    let data = [];
+    ordersForExport.forEach(
+      ({
+        shopifyOrderName,
+        invoiceDetails,
+        customerName,
+        shippingAddress,
+        paymentMode,
+        carrierService,
+        carrierStatus,
+        carrierServiceId,
+        shopifyOrderDate,
+        shopifyPrice,
+        weight,
+        storeId,
+      }) => {
+        let row = {
+          "Order Id": shopifyOrderName,
+          "Invoice No.": get(invoiceDetails, "orderNo", "N/A"),
+          "Customer Name": customerName,
+          "Customer Phone": get(shippingAddress, "phone", "N/A"),
+          "Payment Mode": paymentMode,
+          "Carrier Service": carrierService || "N/A",
+          "Carrier Status": carrierStatus || "N/A",
+          "Carrier Service Id":
+            carrierService == "Areen"
+              ? get(invoiceDetails, "orderNo")
+              : carrierServiceId || "N/A",
+          Date: parseDate(shopifyOrderDate, "DD MM YY"),
+          "Shopify Price (AED)": shopifyPrice,
+          "Inv. Price (AED)":
+            `${numberFormatter(get(invoiceDetails, "price"))}` || "N/A",
+          "Weight (Kg)": weight,
+          Store: get(storeId, "alias", "N/A"),
+        };
+        data.push(row);
+      }
+    );
+
+    var ws = XLSX.utils.json_to_sheet(data);
+    var wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Orders");
+    var wbout = XLSX.write(wb, { bookType: "xlsx", type: "binary" });
+
+    function s2ab(s) {
+      var buf = new ArrayBuffer(s.length);
+      var view = new Uint8Array(buf);
+      for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xff;
+      return buf;
+    }
+
+    saveAs(
+      new Blob([s2ab(wbout)], { type: "application/octet-stream" }),
+      `aoh-exported-orders.xlsx`
+    );
+    setOrdersForExport([]);
+    toggleExportModal();
   };
 
   const nonSelectableRows = useMemo(() => {
@@ -430,6 +501,52 @@ export default function Orders() {
           />
         </Col>
         <div className="d-flex align-items-right ml-auto mr-3">
+          <Modal
+            isOpen={showExportModal}
+            toggle={toggleExportModal}
+            size="xl"
+            fullscreen
+            backdrop="static"
+          >
+            <ModalHeader toggle={toggleExportModal}>Export Orders</ModalHeader>
+            <ModalBody>
+              <RSelectAsync
+                groupClassName="m-0"
+                shouldInitialLoad
+                controlShouldRenderValue
+                placeholder="Select Orders"
+                url={`/api/order`}
+                isMulti
+                name="ordersForExport"
+                value={ordersForExport}
+                param="shopifyOrderName"
+                id="ordersForExport"
+                getOptionLabel={(option) => option.shopifyOrderName}
+                getOptionValue={(option) => option._id}
+                onChange={(e) => {
+                  if (e) {
+                    setOrdersForExport(e);
+                  } else {
+                    setOrdersForExport([]);
+                  }
+                }}
+              />
+            </ModalBody>
+            <ModalFooter>
+              <Button color="primary" onClick={() => shapeAndExportOrders()}>
+                Export
+              </Button>
+              <Button
+                color="secondary"
+                onClick={() => {
+                  setOrdersForExport([]);
+                  toggleExportModal();
+                }}
+              >
+                Cancel
+              </Button>
+            </ModalFooter>
+          </Modal>
           {getGenerateShipmentButton()}
           <ButtonDropdown
             isOpen={bulkDropdownOpen}
@@ -443,10 +560,7 @@ export default function Orders() {
               </span>
             </DropdownToggle>
             <DropdownMenu>
-              <DropdownItem
-                disabled
-                onClick={() => dispatch(operations.syncOrders())}
-              >
+              <DropdownItem onClick={() => toggleExportModal()}>
                 Export Orders
               </DropdownItem>
               <DropdownItem onClick={() => downloadImportTemplate()}>
@@ -567,7 +681,7 @@ export default function Orders() {
             text: "Date",
             dataField: "shopifyOrderDate",
             sort: true,
-            formatter: (cell) => parseDate(cell),
+            formatter: (cell) => parseDate(cell, "DD MMM YY"),
           },
           {
             text: "Shopify Price (AED)",

@@ -16,6 +16,21 @@ exports.paginate = async (req, res) => {
   }
 };
 
+exports.list = async (req, res) => {
+  try {
+    const orders = await Request(
+      {
+        url: "/v1/order/all",
+        method: "GET",
+      },
+      req.headers
+    );
+    res.json(orders);
+  } catch (err) {
+    res.status(err.status).json(err.message);
+  }
+};
+
 exports.fetch = async (req, res) => {
   try {
     const { orderId } = req.params;
