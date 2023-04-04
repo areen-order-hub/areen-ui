@@ -34,6 +34,7 @@ export const getCarrierStatusFiler = () => {
     },
     { value: "APPROVED", label: "Approved" },
     { value: "Shipment cancelled", label: "Shipment cancelled" },
+    { value: "Delivered", label: "Delivered" },
   ];
 };
 

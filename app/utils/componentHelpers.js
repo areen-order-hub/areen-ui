@@ -25,6 +25,8 @@ export const getCarrierStatusBadge = (carrierStatus) => {
       return <Badge color="primary">Approved</Badge>;
     case "Shipment cancelled":
       return <Badge color="danger">Shipment cancelled</Badge>;
+    case "Delivered":
+      return <Badge color="success">Delivered</Badge>;
     default:
       return carrierStatus || "N/A";
   }
