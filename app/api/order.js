@@ -8,6 +8,14 @@ export const paginateOrders = async (params) => {
   });
 };
 
+export const bulkCreate = async (data) => {
+  return await Request({
+    url: "/api/order/bulk",
+    method: "POST",
+    data,
+  });
+};
+
 export const getOrder = async (id) => {
   return await Request({
     url: `/api/order/${id}`,

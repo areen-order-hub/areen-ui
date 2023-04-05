@@ -96,6 +96,7 @@ const getBillDocDefinition = ({
   shippingAddressString,
   weight,
   paymentMode,
+  bulkStoreName,
 }) => {
   const dataTable = {
     widths: ["*", "*", "*", "*"],
@@ -133,7 +134,7 @@ const getBillDocDefinition = ({
       ],
       [
         {
-          text: `Website: ${get(storeId, "name", "N/A")}`,
+          text: `Website: ${get(storeId, "name", bulkStoreName)}`,
           margin: [0, 10, 0, 10],
           alignment: "center",
           bold: true,

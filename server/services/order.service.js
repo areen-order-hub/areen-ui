@@ -16,6 +16,22 @@ exports.paginate = async (req, res) => {
   }
 };
 
+exports.bulkCreate = async (req, res) => {
+  try {
+    const orders = await Request(
+      {
+        url: "/v1/order/bulk",
+        method: "POST",
+        data: req.body,
+      },
+      req.headers
+    );
+    res.json(orders);
+  } catch (err) {
+    res.status(err.status).json(err.message);
+  }
+};
+
 exports.list = async (req, res) => {
   try {
     const orders = await Request(

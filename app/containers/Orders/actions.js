@@ -10,6 +10,7 @@ import {
   SET_IS_SHIPMENT_GENERATING,
 } from "./constants";
 import {
+  bulkCreate,
   paginateOrders,
   triggerProductSync,
   triggerInvoiceSync,
@@ -29,6 +30,27 @@ export const fetchOrders = (params) => {
       dispatch(setOrderList(data));
     } catch (err) {
       dispatch(setOrderList());
+    }
+  };
+};
+
+export const saveBulkOrders = (orders) => {
+  return async (dispatch) => {
+    try {
+      await bulkCreate(orders);
+      NotificationHandler.open({
+        operation: "success",
+        title: "Bulk Orders saved successfully",
+      });
+      dispatch(fetchOrders({ page: 1 }));
+    } catch (err) {
+      NotificationHandler.open({
+        operation: "failure",
+        message:
+          get(err, "response.data", null) ||
+          "Something went wrong. Please try again later",
+        title: "Unable to save bulk orders",
+      });
     }
   };
 };
