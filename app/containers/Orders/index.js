@@ -32,6 +32,7 @@ import RtCreatableSelect from "components/RtCreatableSelect";
 import AlertPopupHandler from "components/AlertPopup/AlertPopupHandler";
 import Table from "components/Table";
 import ReactDatetime from "react-datetime";
+import ImportOrdersModal from "./ImportOrdersModal";
 import { useInjectReducer } from "utils/injectReducer";
 import moment from "moment-timezone";
 import * as XLSX from "xlsx/xlsx.mjs";
@@ -66,8 +67,10 @@ export default function Orders() {
 
   const [showExportModal, setShowExportModal] = useState(false);
   const toggleExportModal = () => setShowExportModal((v) => !v);
-
   const [ordersForExport, setOrdersForExport] = useState([]);
+
+  const [showImportModal, setShowImportModal] = useState(false);
+  const toggleImportModal = () => setShowImportModal((v) => !v);
 
   const {
     orders,
@@ -120,10 +123,10 @@ export default function Orders() {
   const downloadImportTemplate = () => {
     let data = [];
     data.push({
+      storeAlias: "",
+      storeName: "",
       customerName: "",
-      customerPhone: "",
       paymentMode: "",
-      shopifyDisplayId: "",
       shopifyOrderDate: "",
       shopifyOrderName: "",
       shopifyPrice: "",
@@ -135,6 +138,7 @@ export default function Orders() {
       "billingAddress.province": "",
       "billingAddress.country": "",
       "billingAddress.phone": "",
+      "billingAddress.zip": "",
       "shippingAddress.name": "",
       "shippingAddress.address1": "",
       "shippingAddress.address2": "",
@@ -142,6 +146,7 @@ export default function Orders() {
       "shippingAddress.province": "",
       "shippingAddress.country": "",
       "shippingAddress.phone": "",
+      "shippingAddress.zip": "",
       "shippingAddress.latitude": "",
       "shippingAddress.longitude": "",
       itemTitle: "",
@@ -547,6 +552,10 @@ export default function Orders() {
               </Button>
             </ModalFooter>
           </Modal>
+          <ImportOrdersModal
+            isOpen={showImportModal}
+            toggle={toggleImportModal}
+          />
           {getGenerateShipmentButton()}
           <ButtonDropdown
             isOpen={bulkDropdownOpen}
@@ -566,10 +575,7 @@ export default function Orders() {
               <DropdownItem onClick={() => downloadImportTemplate()}>
                 Download Template
               </DropdownItem>
-              <DropdownItem
-                disabled
-                onClick={() => dispatch(operations.syncProducts())}
-              >
+              <DropdownItem onClick={() => toggleImportModal()}>
                 Upload Orders
               </DropdownItem>
             </DropdownMenu>
