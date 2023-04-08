@@ -44,13 +44,11 @@ export default function Dashboard() {
     noOfStores,
     noOfActiveStores,
     noOfOrders,
-    noOfUnfulfilledOrders,
   } = useSelector((state) => ({
     isCountLoading: selectors.isCountLoading(state),
     noOfStores: selectors.noOfStores(state),
     noOfActiveStores: selectors.noOfActiveStores(state),
     noOfOrders: selectors.noOfOrders(state),
-    noOfUnfulfilledOrders: selectors.noOfUnfulfilledOrders(state),
   }));
 
   React.useEffect(() => {
@@ -78,7 +76,6 @@ export default function Dashboard() {
               noOfStores,
               noOfActiveStores,
               noOfOrders,
-              noOfUnfulfilledOrders,
             }}
           />
         </Col>
