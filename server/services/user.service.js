@@ -17,6 +17,22 @@ exports.list = async (req, res) => {
   }
 };
 
+exports.paginate = async (req, res) => {
+  try {
+    const users = await Request(
+      {
+        url: "/v1/user/paginate",
+        method: "GET",
+        params: req.query,
+      },
+      req.headers
+    );
+    res.json(users);
+  } catch (err) {
+    res.status(err.status).json(err.message);
+  }
+};
+
 exports.GetUser = async (req, res) => {
   try {
     const { userId } = req.params;

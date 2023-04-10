@@ -3,6 +3,7 @@ const services = require("../services/user.service");
 
 const router = express.Router();
 
+router.get("/paginate", services.paginate);
 router.get("", services.list);
 
 router.get("/:userId", services.GetUser);
