@@ -29,6 +29,9 @@ import StoreDetails from "containers/StoreDetails";
 import Orders from "containers/Orders";
 import OrderDetails from "containers/OrderDetails";
 
+import Users from "containers/Users";
+import UserForm from "containers/UserForm";
+
 import WhatsNew from "containers/WhatsNew";
 
 import { permissions } from "utils/permissions";
@@ -84,6 +87,20 @@ const routes = {
       component: Orders,
       layout: "",
     },
+    {
+      path: "/users",
+      name: "Users",
+      icon: "fas fa-users text-secondary",
+      component: Users,
+      layout: "",
+    },
+    {
+      redirect: true,
+      path: "/user-form",
+      name: "UserForm",
+      component: UserForm,
+      layout: "",
+    },
     // {
     //   redirect: true,
     //   path: "/add-position",
@@ -125,15 +142,7 @@ const routes = {
     //   icon: "far fa-calendar-alt text-secondary",
     //   component: Interviews,
     //   layout: "",
-    // },
-    // {
-    //   permission: permissions.VIEW_RECRUITERS,
-    //   path: "/recruiters",
-    //   name: "Recruiters",
-    //   icon: "fas fa-users text-secondary",
-    //   component: Recruiters,
-    //   layout: "",
-    // },
+    // }
     // {
     //   redirect: true,
     //   path: "/add-recruiter",

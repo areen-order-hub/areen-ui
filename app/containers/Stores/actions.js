@@ -7,6 +7,7 @@
 import { SET_STORE_LIST, STORES_PAGE_SET_LOADING } from "./constants";
 import { paginateStores, editStore } from "api/store";
 import NotificationHandler from "components/Notifications/NotificationHandler";
+import { get } from "lodash";
 
 export const fetchStores = (params) => {
   return async (dispatch) => {
@@ -32,7 +33,7 @@ export const updateStoreStatus = (id, storeDetails, params) => {
       NotificationHandler.open({
         operation: "failure",
         message:
-          _get(err, "response.data", null) ||
+          get(err, "response.data", null) ||
           "Something went wrong. Please try again later",
         title: "Unable to change Store status",
       });

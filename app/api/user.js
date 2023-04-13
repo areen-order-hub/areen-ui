@@ -1,8 +1,9 @@
 import Request from "utils/request";
 
-export const getRecruiters = async () => {
+export const paginateUsers = async (params) => {
   return await Request({
-    url: "/api/user",
+    url: "/api/user/paginate",
     method: "GET",
+    params,
   });
 };
