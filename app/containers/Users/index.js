@@ -27,11 +27,38 @@ export default function Users() {
     paginationDetails: selectors.paginationDetails(state),
   }));
 
-  const [currentPage, setCurrentPage] = useState(1);
-
   useEffect(() => {
     dispatch(operations.fetchUsers({ page: 1 }));
   }, []);
+
+  const onUserStatusChange = (id, isEnabled) => {
+    AlertPopupHandler.open({
+      onConfirm: () =>
+        dispatch(
+          operations.updateUserStatus(
+            id,
+            {
+              isEnabled,
+            },
+            { page: paginationDetails.page }
+          )
+        ),
+      confirmBtnText: isEnabled ? "Activate" : "Deactivate",
+      text: `You are about to ${
+        isEnabled ? "activate" : "deactivate"
+      } this user. Do you want to continue?`,
+      data: {},
+      customClass: "text-xs",
+      btnSize: "sm",
+      ...(isEnabled
+        ? {
+            success: true,
+            confirmBtnBsStyle: "success",
+            cancelBtnBsStyle: "outline-success",
+          }
+        : { warning: true }),
+    });
+  };
 
   return (
     <div className="users mx-3 mx-md-4 ml-lg-7">
@@ -72,6 +99,36 @@ export default function Users() {
             dataField: "email",
             formatter: (cell) => cell || "N/A",
           },
+          {
+            text: "Actions",
+            dataField: "isEnabled",
+            formatter: (cell, { id }) =>
+              cell ? (
+                <Button
+                  title="Deactivate Store"
+                  type="button"
+                  color="danger"
+                  size="sm"
+                  onClick={() => onUserStatusChange(id, false)}
+                >
+                  <span className="btn-inner--icon">
+                    <i className="fas fa-ban" />
+                  </span>
+                </Button>
+              ) : (
+                <Button
+                  title="Activate Store"
+                  type="button"
+                  color="success"
+                  size="sm"
+                  onClick={() => onUserStatusChange(id, true)}
+                >
+                  <span className="btn-inner--icon">
+                    <i className="fas fa-check" />
+                  </span>
+                </Button>
+              ),
+          },
         ]}
       />
       <Row className="mt-2">
@@ -79,7 +136,6 @@ export default function Users() {
           <PaginationDetails
             paginationDetails={paginationDetails}
             onClick={(page) => {
-              setCurrentPage(page);
               dispatch(operations.fetchUsers({ page }));
             }}
           />

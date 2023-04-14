@@ -33,6 +33,23 @@ exports.paginate = async (req, res) => {
   }
 };
 
+exports.patchUserProfile = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await Request(
+      {
+        url: `/v1/user/profile/${userId}`,
+        method: "PATCH",
+        data: req.body,
+      },
+      req.headers
+    );
+    res.json(user);
+  } catch (err) {
+    res.status(err.status).json(err.message);
+  }
+};
+
 exports.GetUser = async (req, res) => {
   try {
     const { userId } = req.params;

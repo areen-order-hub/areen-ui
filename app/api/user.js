@@ -15,3 +15,11 @@ export const sendInvite = async (userDetails) => {
     data: userDetails,
   });
 };
+
+export const patchUser = async (id, data) => {
+  return await Request({
+    url: `/api/user/profile/${id}`,
+    method: "PATCH",
+    data,
+  });
+};

@@ -5,7 +5,7 @@
  */
 
 import { SET_USER_LIST, SET_USER_LOADING } from "./constants";
-import { paginateUsers } from "api/user";
+import { paginateUsers, patchUser } from "api/user";
 import NotificationHandler from "components/Notifications/NotificationHandler";
 import { get } from "lodash";
 
@@ -22,6 +22,27 @@ export const fetchUsers = (params) => {
           get(err, "response.data", null) ||
           "Something went wrong. Please try again later",
         title: "Unable to fetch Users",
+      });
+    }
+  };
+};
+
+export const updateUserStatus = (id, userDetails, params) => {
+  return async (dispatch) => {
+    try {
+      await patchUser(id, userDetails);
+      NotificationHandler.open({
+        operation: "success",
+        title: "User status changed successfully",
+      });
+      dispatch(fetchUsers(params));
+    } catch (err) {
+      NotificationHandler.open({
+        operation: "failure",
+        message:
+          get(err, "response.data", null) ||
+          "Something went wrong. Please try again later",
+        title: "Unable to change User status",
       });
     }
   };
