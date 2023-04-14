@@ -9,4 +9,4 @@ export const CHANGE_EMAIL = "app/UserForm/CHANGE_EMAIL";
 
 export const SHOW_LOADING = "app/UserForm/SHOW_LOADING";
 export const VALIDATION_ERROR = "app/UserForm/VALIDATION_ERROR";
-export const SET_USER_DETAILS = "app/UserForm/SET_STORE_DETAILS";
+export const SET_USER_DETAILS = "app/UserForm/SET_USER_DETAILS";

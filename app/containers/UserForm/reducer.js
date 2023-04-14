@@ -27,8 +27,8 @@ const userFormReducer = (state = initialState, action) =>
       case INIT:
         return initialState;
       case SET_USER_DETAILS:
-        draft.name = action.user.name;
-        draft.email = action.user.email;
+        draft.name = action.payload.name;
+        draft.email = action.payload.email;
         draft.isEdit = true;
       case CHANGE_NAME:
         draft.name = action.payload;
