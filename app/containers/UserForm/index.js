@@ -12,6 +12,7 @@ import { Helmet } from "react-helmet";
 import { useInjectReducer } from "utils/injectReducer";
 import { get } from "lodash";
 import { Row, Col, Button, Spinner, Form, FormGroup, Label } from "reactstrap";
+import RSelectAsync from "components/RSelectAsync";
 import reducer from "./reducer";
 import * as operations from "./actions";
 import * as selectors from "./selectors";
@@ -28,6 +29,7 @@ export default function UserForm() {
   const {
     name,
     email,
+    roles,
     isLoading,
     errorMessage,
     validations,
@@ -35,6 +37,7 @@ export default function UserForm() {
   } = useSelector((state) => ({
     name: selectors.name(state),
     email: selectors.email(state),
+    roles: selectors.roles(state),
     isLoading: selectors.isLoading(state),
     errorMessage: selectors.errorMessage(state),
     validations: selectors.validations(state),
@@ -57,7 +60,7 @@ export default function UserForm() {
         operations.onEdit(id, {
           name,
           email,
-          orgId: get(cookie, "user.orgId", ""),
+          roles,
         })
       );
     } else {
@@ -66,6 +69,7 @@ export default function UserForm() {
           name,
           email,
           orgId: get(cookie, "user.orgId", ""),
+          roles,
         })
       );
     }
@@ -147,6 +151,7 @@ export default function UserForm() {
           <Label sm={2}>Email</Label>
           <Col sm={6}>
             <RtInput
+              disable={isEdit}
               onChange={(e) => dispatch(operations.changeEmail(e))}
               type="text"
               placeholder="Eg: test@gmail.com"
@@ -155,7 +160,33 @@ export default function UserForm() {
               value={email}
             />
           </Col>
-        </FormGroup>{" "}
+        </FormGroup>
+        <FormGroup row>
+          <Label sm={2}>Role</Label>
+          <Col sm={6}>
+            <RSelectAsync
+              groupClassName="m-0"
+              shouldInitialLoad
+              controlShouldRenderValue
+              placeholder="Select Roles"
+              url={`/api/role`}
+              isMulti
+              name="roles"
+              value={roles}
+              param="role"
+              id="roles"
+              getOptionLabel={(option) => option.role}
+              getOptionValue={(option) => option._id}
+              onChange={(e) => {
+                if (e) {
+                  dispatch(operations.changeRoles(e));
+                } else {
+                  dispatch(operations.changeRoles([]));
+                }
+              }}
+            />
+          </Col>
+        </FormGroup>
         <FormGroup row>
           <Col className="mt-3">{getSubmitButton()}</Col>
           <Col>{getErrorComponent()}</Col>

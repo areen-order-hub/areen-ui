@@ -23,3 +23,10 @@ export const patchUser = async (id, data) => {
     data,
   });
 };
+
+export const getUser = async (id) => {
+  return await Request({
+    url: `/api/user/profile/${id}`,
+    method: "GET",
+  });
+};

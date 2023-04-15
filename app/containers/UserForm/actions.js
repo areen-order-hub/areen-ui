@@ -8,11 +8,12 @@ import {
   INIT,
   CHANGE_NAME,
   CHANGE_EMAIL,
+  CHANGE_ROLES,
   SHOW_LOADING,
   SET_USER_DETAILS,
   VALIDATION_ERROR,
 } from "./constants";
-import { sendInvite } from "api/user";
+import { sendInvite, getUser, patchUser } from "api/user";
 import history from "../../utils/history";
 import { get } from "lodash";
 import schema from "./validations";
@@ -36,7 +37,6 @@ export const onSubmit = (userDetails) => {
       });
       history.push("/users");
     } catch (err) {
-      dispatch(showLoading(false));
       NotificationHandler.open({
         operation: "failure",
         message:
@@ -44,6 +44,39 @@ export const onSubmit = (userDetails) => {
           "Something went wrong. Please try again later",
         title: "Unable to invite User",
       });
+    } finally {
+      dispatch(showLoading(false));
+    }
+  };
+};
+
+export const onEdit = (id, userDetails) => {
+  return async (dispatch) => {
+    try {
+      const isValid = schema.isValidSync(userDetails);
+      if (!isValid) {
+        const err = await schema.validate(userDetails).catch((err) => err);
+        dispatch(validationFailed(err));
+        return;
+      }
+      dispatch(showLoading(true));
+
+      await patchUser(id, userDetails);
+      NotificationHandler.open({
+        operation: "success",
+        title: "User updated successfully",
+      });
+      history.push("/users");
+    } catch (err) {
+      NotificationHandler.open({
+        operation: "failure",
+        message:
+          get(err, "response.data", null) ||
+          "Something went wrong. Please try again later",
+        title: "Unable to update User",
+      });
+    } finally {
+      dispatch(showLoading(false));
     }
   };
 };
@@ -91,5 +124,10 @@ export const changeName = (payload) => ({
 
 export const changeEmail = (payload) => ({
   type: CHANGE_EMAIL,
+  payload,
+});
+
+export const changeRoles = (payload) => ({
+  type: CHANGE_ROLES,
   payload,
 });

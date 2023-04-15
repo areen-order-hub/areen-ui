@@ -7,7 +7,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Helmet } from "react-helmet";
-import { Row, Col, Button } from "reactstrap";
+import { Row, Col, Button, Badge } from "reactstrap";
 import AlertPopupHandler from "components/AlertPopup/AlertPopupHandler";
 import PaginationDetails from "components/PaginationDetails";
 import Table from "components/Table";
@@ -100,34 +100,54 @@ export default function Users() {
             formatter: (cell) => cell || "N/A",
           },
           {
+            text: "Roles",
+            dataField: "roles",
+            formatter: (cell) =>
+              cell.map(({ role }) => <Badge color="primary">{role}</Badge>),
+          },
+          {
             text: "Actions",
             dataField: "isEnabled",
-            formatter: (cell, { id }) =>
-              cell ? (
+            formatter: (cell, { id }) => (
+              <>
                 <Button
-                  title="Deactivate Store"
+                  title="Edit User"
                   type="button"
-                  color="danger"
+                  color="primary"
                   size="sm"
-                  onClick={() => onUserStatusChange(id, false)}
+                  onClick={() => history.push(`/user-form?id=${id}`)}
                 >
                   <span className="btn-inner--icon">
-                    <i className="fas fa-ban" />
+                    <i className="fas fa-edit" />
                   </span>
                 </Button>
-              ) : (
-                <Button
-                  title="Activate Store"
-                  type="button"
-                  color="success"
-                  size="sm"
-                  onClick={() => onUserStatusChange(id, true)}
-                >
-                  <span className="btn-inner--icon">
-                    <i className="fas fa-check" />
-                  </span>
-                </Button>
-              ),
+                {cell ? (
+                  <Button
+                    title="Deactivate Store"
+                    type="button"
+                    color="danger"
+                    size="sm"
+                    onClick={() => onUserStatusChange(id, false)}
+                  >
+                    <span className="btn-inner--icon">
+                      <i className="fas fa-ban" />
+                    </span>
+                  </Button>
+                ) : (
+                  <Button
+                    title="Activate Store"
+                    type="button"
+                    color="success"
+                    size="sm"
+                    onClick={() => onUserStatusChange(id, true)}
+                  >
+                    <span className="btn-inner--icon">
+                      <i className="fas fa-check" />
+                    </span>
+                  </Button>
+                )}
+              </>
+            ),
           },
         ]}
       />

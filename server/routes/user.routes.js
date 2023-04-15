@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.get("/paginate", services.paginate);
 router.patch("/profile/:userId", services.patchUserProfile);
+router.get("/profile/:userId", services.getUserProfile);
 
 router.get("", services.list);
 
