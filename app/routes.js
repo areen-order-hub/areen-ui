@@ -46,6 +46,7 @@ const routes = {
     },
     {
       moduleName: "Stores",
+      requiredPermission: "read",
       path: "/stores",
       name: "Stores",
       icon: "far fa-building text-secondary",
@@ -54,6 +55,7 @@ const routes = {
     },
     {
       moduleName: "Stores",
+      requiredPermission: "create",
       redirect: true,
       path: "/store-form",
       name: "StoreForm",
@@ -62,6 +64,7 @@ const routes = {
     },
     {
       moduleName: "Stores",
+      requiredPermission: "read",
       redirect: true,
       path: "/store/:id",
       name: "Store",
@@ -70,6 +73,7 @@ const routes = {
     },
     {
       moduleName: "Orders",
+      requiredPermission: "read",
       redirect: true,
       path: "/order/:id",
       name: "Order",
@@ -78,6 +82,7 @@ const routes = {
     },
     {
       moduleName: "Orders",
+      requiredPermission: "read",
       path: "/orders",
       name: "Orders",
       icon: "fas fa-file-signature text-secondary",
@@ -86,6 +91,7 @@ const routes = {
     },
     {
       moduleName: "Users",
+      requiredPermission: "read",
       path: "/users",
       name: "Users",
       icon: "fas fa-users text-secondary",
@@ -94,6 +100,7 @@ const routes = {
     },
     {
       moduleName: "Users",
+      requiredPermission: "create",
       redirect: true,
       path: "/user-form",
       name: "UserForm",
@@ -102,6 +109,7 @@ const routes = {
     },
     {
       moduleName: "Roles",
+      requiredPermission: "read",
       path: "/roles",
       name: "Roles",
       icon: "fas fa-user-tag text-secondary",
@@ -110,6 +118,7 @@ const routes = {
     },
     {
       moduleName: "Roles",
+      requiredPermission: "create",
       redirect: true,
       path: "/role-form",
       name: "Role Form",

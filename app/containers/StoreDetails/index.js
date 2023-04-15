@@ -9,6 +9,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { Helmet } from "react-helmet";
 import { Card, CardHeader, CardBody, Row, Col, Badge } from "reactstrap";
 import AlertPopupHandler from "components/AlertPopup/AlertPopupHandler";
+import Can from "components/Can";
+import { STORE_MODULE, UPDATE_ACTION } from "../../utils/constants";
 import Skeleton from "react-loading-skeleton";
 import { useInjectReducer } from "utils/injectReducer";
 import reducer from "./reducer";
@@ -131,7 +133,9 @@ export default function StoreDetails({ match }) {
                 </Badge>
               </span>
             </Col>
-            {getOptions()}
+            <Can moduleName={STORE_MODULE} action={UPDATE_ACTION}>
+              {getOptions()}
+            </Can>
           </Row>
           <Row className="mx-1 mt-3 text-md text-muted">
             <div className="mr-3" title="Alias">

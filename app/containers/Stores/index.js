@@ -10,6 +10,12 @@ import { Helmet } from "react-helmet";
 import { Row, Col, Button, Table, Badge } from "reactstrap";
 import AlertPopupHandler from "components/AlertPopup/AlertPopupHandler";
 import PaginationDetails from "components/PaginationDetails";
+import Can from "components/Can";
+import {
+  STORE_MODULE,
+  CREATE_ACTION,
+  UPDATE_ACTION,
+} from "../../utils/constants";
 import { useInjectReducer } from "utils/injectReducer";
 import reducer from "./reducer";
 import history from "../../utils/history";
@@ -78,44 +84,46 @@ export default function Stores() {
           <td>
             <Badge>{alias}</Badge>
           </td>
-          <td>
-            <Button
-              title="Edit Store"
-              type="button"
-              color="primary"
-              size="sm"
-              onClick={() => history.push(`/store-form?id=${_id}`)}
-            >
-              <span className="btn-inner--icon">
-                <i className="fas fa-edit" />
-              </span>
-            </Button>
-            {isActive ? (
+          <Can moduleName={STORE_MODULE} action={UPDATE_ACTION}>
+            <td>
               <Button
-                title="Deactivate Store"
+                title="Edit Store"
                 type="button"
-                color="danger"
+                color="primary"
                 size="sm"
-                onClick={() => onStoreStatusChange(_id, false)}
+                onClick={() => history.push(`/store-form?id=${_id}`)}
               >
                 <span className="btn-inner--icon">
-                  <i className="fas fa-ban" />
+                  <i className="fas fa-edit" />
                 </span>
               </Button>
-            ) : (
-              <Button
-                title="Activate Store"
-                type="button"
-                color="success"
-                size="sm"
-                onClick={() => onStoreStatusChange(_id, true)}
-              >
-                <span className="btn-inner--icon">
-                  <i className="fas fa-check" />
-                </span>
-              </Button>
-            )}
-          </td>
+              {isActive ? (
+                <Button
+                  title="Deactivate Store"
+                  type="button"
+                  color="danger"
+                  size="sm"
+                  onClick={() => onStoreStatusChange(_id, false)}
+                >
+                  <span className="btn-inner--icon">
+                    <i className="fas fa-ban" />
+                  </span>
+                </Button>
+              ) : (
+                <Button
+                  title="Activate Store"
+                  type="button"
+                  color="success"
+                  size="sm"
+                  onClick={() => onStoreStatusChange(_id, true)}
+                >
+                  <span className="btn-inner--icon">
+                    <i className="fas fa-check" />
+                  </span>
+                </Button>
+              )}
+            </td>
+          </Can>
         </tr>
       </React.Fragment>
     ));
@@ -126,28 +134,32 @@ export default function Stores() {
         <title>Stores</title>
         <meta name="description" content="Description of Stores" />
       </Helmet>
-      <Row className="mt-3">
-        <div className="align-items-right ml-auto mr-3 mr-md-5">
-          <Button
-            color="primary"
-            className="btn-icon btn-3"
-            type="button"
-            onClick={() => history.push("/store-form")}
-          >
-            <span className="btn-inner--icon">
-              <i className="fas fa-plus" />
-            </span>
-            <span className="btn-inner--text">Add Store</span>
-          </Button>
-        </div>
-      </Row>
+      <Can moduleName={STORE_MODULE} action={CREATE_ACTION}>
+        <Row className="mt-3">
+          <div className="align-items-right ml-auto mr-3 mr-md-5">
+            <Button
+              color="primary"
+              className="btn-icon btn-3"
+              type="button"
+              onClick={() => history.push("/store-form")}
+            >
+              <span className="btn-inner--icon">
+                <i className="fas fa-plus" />
+              </span>
+              <span className="btn-inner--text">Add Store</span>
+            </Button>
+          </div>
+        </Row>
+      </Can>
       <div className="table-responsive">
         <Table className="mt-3 align-items-center">
           <thead className="thead-light">
             <tr>
               <th scope="col">Store Name</th>
               <th scope="col">Alias</th>
-              <th scope="col">Actions</th>
+              <Can moduleName={STORE_MODULE} action={UPDATE_ACTION}>
+                <th scope="col">Actions</th>
+              </Can>
             </tr>
           </thead>
           <tbody>{getStoreData()}</tbody>

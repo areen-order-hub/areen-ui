@@ -11,6 +11,13 @@ import { Row, Col, Button } from "reactstrap";
 import Table from "components/Table";
 import { useInjectReducer } from "utils/injectReducer";
 import PaginationDetails from "components/PaginationDetails";
+import Can from "components/Can";
+import {
+  ROLE_MODULE,
+  CREATE_ACTION,
+  UPDATE_ACTION,
+} from "../../utils/constants";
+import { useAccess } from "utils/permissions";
 import reducer from "./reducer";
 import history from "../../utils/history";
 import * as operations from "./actions";
@@ -36,21 +43,23 @@ export default function Roles() {
         <title>Roles</title>
         <meta name="description" content="Description of Roles" />
       </Helmet>
-      <Row className="my-3">
-        <div className="align-items-right ml-auto mr-3 mr-md-5">
-          <Button
-            color="primary"
-            className="btn-icon btn-3"
-            type="button"
-            onClick={() => history.push("/role-form")}
-          >
-            <span className="btn-inner--icon">
-              <i className="fas fa-plus" />
-            </span>
-            <span className="btn-inner--text">Add Role</span>
-          </Button>
-        </div>
-      </Row>
+      <Can moduleName={ROLE_MODULE} action={CREATE_ACTION}>
+        <Row className="my-3">
+          <div className="align-items-right ml-auto mr-3 mr-md-5">
+            <Button
+              color="primary"
+              className="btn-icon btn-3"
+              type="button"
+              onClick={() => history.push("/role-form")}
+            >
+              <span className="btn-inner--icon">
+                <i className="fas fa-plus" />
+              </span>
+              <span className="btn-inner--text">Add Role</span>
+            </Button>
+          </div>
+        </Row>
+      </Can>
       <Table
         bootstrap4
         striped
@@ -84,25 +93,29 @@ export default function Roles() {
                 );
               }),
           },
-          {
-            text: "Actions",
-            dataField: "actions",
-            dummyField: true,
-            formatter: (cell, { _id, role }) => (
-              <Button
-                disabled={role == "Super Admin"}
-                title="Edit Role"
-                type="button"
-                color="primary"
-                size="sm"
-                onClick={() => history.push(`/role-form?id=${_id}`)}
-              >
-                <span className="btn-inner--icon">
-                  <i className="fas fa-edit" />
-                </span>
-              </Button>
-            ),
-          },
+          ...(useAccess(ROLE_MODULE, UPDATE_ACTION)
+            ? [
+                {
+                  text: "Actions",
+                  dataField: "actions",
+                  dummyField: true,
+                  formatter: (cell, { _id, role }) => (
+                    <Button
+                      disabled={role == "Super Admin"}
+                      title="Edit Role"
+                      type="button"
+                      color="primary"
+                      size="sm"
+                      onClick={() => history.push(`/role-form?id=${_id}`)}
+                    >
+                      <span className="btn-inner--icon">
+                        <i className="fas fa-edit" />
+                      </span>
+                    </Button>
+                  ),
+                },
+              ]
+            : []),
         ]}
       />
       <Row className="mt-2">

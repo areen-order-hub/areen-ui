@@ -49,7 +49,11 @@ function Home() {
       if (prop.collapse) {
         return getRoutes(prop.views);
       }
-      if (prop.moduleName && !useAccess(prop.moduleName)) return null;
+      if (
+        prop.moduleName &&
+        !useAccess(prop.moduleName, prop.requiredPermission)
+      )
+        return null;
       if (prop.layout === "" && prop.component) {
         return (
           <Route

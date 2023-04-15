@@ -11,6 +11,13 @@ import { Row, Col, Button, Badge } from "reactstrap";
 import AlertPopupHandler from "components/AlertPopup/AlertPopupHandler";
 import PaginationDetails from "components/PaginationDetails";
 import Table from "components/Table";
+import Can from "components/Can";
+import {
+  USER_MODULE,
+  CREATE_ACTION,
+  UPDATE_ACTION,
+} from "../../utils/constants";
+import { useAccess } from "utils/permissions";
 import { useInjectReducer } from "utils/injectReducer";
 import reducer from "./reducer";
 import history from "../../utils/history";
@@ -66,21 +73,23 @@ export default function Users() {
         <title>Users</title>
         <meta name="description" content="Description of Users" />
       </Helmet>
-      <Row className="my-3">
-        <div className="align-items-right ml-auto mr-3 mr-md-5">
-          <Button
-            color="primary"
-            className="btn-icon btn-3"
-            type="button"
-            onClick={() => history.push("/user-form")}
-          >
-            <span className="btn-inner--icon">
-              <i className="fas fa-plus" />
-            </span>
-            <span className="btn-inner--text">Add User</span>
-          </Button>
-        </div>
-      </Row>
+      <Can moduleName={USER_MODULE} action={CREATE_ACTION}>
+        <Row className="my-3">
+          <div className="align-items-right ml-auto mr-3 mr-md-5">
+            <Button
+              color="primary"
+              className="btn-icon btn-3"
+              type="button"
+              onClick={() => history.push("/user-form")}
+            >
+              <span className="btn-inner--icon">
+                <i className="fas fa-plus" />
+              </span>
+              <span className="btn-inner--text">Add User</span>
+            </Button>
+          </div>
+        </Row>
+      </Can>
       <Table
         bootstrap4
         striped
@@ -105,50 +114,54 @@ export default function Users() {
             formatter: (cell) =>
               cell.map(({ role }) => <Badge color="primary">{role}</Badge>),
           },
-          {
-            text: "Actions",
-            dataField: "isEnabled",
-            formatter: (cell, { id }) => (
-              <>
-                <Button
-                  title="Edit User"
-                  type="button"
-                  color="primary"
-                  size="sm"
-                  onClick={() => history.push(`/user-form?id=${id}`)}
-                >
-                  <span className="btn-inner--icon">
-                    <i className="fas fa-edit" />
-                  </span>
-                </Button>
-                {cell ? (
-                  <Button
-                    title="Deactivate Store"
-                    type="button"
-                    color="danger"
-                    size="sm"
-                    onClick={() => onUserStatusChange(id, false)}
-                  >
-                    <span className="btn-inner--icon">
-                      <i className="fas fa-ban" />
-                    </span>
-                  </Button>
-                ) : (
-                  <Button
-                    title="Activate Store"
-                    type="button"
-                    color="success"
-                    size="sm"
-                    onClick={() => onUserStatusChange(id, true)}
-                  >
-                    <span className="btn-inner--icon">
-                      <i className="fas fa-check" />
-                    </span>
-                  </Button>
-                )}
-              </>
-            ),
-          },
+          ...(useAccess(USER_MODULE, UPDATE_ACTION)
+            ? [
+                {
+                  text: "Actions",
+                  dataField: "isEnabled",
+                  formatter: (cell, { id }) => (
+                    <>
+                      <Button
+                        title="Edit User"
+                        type="button"
+                        color="primary"
+                        size="sm"
+                        onClick={() => history.push(`/user-form?id=${id}`)}
+                      >
+                        <span className="btn-inner--icon">
+                          <i className="fas fa-edit" />
+                        </span>
+                      </Button>
+                      {cell ? (
+                        <Button
+                          title="Deactivate Store"
+                          type="button"
+                          color="danger"
+                          size="sm"
+                          onClick={() => onUserStatusChange(id, false)}
+                        >
+                          <span className="btn-inner--icon">
+                            <i className="fas fa-ban" />
+                          </span>
+                        </Button>
+                      ) : (
+                        <Button
+                          title="Activate Store"
+                          type="button"
+                          color="success"
+                          size="sm"
+                          onClick={() => onUserStatusChange(id, true)}
+                        >
+                          <span className="btn-inner--icon">
+                            <i className="fas fa-check" />
+                          </span>
+                        </Button>
+                      )}
+                    </>
+                  ),
+                },
+              ]
+            : []),
         ]}
       />
       <Row className="mt-2">

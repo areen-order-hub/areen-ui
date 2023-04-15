@@ -31,6 +31,12 @@ import PaginationDetails from "components/PaginationDetails";
 import RtCreatableSelect from "components/RtCreatableSelect";
 import AlertPopupHandler from "components/AlertPopup/AlertPopupHandler";
 import Table from "components/Table";
+import Can from "components/Can";
+import {
+  ORDER_MODULE,
+  CREATE_ACTION,
+  UPDATE_ACTION,
+} from "../../utils/constants";
 import ReactDatetime from "react-datetime";
 import ImportOrdersModal from "./ImportOrdersModal";
 import { useInjectReducer } from "utils/injectReducer";
@@ -556,7 +562,9 @@ export default function Orders() {
             isOpen={showImportModal}
             toggle={toggleImportModal}
           />
-          {getGenerateShipmentButton()}
+          <Can moduleName={ORDER_MODULE} action={UPDATE_ACTION}>
+            {getGenerateShipmentButton()}
+          </Can>
           <ButtonDropdown
             isOpen={bulkDropdownOpen}
             toggle={toggleBulkDropdown}
@@ -572,12 +580,14 @@ export default function Orders() {
               <DropdownItem onClick={() => toggleExportModal()}>
                 Export Orders
               </DropdownItem>
-              <DropdownItem onClick={() => downloadImportTemplate()}>
-                Download Template
-              </DropdownItem>
-              <DropdownItem onClick={() => toggleImportModal()}>
-                Upload Orders
-              </DropdownItem>
+              <Can moduleName={ORDER_MODULE} action={CREATE_ACTION}>
+                <DropdownItem onClick={() => downloadImportTemplate()}>
+                  Download Template
+                </DropdownItem>
+                <DropdownItem onClick={() => toggleImportModal()}>
+                  Upload Orders
+                </DropdownItem>
+              </Can>
             </DropdownMenu>
           </ButtonDropdown>
           <ButtonDropdown

@@ -24,6 +24,8 @@ import {
 import { get, map, isEmpty } from "lodash";
 import Skeleton from "react-loading-skeleton";
 import AlertPopupHandler from "components/AlertPopup/AlertPopupHandler";
+import Can from "components/Can";
+import { ORDER_MODULE, UPDATE_ACTION } from "../../utils/constants";
 import reducer from "./reducer";
 import history from "utils/history";
 import RtInput from "../../components/RtInput/index";
@@ -173,9 +175,11 @@ export default function OrderDetails({ match }) {
             <Col xs="12" md="10" className="align-items-center">
               <span className="h1 mr-2 text-primary">{shopifyOrderName}</span>
             </Col>
-            {carrierService && carrierStatus != "Shipment cancelled" && (
-              <Col className="text-right">{getCancelShipmentButton()}</Col>
-            )}
+            <Can moduleName={ORDER_MODULE} action={UPDATE_ACTION}>
+              {carrierService && carrierStatus != "Shipment cancelled" && (
+                <Col className="text-right">{getCancelShipmentButton()}</Col>
+              )}
+            </Can>
           </Row>
           <Row className="mx-1 mt-3 text-md text-muted">
             <div className="mr-3" title="Shopify Order Date">
