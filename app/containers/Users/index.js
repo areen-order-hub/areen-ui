@@ -86,7 +86,7 @@ export default function Users() {
         striped
         search={false}
         bordered={false}
-        keyField="_id"
+        keyField="id"
         data={users}
         columns={[
           {

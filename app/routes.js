@@ -32,6 +32,9 @@ import OrderDetails from "containers/OrderDetails";
 import Users from "containers/Users";
 import UserForm from "containers/UserForm";
 
+import Roles from "containers/Roles";
+import RoleForm from "containers/RoleForm";
+
 import WhatsNew from "containers/WhatsNew";
 
 import { permissions } from "utils/permissions";
@@ -101,6 +104,20 @@ const routes = {
       component: UserForm,
       layout: "",
     },
+    {
+      path: "/roles",
+      name: "Roles",
+      icon: "fas fa-user-tag text-secondary",
+      component: Roles,
+      layout: "",
+    },
+    {
+      redirect: true,
+      path: "/role-form",
+      name: "Role Form",
+      component: RoleForm,
+      layout: "",
+    },
     // {
     //   redirect: true,
     //   path: "/add-position",
@@ -157,13 +174,13 @@ const routes = {
     //   component: Profile,
     //   layout: "",
     // },
-    {
-      path: "/updates",
-      name: "What's New",
-      icon: "fas fa-question text-secondary",
-      component: WhatsNew,
-      layout: "",
-    },
+    // {
+    //   path: "/updates",
+    //   name: "What's New",
+    //   icon: "fas fa-question text-secondary",
+    //   component: WhatsNew,
+    //   layout: "",
+    // },
     {
       path: "/logout",
       name: "Logout",

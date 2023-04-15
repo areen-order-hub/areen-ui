@@ -16,6 +16,7 @@ const recruiterRoutes = require("./recruiter.routes");
 const storeRoutes = require("./store.routes");
 const orderRoutes = require("./order.routes");
 const commentRoutes = require("./comment.routes");
+const roleRoutes = require("./role.routes");
 
 const multer = require("multer");
 var storage = multer.memoryStorage({
@@ -42,6 +43,7 @@ router.use("/recruiter", session.protected, recruiterRoutes);
 router.use("/store", session.protected, storeRoutes);
 router.use("/order", session.protected, orderRoutes);
 router.use("/comment", session.protected, commentRoutes);
+router.use("/role", session.protected, roleRoutes);
 
 router.use("", session.protected, authorisedRoutes);
 
