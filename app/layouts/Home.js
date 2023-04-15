@@ -8,6 +8,8 @@ import routes from "routes.js";
 import get from "lodash/get";
 import { useCookies } from "react-cookie";
 import isEmpty from "lodash/isEmpty";
+import { useAccess } from "utils/permissions";
+
 function Home() {
   const dashboard = useSelector((state) =>
     get(state, "dashboard", { initialState })
@@ -47,6 +49,7 @@ function Home() {
       if (prop.collapse) {
         return getRoutes(prop.views);
       }
+      if (prop.moduleName && !useAccess(prop.moduleName)) return null;
       if (prop.layout === "" && prop.component) {
         return (
           <Route

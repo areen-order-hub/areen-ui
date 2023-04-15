@@ -1,6 +1,6 @@
 import _map from "lodash/map";
 import _isObject from "lodash/isObject";
-import _get from "lodash/get";
+import { get } from "lodash";
 import useGetFieldFromObjects from "./useGetFieldFromObject";
 
 export const permissions = {
@@ -39,29 +39,9 @@ export const permissions = {
   DOWNLOAD_POSITION_TRACKER: "download position tracker",
 };
 
-export const useAccess = (permissions, eitherOr = true) => {
+export const useAccess = (module, action = "read") => {
   const userPermissions =
-    useGetFieldFromObjects("authPage", "permissions", []) || [];
-  const isPermissionAllowed = (permission) =>
-    userPermissions.includes(permission);
+    useGetFieldFromObjects("authPage", "permissions", {}) || {};
 
-  const finalPermissions = [].concat(permissions);
-  const allPermissions = _map(finalPermissions, (perm) => {
-    const isAllowed = isPermissionAllowed(
-      _isObject(perm) ? _get(perm, "permission") : perm
-    );
-    const operation = _get(perm, "operation", "and");
-    const otherBoolean = _get(perm, "value", true);
-    switch (operation) {
-      case "and":
-        return isAllowed && otherBoolean;
-      default:
-        return isAllowed || otherBoolean;
-    }
-  });
-
-  if (eitherOr) {
-    return allPermissions.some((perm) => !!perm);
-  }
-  return allPermissions.every((perm) => !!perm);
+  return get(userPermissions, [module, action], false);
 };

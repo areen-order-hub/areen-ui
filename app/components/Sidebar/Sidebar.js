@@ -103,15 +103,15 @@ function Sidebar({ toggleSidenav, sidenavOpen, routes, logo, rtlActive }) {
     }
   };
 
-  const checkForPermission = (permission) => {
-    return useAccess(permission);
+  const checkForPermission = (moduleName) => {
+    return useAccess(moduleName);
   };
 
   // this function creates the links and collapses that appear in the sidebar (left menu)
   const createLinks = (routes) => {
     return routes.map((prop, key) => {
       if (
-        (prop.permission && !checkForPermission(prop.permission)) ||
+        (prop.moduleName && !checkForPermission(prop.moduleName)) ||
         prop.redirect
       ) {
         return null;

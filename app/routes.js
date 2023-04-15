@@ -35,10 +35,6 @@ import UserForm from "containers/UserForm";
 import Roles from "containers/Roles";
 import RoleForm from "containers/RoleForm";
 
-import WhatsNew from "containers/WhatsNew";
-
-import { permissions } from "utils/permissions";
-
 const routes = {
   home: [
     {
@@ -49,6 +45,7 @@ const routes = {
       layout: "",
     },
     {
+      moduleName: "Stores",
       path: "/stores",
       name: "Stores",
       icon: "far fa-building text-secondary",
@@ -56,6 +53,7 @@ const routes = {
       layout: "",
     },
     {
+      moduleName: "Stores",
       redirect: true,
       path: "/store-form",
       name: "StoreForm",
@@ -63,6 +61,7 @@ const routes = {
       layout: "",
     },
     {
+      moduleName: "Stores",
       redirect: true,
       path: "/store/:id",
       name: "Store",
@@ -70,20 +69,15 @@ const routes = {
       layout: "",
     },
     {
+      moduleName: "Orders",
       redirect: true,
       path: "/order/:id",
       name: "Order",
       component: OrderDetails,
       layout: "",
     },
-    // {
-    //   redirect: true,
-    //   path: "/client/:id",
-    //   name: "Client",
-    //   component: Client,
-    //   layout: "",
-    // },
     {
+      moduleName: "Orders",
       path: "/orders",
       name: "Orders",
       icon: "fas fa-file-signature text-secondary",
@@ -91,6 +85,7 @@ const routes = {
       layout: "",
     },
     {
+      moduleName: "Users",
       path: "/users",
       name: "Users",
       icon: "fas fa-users text-secondary",
@@ -98,6 +93,7 @@ const routes = {
       layout: "",
     },
     {
+      moduleName: "Users",
       redirect: true,
       path: "/user-form",
       name: "UserForm",
@@ -105,6 +101,7 @@ const routes = {
       layout: "",
     },
     {
+      moduleName: "Roles",
       path: "/roles",
       name: "Roles",
       icon: "fas fa-user-tag text-secondary",
@@ -112,75 +109,13 @@ const routes = {
       layout: "",
     },
     {
+      moduleName: "Roles",
       redirect: true,
       path: "/role-form",
       name: "Role Form",
       component: RoleForm,
       layout: "",
     },
-    // {
-    //   redirect: true,
-    //   path: "/add-position",
-    //   name: "AddPosition",
-    //   component: AddPosition,
-    //   layout: "",
-    // },
-    // {
-    //   redirect: true,
-    //   path: "/position/:id",
-    //   name: "Position",
-    //   component: Position,
-    //   layout: "",
-    // },
-    // {
-    //   redirect: true,
-    //   path: "/position-tracker",
-    //   name: "PositionTracker",
-    //   component: PositionTracker,
-    //   layout: "",
-    // },
-    // {
-    //   path: "/candidates",
-    //   name: "Candidates",
-    //   icon: "fas fa-users text-secondary",
-    //   component: Candidates,
-    //   layout: "",
-    // },
-    // {
-    //   redirect: true,
-    //   path: "/candidate/:id",
-    //   name: "Candidate",
-    //   component: Candidate,
-    //   layout: "",
-    // },
-    // {
-    //   path: "/interviews",
-    //   name: "Interviews",
-    //   icon: "far fa-calendar-alt text-secondary",
-    //   component: Interviews,
-    //   layout: "",
-    // }
-    // {
-    //   redirect: true,
-    //   path: "/add-recruiter",
-    //   name: "AddRecruiter",
-    //   component: AddRecruiter,
-    //   layout: "",
-    // },
-    // {
-    //   redirect: true,
-    //   path: "/profile/:id",
-    //   name: "Profile",
-    //   component: Profile,
-    //   layout: "",
-    // },
-    // {
-    //   path: "/updates",
-    //   name: "What's New",
-    //   icon: "fas fa-question text-secondary",
-    //   component: WhatsNew,
-    //   layout: "",
-    // },
     {
       path: "/logout",
       name: "Logout",
