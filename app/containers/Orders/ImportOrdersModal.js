@@ -82,6 +82,7 @@ export default function ImportOrdersModal({ isOpen, toggle }) {
           shopifyOrderItems[get(order, "itemSKU")] = {
             quantity: get(order, "itemQuantity", "0"),
             title: get(order, "itemTitle", "N/A"),
+            price: get(order, "itemPrice", "0"),
           };
         });
 

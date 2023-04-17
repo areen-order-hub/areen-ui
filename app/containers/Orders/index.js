@@ -158,6 +158,7 @@ export default function Orders() {
       itemTitle: "",
       itemQuantity: "",
       itemSKU: "",
+      itemPrice: "",
     });
 
     var ws = XLSX.utils.json_to_sheet(data);

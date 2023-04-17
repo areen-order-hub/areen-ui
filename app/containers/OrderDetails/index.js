@@ -273,7 +273,8 @@ export default function OrderDetails({ match }) {
                     <th scope="col">Item Code</th>
                     <th scope="col">Ordered QTY.</th>
                     <th scope="col">Invoiced QTY.</th>
-                    <th scope="col">Unit Price</th>
+                    <th scope="col">Shopify Unit Price</th>
+                    <th scope="col">Invoice Unit Price</th>
                     <th scope="col">Total</th>
                   </tr>
                 </thead>
@@ -285,6 +286,7 @@ export default function OrderDetails({ match }) {
                           <td>{key}</td>
                           <td>{get(value, "quantity", 0)}</td>
                           <td>-</td>
+                          <td>{get(value, "price", "0")}</td>
                           <td>-</td>
                           <td>-</td>
                         </tr>
@@ -305,6 +307,9 @@ export default function OrderDetails({ match }) {
                               )}
                             </td>
                             <td>{quantity}</td>
+                            <td>
+                              {get(shopifyOrderItems, [itemCode, "price"], 0)}
+                            </td>
                             <td>{unitPrice}</td>
                             <td>{price}</td>
                           </tr>
