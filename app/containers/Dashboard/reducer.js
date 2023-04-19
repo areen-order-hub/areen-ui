@@ -18,6 +18,8 @@ export const initialState = {
   noOfStores: 0,
   noOfActiveStores: 0,
   noOfOrders: 0,
+  noOfAssignedOrders: 0,
+  noOfDeliveredOrders: 0,
   noOfPositions: 0,
   noOfRecruiters: 0,
   noOfShortlisted: 0,
@@ -42,6 +44,8 @@ const dashboardReducer = (state = initialState, action) =>
         draft.noOfStores = action.payload.noOfStores;
         draft.noOfActiveStores = action.payload.noOfActiveStores;
         draft.noOfOrders = action.payload.noOfOrders;
+        draft.noOfAssignedOrders = action.payload.noOfAssignedOrders;
+        draft.noOfDeliveredOrders = action.payload.noOfDeliveredOrders;
         draft.isCountLoading = false;
         break;
       case SET_INTERVIEW_DETAILS:
