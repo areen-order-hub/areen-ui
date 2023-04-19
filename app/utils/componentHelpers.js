@@ -22,9 +22,11 @@ export const getCarrierStatusBadge = (carrierStatus) => {
     case "AWB Generated":
       return <Badge>AWB Generated</Badge>;
     case "APPROVED":
-      return <Badge color="primary">Approved</Badge>;
+    case "Out for Delivery":
+      return <Badge color="primary">{carrierStatus}</Badge>;
     case "Shipment cancelled":
-      return <Badge color="danger">Shipment cancelled</Badge>;
+    case "Returned":
+      return <Badge color="danger">{carrierStatus}</Badge>;
     case "Delivered":
       return <Badge color="success">Delivered</Badge>;
     default:

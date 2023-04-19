@@ -74,3 +74,11 @@ export const cancelShipment = async (orderId) => {
     method: "DELETE",
   });
 };
+
+export const handleDelivery = async (data) => {
+  return await Request({
+    url: `/api/order/delivery`,
+    method: "POST",
+    data,
+  });
+};

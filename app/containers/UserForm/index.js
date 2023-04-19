@@ -20,7 +20,7 @@ import RtInput from "../../components/RtInput/index";
 import history from "../../utils/history";
 import "./userFormStyle.scss";
 
-export default function UserForm() {
+export default function UserForm({ match }) {
   useInjectReducer({ key: "userForm", reducer });
   const dispatch = useDispatch();
   const addUserInit = operations.addUserInit(dispatch);
@@ -57,20 +57,29 @@ export default function UserForm() {
     if (isEdit) {
       const id = qs.parse(location.search).id;
       dispatch(
-        operations.onEdit(id, {
-          name,
-          email,
-          roles,
-        })
+        operations.onEdit(
+          id,
+          {
+            name,
+            email,
+            roles,
+            isDriver: match.params.type == "Driver",
+          },
+          match.params.type
+        )
       );
     } else {
       dispatch(
-        operations.onSubmit({
-          name,
-          email,
-          orgId: get(cookie, "user.orgId", ""),
-          roles,
-        })
+        operations.onSubmit(
+          {
+            name,
+            email,
+            orgId: get(cookie, "user.orgId", ""),
+            roles,
+            isDriver: match.params.type == "Driver",
+          },
+          match.params.type
+        )
       );
     }
   };
@@ -84,7 +93,9 @@ export default function UserForm() {
               <Spinner size="sm" className="mr-2" />
             </span>
             <span className="btn-inner-text">
-              {isEdit ? "Save / Edit User" : "Invite User"}
+              {isEdit
+                ? `Save / Edit ${match.params.type}`
+                : `Invite ${match.params.type}`}
             </span>
           </Button>
           <Button type="button" color="secondary" disabled>
@@ -95,7 +106,9 @@ export default function UserForm() {
     return (
       <>
         <Button type="button" color="primary" onClick={(e) => onSubmit(e)}>
-          {isEdit ? "Save / Edit User" : "Invite User"}
+          {isEdit
+            ? `Save / Edit ${match.params.type}`
+            : `Invite ${match.params.type}`}
         </Button>
         <Button
           type="button"
@@ -129,7 +142,9 @@ export default function UserForm() {
       <Row className="mt-3 mb-4">
         <Col xs="12">
           <div className="text-primary font-weight-bold">
-            {isEdit ? "Edit User" : "Invite a User"}
+            {isEdit
+              ? `Edit ${match.params.type}`
+              : `Invite a  ${match.params.type}`}
           </div>
         </Col>
       </Row>
@@ -140,7 +155,7 @@ export default function UserForm() {
             <RtInput
               onChange={(e) => dispatch(operations.changeName(e))}
               type="text"
-              placeholder="Eg: Test User"
+              placeholder="Eg: John Doe"
               error={validations}
               name="name"
               value={name}

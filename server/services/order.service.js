@@ -184,3 +184,20 @@ exports.cancelShipment = async (req, res) => {
     res.status(err.status).json(err.message);
   }
 };
+
+exports.handleDelivery = async (req, res) => {
+  try {
+    const url = `/v1/order/delivery`;
+    const data = await Request(
+      {
+        url,
+        method: "POST",
+        data: req.body,
+      },
+      req.headers
+    );
+    res.json(data);
+  } catch (err) {
+    res.status(err.status).json(err.message);
+  }
+};

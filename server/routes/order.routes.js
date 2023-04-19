@@ -16,4 +16,6 @@ router.post("/carrier/beeThere", services.createBeeThereShipment);
 router.post("/carrier/elite", services.createEliteShipment);
 router.delete("/carrier/:orderId", services.cancelShipment);
 
+router.post("/delivery", services.handleDelivery);
+
 module.exports = router;
