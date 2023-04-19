@@ -718,7 +718,8 @@ export default function Orders() {
           {
             text: "Store",
             dataField: "storeId.alias",
-            formatter: (cell) => cell || "N/A",
+            formatter: (cell, { bulkStoreAlias }) =>
+              cell || bulkStoreAlias || "N/A",
           },
         ]}
       />

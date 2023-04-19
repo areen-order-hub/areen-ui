@@ -30,6 +30,7 @@ export const initialState = {
   carrierTrackingLink: "",
   weight: 0,
   paymentMode: "",
+  bulkStoreName: "",
   comments: [],
 };
 
@@ -55,6 +56,7 @@ const orderDetailsReducer = (state = initialState, action) =>
         draft.carrierTrackingLink = action.payload.carrierTrackingLink;
         draft.weight = action.payload.weight;
         draft.paymentMode = action.payload.paymentMode;
+        draft.bulkStoreName = action.payload.bulkStoreName;
         draft.isLoading = false;
         break;
       case SET_COMMENT_DETAILS:

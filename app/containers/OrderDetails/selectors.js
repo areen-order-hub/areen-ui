@@ -28,6 +28,8 @@ export const carrierTrackingLink = (state) =>
 export const weight = (state) => get(state, "orderDetails.weight", 0);
 export const paymentMode = (state) =>
   get(state, "orderDetails.paymentMode", "");
+export const bulkStoreName = (state) =>
+  get(state, "orderDetails.bulkStoreName", "");
 export const comments = (state) => get(state, "orderDetails.comments", []);
 
 export const isLoading = (state) => get(state, "orderDetails.isLoading", "");

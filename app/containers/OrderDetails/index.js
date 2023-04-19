@@ -24,6 +24,7 @@ import {
 import { get, map, isEmpty } from "lodash";
 import Skeleton from "react-loading-skeleton";
 import AlertPopupHandler from "components/AlertPopup/AlertPopupHandler";
+import classNames from "classnames";
 import Can from "components/Can";
 import { ORDER_MODULE, UPDATE_ACTION } from "../../utils/constants";
 import reducer from "./reducer";
@@ -54,6 +55,7 @@ export default function OrderDetails({ match }) {
     carrierTrackingLink,
     weight,
     paymentMode,
+    bulkStoreName,
     comments,
     isShipmentCancelling,
   } = useSelector((state) => ({
@@ -72,6 +74,7 @@ export default function OrderDetails({ match }) {
     carrierTrackingLink: selectors.carrierTrackingLink(state),
     weight: selectors.weight(state),
     paymentMode: selectors.paymentMode(state),
+    bulkStoreName: selectors.bulkStoreName(state),
     comments: selectors.comments(state),
     isLoading: selectors.isLoading(state),
     isShipmentCancelling: selectors.isShipmentCancelling(state),
@@ -191,14 +194,18 @@ export default function OrderDetails({ match }) {
               {syncedAt}
             </div>
             <div
-              className="mr-3 hover-pointer text-underline"
+              className={classNames("mr-3", {
+                "hover-pointer text-underline": get(storeDetails, "_id", null),
+              })}
               title="Store"
               onClick={() =>
-                history.push(`/store/${get(storeDetails, "_id", "")}`)
+                get(storeDetails, "_id", null)
+                  ? history.push(`/store/${get(storeDetails, "_id", "")}`)
+                  : ""
               }
             >
               <i className="far fa-building mr-1" />
-              {get(storeDetails, "name", "--")}
+              {get(storeDetails, "name", bulkStoreName || "N/A")}
             </div>
           </Row>
         </CardHeader>
