@@ -28,7 +28,7 @@ export default function ImportOrdersModal({ isOpen, toggle }) {
         value.forEach((order) => {
           finalOrder["customerName"] = get(order, "customerName", "N/A");
           finalOrder["shopifyOrderDate"] = moment(
-            get(order, "shopifyOrderDate")
+            get(order, "shopifyOrderDate"), "DD-MM-YYYY"
           ).valueOf();
           finalOrder["weight"] = get(order, "weight", 0.5);
           finalOrder["bulkStoreAlias"] = get(order, "storeAlias", "");
