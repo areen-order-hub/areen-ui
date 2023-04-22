@@ -628,6 +628,7 @@ export default function Orders() {
           {
             text: "Shopify Order ID",
             dataField: "shopifyOrderName",
+            sort: true,
             formatter: (cell, { _id }) => (
               <span
                 className="text-primary hover-pointer"
@@ -641,11 +642,13 @@ export default function Orders() {
           {
             text: "Inv. No.",
             dataField: "invoiceDetails.orderNo",
+            sort: true,
             formatter: (cell) => cell || "N/A",
           },
           {
             text: "Cust. Name",
             dataField: "customerName",
+            sort: true,
             formatter: (cell) => cell || "N/A",
           },
           {
