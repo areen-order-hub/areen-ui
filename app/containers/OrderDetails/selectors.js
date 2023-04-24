@@ -13,6 +13,8 @@ export const shippingAddress = (state) =>
   get(state, "orderDetails.shippingAddress", {});
 export const shopifyOrderItems = (state) =>
   get(state, "orderDetails.shopifyOrderItems", {});
+export const finalDisplayItems = (state) =>
+  get(state, "orderDetails.finalDisplayItems", {});
 export const shopifyPrice = (state) =>
   get(state, "orderDetails.shopifyPrice", "");
 export const invoiceDetails = (state) =>

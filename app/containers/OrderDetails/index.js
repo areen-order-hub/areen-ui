@@ -47,6 +47,7 @@ export default function OrderDetails({ match }) {
     billingAddress,
     shippingAddress,
     shopifyOrderItems,
+    finalDisplayItems,
     shopifyPrice,
     invoiceDetails,
     carrierService,
@@ -66,6 +67,7 @@ export default function OrderDetails({ match }) {
     billingAddress: selectors.billingAddress(state),
     shippingAddress: selectors.shippingAddress(state),
     shopifyOrderItems: selectors.shopifyOrderItems(state),
+    finalDisplayItems: selectors.finalDisplayItems(state),
     shopifyPrice: selectors.shopifyPrice(state),
     invoiceDetails: selectors.invoiceDetails(state),
     carrierService: selectors.carrierService(state),
@@ -291,42 +293,17 @@ export default function OrderDetails({ match }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {isEmpty(get(invoiceDetails, "items", []))
-                    ? Object.entries(shopifyOrderItems).map(([key, value]) => (
-                        <tr>
-                          <td>{get(value, "title", "-")}</td>
-                          <td>{key}</td>
-                          <td>{get(value, "quantity", 0)}</td>
-                          <td>-</td>
-                          <td>{get(value, "price", "0")}</td>
-                          <td>-</td>
-                          <td>-</td>
-                        </tr>
-                      ))
-                    : map(
-                        get(invoiceDetails, "items", []),
-                        ({ itemCode, quantity, unitPrice, price }, index) => (
-                          <tr key={index}>
-                            <td>
-                              {get(shopifyOrderItems, [itemCode, "title"], "-")}
-                            </td>
-                            <td>{itemCode}</td>
-                            <td>
-                              {get(
-                                shopifyOrderItems,
-                                [itemCode, "quantity"],
-                                0
-                              )}
-                            </td>
-                            <td>{quantity}</td>
-                            <td>
-                              {get(shopifyOrderItems, [itemCode, "price"], 0)}
-                            </td>
-                            <td>{unitPrice}</td>
-                            <td>{price}</td>
-                          </tr>
-                        )
-                      )}
+                  {Object.entries(finalDisplayItems).map(([key, value]) => (
+                    <tr>
+                      <td>{get(value, "title", "-")}</td>
+                      <td>{key}</td>
+                      <td>{get(value, "quantity", "-")}</td>
+                      <td>{get(value, "invoicedQty", "-")}</td>
+                      <td>{get(value, "price", "-")}</td>
+                      <td>{get(value, "invoicedUnitPrice", "-")}</td>
+                      <td>{get(value, "invoicedPrice", "-")}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </Table>
             </div>

@@ -11,6 +11,7 @@ import {
   SET_IS_SHIPMENT_CANCELLING,
 } from "./constants";
 import { getDateTimeString } from "utils/dateTimeHelpers";
+import { isEmpty } from "lodash";
 
 export const initialState = {
   isLoading: true,
@@ -31,7 +32,32 @@ export const initialState = {
   weight: 0,
   paymentMode: "",
   bulkStoreName: "",
+  finalDisplayItems: {},
   comments: [],
+};
+
+const mapItemsForDisplay = (shopifyOrderItems = {}, invoiceDetails = {}) => {
+  const { items: invoiceItems = [] } = invoiceDetails;
+  let finalDisplayItems = { ...shopifyOrderItems };
+  for (let item of invoiceItems) {
+    const { itemCode, quantity = 0, price = 0, unitPrice = 0 } = item;
+    if (!isEmpty(finalDisplayItems[itemCode])) {
+      finalDisplayItems[itemCode] = {
+        ...finalDisplayItems[itemCode],
+        invoicedQty: quantity,
+        invoicedPrice: price,
+        invoicedUnitPrice: unitPrice,
+      };
+    } else {
+      finalDisplayItems[itemCode] = {
+        invoicedQty: quantity,
+        invoicedPrice: price,
+        invoicedUnitPrice: unitPrice,
+      };
+    }
+  }
+
+  return finalDisplayItems;
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -57,6 +83,10 @@ const orderDetailsReducer = (state = initialState, action) =>
         draft.weight = action.payload.weight;
         draft.paymentMode = action.payload.paymentMode;
         draft.bulkStoreName = action.payload.bulkStoreName;
+        draft.finalDisplayItems = mapItemsForDisplay(
+          action.payload.shopifyOrderItems,
+          action.payload.invoiceDetails
+        );
         draft.isLoading = false;
         break;
       case SET_COMMENT_DETAILS:
