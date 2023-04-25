@@ -54,6 +54,7 @@ export default function OrderDetails({ match }) {
     carrierStatus,
     carrierServiceId,
     carrierTrackingLink,
+    assignedDeliveryPartner,
     weight,
     paymentMode,
     bulkStoreName,
@@ -74,6 +75,7 @@ export default function OrderDetails({ match }) {
     carrierStatus: selectors.carrierStatus(state),
     carrierServiceId: selectors.carrierServiceId(state),
     carrierTrackingLink: selectors.carrierTrackingLink(state),
+    assignedDeliveryPartner: selectors.assignedDeliveryPartner(state),
     weight: selectors.weight(state),
     paymentMode: selectors.paymentMode(state),
     bulkStoreName: selectors.bulkStoreName(state),
@@ -254,6 +256,12 @@ export default function OrderDetails({ match }) {
               </span>
             </p>
           )}
+           <p>
+            <span className="text-muted">Assigned Delivery Partner: </span>
+            <span className="text-primary font-weight-bold">
+              {get(assignedDeliveryPartner, "name", "N/A")}
+            </span>
+          </p>
         </CardHeader>
         <CardHeader>
           <div className="mb-3">

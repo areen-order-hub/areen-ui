@@ -33,8 +33,10 @@ export const getCarrierStatusFiler = () => {
       label: "AWB Generated",
     },
     { value: "APPROVED", label: "Approved" },
-    { value: "Shipment cancelled", label: "Shipment cancelled" },
+    { value: "Out for Delivery", label: "Out for Delivery" },
     { value: "Delivered", label: "Delivered" },
+    { value: "Shipment cancelled", label: "Shipment cancelled" },
+    { value: "Returned", label: "Returned" },
   ];
 };
 

@@ -27,6 +27,8 @@ export const carrierServiceId = (state) =>
   get(state, "orderDetails.carrierServiceId", "");
 export const carrierTrackingLink = (state) =>
   get(state, "orderDetails.carrierTrackingLink", "");
+export const assignedDeliveryPartner = (state) =>
+  get(state, "orderDetails.assignedDeliveryPartner", {});
 export const weight = (state) => get(state, "orderDetails.weight", 0);
 export const paymentMode = (state) =>
   get(state, "orderDetails.paymentMode", "");
