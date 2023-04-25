@@ -195,11 +195,14 @@ export default function OrderDetails({ match }) {
             </div>
             <div
               className={classNames("mr-3", {
-                "hover-pointer text-underline": get(storeDetails, "_id", null),
+                "hover-pointer text-underline":
+                  get(storeDetails, "_id", null) &&
+                  get(storeDetails, "isShopifyStore", false),
               })}
               title="Store"
               onClick={() =>
-                get(storeDetails, "_id", null)
+                get(storeDetails, "_id", null) &&
+                get(storeDetails, "isShopifyStore", false)
                   ? history.push(`/store/${get(storeDetails, "_id", "")}`)
                   : ""
               }
@@ -228,7 +231,9 @@ export default function OrderDetails({ match }) {
           <p>
             <span className="text-muted">Carrier Id: </span>
             <span className="text-primary font-weight-bold">
-              {carrierServiceId || "N/A"}
+              {carrierService == "Areen"
+                ? get(invoiceDetails, "orderNo", "N/A")
+                : carrierServiceId || "N/A"}
             </span>
           </p>
           {carrierService == "Elite" && (

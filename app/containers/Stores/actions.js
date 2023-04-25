@@ -12,7 +12,10 @@ import { get } from "lodash";
 export const fetchStores = (params) => {
   return async (dispatch) => {
     try {
-      const { data } = await paginateStores(params);
+      const { data } = await paginateStores({
+        ...params,
+        isShopifyStore: true,
+      });
       dispatch(setStoreList(data));
     } catch (err) {
       dispatch(setStoreList());
