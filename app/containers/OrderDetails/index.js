@@ -285,7 +285,7 @@ export default function OrderDetails({ match }) {
                     <th scope="col">Item Code</th>
                     <th scope="col">Ordered QTY.</th>
                     <th scope="col">Invoiced QTY.</th>
-                    <th scope="col">Shopify Unit Price</th>
+                    <th scope="col">Website Unit Price</th>
                     <th scope="col">Invoice Unit Price</th>
                     <th scope="col">Total</th>
                   </tr>
