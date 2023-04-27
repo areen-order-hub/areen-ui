@@ -212,7 +212,7 @@ export default function Orders() {
           "Shopify Price (AED)": shopifyPrice,
           "Inv. Price (AED)":
             `${numberFormatter(get(invoiceDetails, "price"))}` || "N/A",
-          "Weight (Kg)": weight,
+          "Weight (Gms)": weight,
           Store: get(storeId, "alias", "N/A"),
         };
         data.push(row);
@@ -714,7 +714,7 @@ export default function Orders() {
             formatter: (cell) => `${numberFormatter(cell)}` || "N/A",
           },
           {
-            text: "Weight (Kg)",
+            text: "Weight (Gms)",
             dataField: "weight",
             formatter: (cell) => cell || "N/A",
           },

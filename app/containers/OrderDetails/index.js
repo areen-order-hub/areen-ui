@@ -259,7 +259,7 @@ export default function OrderDetails({ match }) {
           <p>
             <span className="text-muted">Weight: </span>
             <span className="text-primary font-weight-bold">
-              {weight || 0} KG
+              {weight || 0} Gms
             </span>
           </p>
           <p>

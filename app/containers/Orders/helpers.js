@@ -190,7 +190,7 @@ const getBillDocDefinition = ({
       ],
       [
         {
-          text: "Weight",
+          text: "Weight (Gms)",
           alignment: "center",
           // fillColor: "#D9D9D9",
           bold: true,
@@ -216,7 +216,7 @@ const getBillDocDefinition = ({
       ],
       [
         {
-          text: `${weight} KG`,
+          text: `${weight}`,
           alignment: "center",
           // fillColor: "#D9D9D9",
           bold: true,
