@@ -8,30 +8,13 @@ import React from "react";
 import { useCookies } from "react-cookie";
 import { useSelector, useDispatch } from "react-redux";
 import { Helmet } from "react-helmet";
-import {
-  Row,
-  Col,
-  Button,
-  Container,
-  Card,
-  CardHeader,
-  CardBody,
-  Spinner,
-} from "reactstrap";
+import { Row, Col } from "reactstrap";
 import { useInjectReducer } from "utils/injectReducer";
-import Tag from "../../components/Tag";
-import history from "utils/history";
-import InterviewTable, {
-  InterviewsTableSkeleton,
-} from "../../components/InterviewTable";
-import CalendarCard from "components/CalendarCard";
-import AlertPopupHandler from "components/AlertPopup/AlertPopupHandler";
 import reducer from "./reducer";
-import moment from "moment-timezone";
 import * as selectors from "./selectors";
 import * as operations from "./actions";
 import "./dashboardStyle.scss";
-import { parseDateTime } from "utils/dateTimeHelpers";
+import { useAccess } from "utils/permissions";
 import CountComponent from "./CountComponent";
 
 export default function Dashboard() {
@@ -44,11 +27,15 @@ export default function Dashboard() {
     noOfStores,
     noOfActiveStores,
     noOfOrders,
+    noOfAssignedOrders,
+    noOfDeliveredOrders,
   } = useSelector((state) => ({
     isCountLoading: selectors.isCountLoading(state),
     noOfStores: selectors.noOfStores(state),
     noOfActiveStores: selectors.noOfActiveStores(state),
     noOfOrders: selectors.noOfOrders(state),
+    noOfAssignedOrders: selectors.noOfAssignedOrders(state),
+    noOfDeliveredOrders: selectors.noOfDeliveredOrders(state),
   }));
 
   React.useEffect(() => {
@@ -76,6 +63,11 @@ export default function Dashboard() {
               noOfStores,
               noOfActiveStores,
               noOfOrders,
+              noOfAssignedOrders,
+              noOfDeliveredOrders,
+              hasStoreAccess: useAccess("Stores", "read"),
+              hasOrderAccess: useAccess("Orders", "read"),
+              hasDeliveryAccess: useAccess("Delivery", "read"),
             }}
           />
         </Col>

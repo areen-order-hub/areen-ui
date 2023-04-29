@@ -245,7 +245,9 @@ export default function Orders() {
       if (
         isEmpty(get(order, "invoiceDetails", {})) ||
         (order.carrierService &&
-          get(order, "carrierStatus", "") !== "Shipment cancelled")
+          !["Shipment cancelled", "Returned"].includes(
+            get(order, "carrierStatus", "")
+          ))
       ) {
         return order._id;
       }

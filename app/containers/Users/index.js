@@ -25,7 +25,7 @@ import * as operations from "./actions";
 import * as selectors from "./selectors";
 import "./usersStyle.scss";
 
-export default function Users() {
+export default function Users({ match }) {
   useInjectReducer({ key: "users", reducer });
   const dispatch = useDispatch();
   const { isLoading, users, paginationDetails } = useSelector((state) => ({
@@ -35,7 +35,12 @@ export default function Users() {
   }));
 
   useEffect(() => {
-    dispatch(operations.fetchUsers({ page: 1 }));
+    const userType = match.path.split("/")[2];
+    if (userType == "User") {
+      dispatch(operations.fetchUsers({ page: 1, isDriver: false }));
+    } else {
+      dispatch(operations.fetchUsers({ page: 1, isDriver: true }));
+    }
   }, []);
 
   const onUserStatusChange = (id, isEnabled) => {
@@ -80,12 +85,16 @@ export default function Users() {
               color="primary"
               className="btn-icon btn-3"
               type="button"
-              onClick={() => history.push("/user-form")}
+              onClick={() =>
+                history.push(`/user-form/${match.path.split("/")[2]}`)
+              }
             >
               <span className="btn-inner--icon">
                 <i className="fas fa-plus" />
               </span>
-              <span className="btn-inner--text">Add User</span>
+              <span className="btn-inner--text">
+                Add {match.path.split("/")[2]}
+              </span>
             </Button>
           </div>
         </Row>
@@ -126,7 +135,11 @@ export default function Users() {
                         type="button"
                         color="primary"
                         size="sm"
-                        onClick={() => history.push(`/user-form?id=${id}`)}
+                        onClick={() =>
+                          history.push(
+                            `/user-form/${match.path.split("/")[2]}?id=${id}`
+                          )
+                        }
                       >
                         <span className="btn-inner--icon">
                           <i className="fas fa-edit" />

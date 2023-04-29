@@ -200,6 +200,7 @@ export default function RoleForm() {
                       <Input
                         type="checkbox"
                         checked={update}
+                        disabled={index == 5}
                         onChange={(e) =>
                           dispatch(
                             operations.changeAccess({

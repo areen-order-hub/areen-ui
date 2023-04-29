@@ -19,7 +19,7 @@ import { get } from "lodash";
 import schema from "./validations";
 import NotificationHandler from "components/Notifications/NotificationHandler";
 
-export const onSubmit = (userDetails) => {
+export const onSubmit = (userDetails, userType) => {
   return async (dispatch) => {
     try {
       const isValid = schema.isValidSync(userDetails);
@@ -35,7 +35,7 @@ export const onSubmit = (userDetails) => {
         operation: "success",
         title: "User invited successfully",
       });
-      history.push("/users");
+      history.push(`/users/${userType}`);
     } catch (err) {
       NotificationHandler.open({
         operation: "failure",
@@ -50,7 +50,7 @@ export const onSubmit = (userDetails) => {
   };
 };
 
-export const onEdit = (id, userDetails) => {
+export const onEdit = (id, userDetails, userType) => {
   return async (dispatch) => {
     try {
       const isValid = schema.isValidSync(userDetails);
@@ -66,7 +66,7 @@ export const onEdit = (id, userDetails) => {
         operation: "success",
         title: "User updated successfully",
       });
-      history.push("/users");
+      history.push(`/users/${userType}`);
     } catch (err) {
       NotificationHandler.open({
         operation: "failure",

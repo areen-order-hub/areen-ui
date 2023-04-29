@@ -35,6 +35,8 @@ import UserForm from "containers/UserForm";
 import Roles from "containers/Roles";
 import RoleForm from "containers/RoleForm";
 
+import DeliveryManagement from "containers/DeliveryManagement";
+
 const routes = {
   home: [
     {
@@ -92,7 +94,7 @@ const routes = {
     {
       moduleName: "Users",
       requiredPermission: "read",
-      path: "/users",
+      path: "/users/User",
       name: "Users",
       icon: "fas fa-users text-secondary",
       component: Users,
@@ -102,7 +104,7 @@ const routes = {
       moduleName: "Users",
       requiredPermission: "create",
       redirect: true,
-      path: "/user-form",
+      path: "/user-form/:type",
       name: "UserForm",
       component: UserForm,
       layout: "",
@@ -123,6 +125,24 @@ const routes = {
       path: "/role-form",
       name: "Role Form",
       component: RoleForm,
+      layout: "",
+    },
+    {
+      moduleName: "Delivery Partners",
+      requiredPermission: "read",
+      path: "/users/Driver",
+      name: "Delivery Partners",
+      icon: "fas fa-truck text-secondary",
+      component: Users,
+      layout: "",
+    },
+    {
+      moduleName: "Delivery",
+      requiredPermission: "read",
+      path: "/delivery",
+      name: "Delivery",
+      icon: "fas fa-box-open text-secondary",
+      component: DeliveryManagement,
       layout: "",
     },
     {

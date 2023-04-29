@@ -29,6 +29,7 @@ export const initialState = {
   carrierStatus: "",
   carrierServiceId: "",
   carrierTrackingLink: "",
+  assignedDeliveryPartner: {},
   weight: 0,
   paymentMode: "",
   bulkStoreName: "",
@@ -80,6 +81,7 @@ const orderDetailsReducer = (state = initialState, action) =>
         draft.carrierStatus = action.payload.carrierStatus;
         draft.carrierServiceId = action.payload.carrierServiceId;
         draft.carrierTrackingLink = action.payload.carrierTrackingLink;
+        draft.assignedDeliveryPartner = action.payload.assignedDeliveryPartner;
         draft.weight = action.payload.weight;
         draft.paymentMode = action.payload.paymentMode;
         draft.bulkStoreName = action.payload.bulkStoreName;
