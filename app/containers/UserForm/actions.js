@@ -8,6 +8,7 @@ import {
   INIT,
   CHANGE_NAME,
   CHANGE_EMAIL,
+  CHANGE_PHONE,
   CHANGE_ROLES,
   SHOW_LOADING,
   SET_USER_DETAILS,
@@ -124,6 +125,11 @@ export const changeName = (payload) => ({
 
 export const changeEmail = (payload) => ({
   type: CHANGE_EMAIL,
+  payload,
+});
+
+export const changePhone = (payload) => ({
+  type: CHANGE_PHONE,
   payload,
 });
 

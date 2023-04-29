@@ -10,7 +10,7 @@ import {
   SET_COMMENT_DETAILS,
   SET_IS_SHIPMENT_CANCELLING,
 } from "./constants";
-import { getDateTimeString } from "utils/dateTimeHelpers";
+import { getDateTimeString, parseDate } from "utils/dateTimeHelpers";
 import { isEmpty } from "lodash";
 
 export const initialState = {
@@ -30,6 +30,7 @@ export const initialState = {
   carrierServiceId: "",
   carrierTrackingLink: "",
   assignedDeliveryPartner: {},
+  lastScannedTimeStamp: "",
   weight: 0,
   paymentMode: "",
   bulkStoreName: "",
@@ -82,6 +83,12 @@ const orderDetailsReducer = (state = initialState, action) =>
         draft.carrierServiceId = action.payload.carrierServiceId;
         draft.carrierTrackingLink = action.payload.carrierTrackingLink;
         draft.assignedDeliveryPartner = action.payload.assignedDeliveryPartner;
+        draft.lastScannedTimeStamp = action.payload.lastScannedTimeStamp
+          ? parseDate(
+              action.payload.lastScannedTimeStamp,
+              "DD MMM YYYY / HH:mm"
+            )
+          : "N/A";
         draft.weight = action.payload.weight;
         draft.paymentMode = action.payload.paymentMode;
         draft.bulkStoreName = action.payload.bulkStoreName;

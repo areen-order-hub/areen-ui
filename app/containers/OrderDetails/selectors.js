@@ -30,6 +30,8 @@ export const carrierTrackingLink = (state) =>
 export const assignedDeliveryPartner = (state) =>
   get(state, "orderDetails.assignedDeliveryPartner", {});
 export const weight = (state) => get(state, "orderDetails.weight", 0);
+export const lastScannedTimeStamp = (state) =>
+  get(state, "orderDetails.lastScannedTimeStamp", "");
 export const paymentMode = (state) =>
   get(state, "orderDetails.paymentMode", "");
 export const bulkStoreName = (state) =>

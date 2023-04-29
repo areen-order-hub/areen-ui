@@ -29,6 +29,7 @@ export default function UserForm({ match }) {
   const {
     name,
     email,
+    phone,
     roles,
     isLoading,
     errorMessage,
@@ -37,6 +38,7 @@ export default function UserForm({ match }) {
   } = useSelector((state) => ({
     name: selectors.name(state),
     email: selectors.email(state),
+    phone: selectors.phone(state),
     roles: selectors.roles(state),
     isLoading: selectors.isLoading(state),
     errorMessage: selectors.errorMessage(state),
@@ -62,6 +64,7 @@ export default function UserForm({ match }) {
           {
             name,
             email,
+            phone,
             roles,
             isDriver: match.params.type == "Driver",
           },
@@ -74,6 +77,7 @@ export default function UserForm({ match }) {
           {
             name,
             email,
+            phone,
             orgId: get(cookie, "user.orgId", ""),
             roles,
             isDriver: match.params.type == "Driver",
@@ -173,6 +177,19 @@ export default function UserForm({ match }) {
               error={validations}
               name="email"
               value={email}
+            />
+          </Col>
+        </FormGroup>
+        <FormGroup row>
+          <Label sm={2}>Phone</Label>
+          <Col sm={6}>
+            <RtInput
+              onChange={(e) => dispatch(operations.changePhone(e))}
+              type="text"
+              placeholder="Eg: 1234567890"
+              error={validations}
+              name="phone"
+              value={phone}
             />
           </Col>
         </FormGroup>

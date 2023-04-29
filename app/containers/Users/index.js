@@ -118,6 +118,11 @@ export default function Users({ match }) {
             formatter: (cell) => cell || "N/A",
           },
           {
+            text: "Phone",
+            dataField: "phone",
+            formatter: (cell) => cell || "N/A",
+          },
+          {
             text: "Roles",
             dataField: "roles",
             formatter: (cell) =>

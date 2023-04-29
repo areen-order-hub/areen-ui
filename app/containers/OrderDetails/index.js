@@ -55,6 +55,7 @@ export default function OrderDetails({ match }) {
     carrierServiceId,
     carrierTrackingLink,
     assignedDeliveryPartner,
+    lastScannedTimeStamp,
     weight,
     paymentMode,
     bulkStoreName,
@@ -76,6 +77,7 @@ export default function OrderDetails({ match }) {
     carrierServiceId: selectors.carrierServiceId(state),
     carrierTrackingLink: selectors.carrierTrackingLink(state),
     assignedDeliveryPartner: selectors.assignedDeliveryPartner(state),
+    lastScannedTimeStamp: selectors.lastScannedTimeStamp(state),
     weight: selectors.weight(state),
     paymentMode: selectors.paymentMode(state),
     bulkStoreName: selectors.bulkStoreName(state),
@@ -256,12 +258,28 @@ export default function OrderDetails({ match }) {
               </span>
             </p>
           )}
-           <p>
-            <span className="text-muted">Assigned Delivery Partner: </span>
-            <span className="text-primary font-weight-bold">
-              {get(assignedDeliveryPartner, "name", "N/A")}
-            </span>
-          </p>
+          {carrierService == "Areen" && (
+            <>
+              <p>
+                <span className="text-muted">Delivery Partner Name: </span>
+                <span className="text-primary font-weight-bold">
+                  {get(assignedDeliveryPartner, "name", "N/A")}
+                </span>
+              </p>
+              <p>
+                <span className="text-muted">Delivery Partner Mobile: </span>
+                <span className="text-primary font-weight-bold">
+                  {get(assignedDeliveryPartner, "phone", "N/A")}
+                </span>
+              </p>
+              <p>
+                <span className="text-muted">Last Scanned By Driver: </span>
+                <span className="text-primary font-weight-bold">
+                  {lastScannedTimeStamp}
+                </span>
+              </p>
+            </>
+          )}
         </CardHeader>
         <CardHeader>
           <div className="mb-3">
