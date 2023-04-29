@@ -179,6 +179,9 @@ export default function OrderDetails({ match }) {
           <Row className="px-1 align-items-center">
             <Col xs="12" md="10" className="align-items-center">
               <span className="h1 mr-2 text-primary">{shopifyOrderName}</span>
+              <span className="h2 ml-2">
+                Invoice #: {get(invoiceDetails, "orderNo", "N/A")}
+              </span>
             </Col>
             <Can moduleName={ORDER_MODULE} action={UPDATE_ACTION}>
               {carrierService && carrierStatus != "Shipment cancelled" && (

@@ -11,6 +11,7 @@ import {
   Row,
   Col,
   Spinner,
+  Badge,
   ButtonDropdown,
   Button,
   DropdownToggle,
@@ -411,7 +412,10 @@ export default function Orders() {
           color="primary"
           caret
         >
-          Generate Shipping Bill
+          Generate Shipping Bill{" "}
+          {!isEmpty(selectedOrders) &&
+            selectedOrders.length > 0 &&
+            `(${selectedOrders.length})`}
         </DropdownToggle>
         <DropdownMenu>
           <DropdownItem onClick={() => onGenerateShipment("Areen")}>
@@ -629,14 +633,21 @@ export default function Orders() {
             text: "Shopify Order ID",
             dataField: "shopifyOrderName",
             sort: true,
-            formatter: (cell, { _id }) => (
-              <span
-                className="text-primary hover-pointer"
-                onClick={() => onClick(_id)}
-                aria-hidden="true"
-              >
-                {cell}
-              </span>
+            formatter: (cell, { _id, noOfComments }) => (
+              <>
+                <span
+                  className="text-primary hover-pointer"
+                  onClick={() => onClick(_id)}
+                  aria-hidden="true"
+                >
+                  {cell}
+                </span>
+                {noOfComments != 0 && (
+                  <Badge color="info" className="ml-2" title="No Of Comments">
+                    {noOfComments}
+                  </Badge>
+                )}
+              </>
             ),
           },
           {
