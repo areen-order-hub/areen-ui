@@ -27,6 +27,7 @@ import StoreForm from "containers/StoreForm";
 import StoreDetails from "containers/StoreDetails";
 
 import Orders from "containers/Orders";
+import OrderForm from "containers/OrderForm";
 import OrderDetails from "containers/OrderDetails";
 
 import Users from "containers/Users";
@@ -80,6 +81,15 @@ const routes = {
       path: "/order/:id",
       name: "Order",
       component: OrderDetails,
+      layout: "",
+    },
+    {
+      moduleName: "Orders",
+      requiredPermission: "create",
+      redirect: true,
+      path: "/order-form",
+      name: "OrderForm",
+      component: OrderForm,
       layout: "",
     },
     {

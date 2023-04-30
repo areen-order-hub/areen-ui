@@ -1,6 +1,7 @@
 import React from "react";
 import classnames from "classnames";
 import { Input, InputGroup, InputGroupAddon, InputGroupText } from "reactstrap";
+import ReactDatetime from "react-datetime";
 import toNumber from "lodash/toNumber";
 import isArray from "lodash/isArray";
 import isNil from "lodash/isNil";
@@ -18,6 +19,7 @@ function RtInput({
   className,
   disable,
   ref,
+  inputType = "text",
 }) {
   const isErrorAvailable = !isNil(error);
   const isErrorArray = isErrorAvailable && isArray(error);
@@ -38,32 +40,53 @@ function RtInput({
 
   return (
     <>
-      <InputGroup
-        className={classnames(
-          "rt-input input-group-merge input-group-alternative",
-          {
-            warning: isValidError,
-          }
-        )}
-      >
-        {getPrepend()}
-        <Input
-          placeholder={placeholder}
-          type={type}
-          onChange={(e) => {
-            if (type == "number") {
-              return onChange(toNumber(e.target.value));
+      {inputType == "text" ? (
+        <InputGroup
+          className={classnames(
+            "rt-input input-group-merge input-group-alternative",
+            {
+              warning: isValidError,
             }
-            onChange(e.target.value);
+          )}
+        >
+          {getPrepend()}
+          <Input
+            placeholder={placeholder}
+            type={type}
+            onChange={(e) => {
+              if (type == "number") {
+                return onChange(toNumber(e.target.value));
+              }
+              onChange(e.target.value);
+            }}
+            autoComplete="true"
+            className={className}
+            value={value}
+            onFocus={onFocus}
+            ref={ref}
+            disabled={disable}
+          />
+        </InputGroup>
+      ) : (
+        <ReactDatetime
+          inputProps={{
+            placeholder,
+            required: true,
           }}
-          autoComplete="true"
-          className={className}
+          dateFormat="DD MMM YYYY"
+          timeFormat={false}
+          className="text-sm"
+          onChange={(e) => {
+            try {
+              onChange(e);
+            } catch (err) {
+              onChange(null);
+            }
+          }}
           value={value}
-          onFocus={onFocus}
-          ref={ref}
-          disabled={disable}
+          initialValue={value}
         />
-      </InputGroup>
+      )}
       {isValidError ? (
         <div className="text-xs text-warning ml-1 pt-1">
           {correctError.message}

@@ -468,6 +468,21 @@ export default function Orders() {
             onChange={(e) => setSearchText(e)}
           />
         </Col>
+        <Can moduleName={ORDER_MODULE} action={CREATE_ACTION}>
+          <div className="align-items-right ml-auto mr-3 mr-md-3">
+            <Button
+              color="primary"
+              className="btn-icon btn-3"
+              type="button"
+              onClick={() => history.push("/order-form")}
+            >
+              <span className="btn-inner--icon">
+                <i className="fas fa-plus" />
+              </span>
+              <span className="btn-inner--text">Add Order</span>
+            </Button>
+          </div>
+        </Can>
       </Row>
       <Row className="mt-4">
         <Col md="2">

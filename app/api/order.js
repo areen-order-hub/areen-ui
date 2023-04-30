@@ -23,6 +23,14 @@ export const getOrder = async (id) => {
   });
 };
 
+export const createOrder = async (data) => {
+  return await Request({
+    url: `/api/order`,
+    method: "POST",
+    data,
+  });
+};
+
 export const triggerProductSync = async () => {
   return await Request({
     url: `/api/order/trigger/productSync`,

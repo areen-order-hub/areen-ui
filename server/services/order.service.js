@@ -47,6 +47,22 @@ exports.list = async (req, res) => {
   }
 };
 
+exports.create = async (req, res) => {
+  try {
+    const order = await Request(
+      {
+        url: "/v1/order",
+        method: "POST",
+        data: req.body,
+      },
+      req.headers
+    );
+    res.json(order);
+  } catch (err) {
+    res.status(err.status).json(err.message);
+  }
+};
+
 exports.fetch = async (req, res) => {
   try {
     const { orderId } = req.params;
