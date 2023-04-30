@@ -27,6 +27,7 @@ import {
   getPaymentModeBadge,
   getCarrierStatusBadge,
 } from "utils/componentHelpers";
+import RtInput from "components/RtInput";
 import RSelectAsync from "components/RSelectAsync";
 import PaginationDetails from "components/PaginationDetails";
 import RtCreatableSelect from "components/RtCreatableSelect";
@@ -56,6 +57,7 @@ import history from "../../utils/history";
 import { parseDate } from "../../utils/dateTimeHelpers";
 import * as operations from "./actions";
 import * as selectors from "./selectors";
+import { useDebounce } from "react-use";
 import "./ordersStyle.scss";
 
 export default function Orders() {
@@ -91,6 +93,7 @@ export default function Orders() {
     isShipmentGenerating: selectors.isShipmentGenerating(state),
   }));
 
+  const [searchText, setSearchText] = useState("");
   const [selectedStores, setSelectedStores] = useState([]);
   const [selectedPaymentMode, setSelectedPaymentMode] = useState([]);
   const [selectedCarrierStatus, setSelectedCarrierStatus] = useState([]);
@@ -258,6 +261,10 @@ export default function Orders() {
 
   const getFilterParams = () => {
     let filter = { page: 1 };
+    if (searchText && !isEmpty(searchText)) {
+      filter["searchText"] = searchText;
+    }
+
     if (!isEmpty(selectedStores)) {
       filter["store"] = map(selectedStores, ({ value }) => value)
         .filter((x) => x)
@@ -308,6 +315,14 @@ export default function Orders() {
     startDate,
     endDate,
   ]);
+
+  useDebounce(
+    () => {
+      dispatch(operations.fetchOrders(getFilterParams()));
+    },
+    1000,
+    [searchText]
+  );
 
   const onClick = (id) =>
     history.push({
@@ -444,6 +459,16 @@ export default function Orders() {
         <title>Orders</title>
         <meta name="description" content="Description of Orders" />
       </Helmet>
+      <Row className="mt-4">
+        <Col md="2">
+          <RtInput
+            type="text"
+            value={searchText}
+            placeholder="Enter Order ID to Search"
+            onChange={(e) => setSearchText(e)}
+          />
+        </Col>
+      </Row>
       <Row className="mt-4">
         <Col md="2">
           <RtCreatableSelect
