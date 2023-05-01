@@ -11,9 +11,10 @@ import {
   SET_COMMENT_DETAILS,
   SET_IS_SHIPMENT_CANCELLING,
 } from "./constants";
-import { getOrder, cancelShipment } from "api/order";
+import { getOrder, cancelShipment, deleteOrder } from "api/order";
 import { saveComment, getComments } from "api/comment";
 import NotificationHandler from "../../components/Notifications/NotificationHandler";
+import history from "utils/history";
 
 export const fetchOrder = (orderId) => {
   return async (dispatch) => {
@@ -89,6 +90,27 @@ export const addComment = (commentDetails) => {
           get(err, "response.data", null) ||
           "Something went wrong. Please try again later",
         title: "Unable to save comment",
+      });
+    }
+  };
+};
+
+export const onDelete = (orderId) => {
+  return async (dispatch) => {
+    try {
+      await deleteOrder(orderId);
+      NotificationHandler.open({
+        operation: "success",
+        title: "Order deleted successfully",
+      });
+      history.push("/orders");
+    } catch (err) {
+      NotificationHandler.open({
+        operation: "failure",
+        message:
+          get(err, "response.data", null) ||
+          "Something went wrong. Please try again later",
+        title: "Unable to delete order",
       });
     }
   };

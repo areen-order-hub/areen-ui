@@ -19,4 +19,6 @@ router.delete("/carrier/:orderId", services.cancelShipment);
 
 router.post("/delivery", services.handleDelivery);
 
+router.delete("/:orderId", services.delete);
+
 module.exports = router;

@@ -26,7 +26,11 @@ import Skeleton from "react-loading-skeleton";
 import AlertPopupHandler from "components/AlertPopup/AlertPopupHandler";
 import classNames from "classnames";
 import Can from "components/Can";
-import { ORDER_MODULE, UPDATE_ACTION } from "../../utils/constants";
+import {
+  CREATE_ACTION,
+  ORDER_MODULE,
+  UPDATE_ACTION,
+} from "../../utils/constants";
 import reducer from "./reducer";
 import history from "utils/history";
 import RtInput from "../../components/RtInput/index";
@@ -149,6 +153,21 @@ export default function OrderDetails({ match }) {
         carrierService == "Elite"
           ? `This only marks the shipment as cancelled and doesn't cancel the actual Elite Shipment. Do you want to continue?`
           : `You are about to cancel the shipment. Do you want to continue?`,
+      data: {},
+      type: "danger",
+      customClass: "text-xs",
+      btnSize: "sm",
+      confirmBtnBsStyle: "danger",
+      cancelBtnBsStyle: "outline-danger",
+    });
+  };
+
+  const onDeleteOrder = () => {
+    AlertPopupHandler.open({
+      onConfirm: () => dispatch(operations.onDelete(match.params.id)),
+      confirmBtnText: "Yes, Delete",
+      cancelBtnText: "No, Go Back",
+      text: `You are about to delete the order. Do you want to continue?`,
       data: {},
       type: "danger",
       customClass: "text-xs",
@@ -338,6 +357,24 @@ export default function OrderDetails({ match }) {
             </div>
           </div>
         </CardHeader>
+        {bulkStoreName && (
+          <Can moduleName={ORDER_MODULE} action={CREATE_ACTION}>
+            <CardHeader>
+              <div className="mb-3">
+                <span className="h3 text-muted">Order Actions</span>
+              </div>
+              <p>
+                <Button
+                  color="danger"
+                  size="sm"
+                  onClick={() => onDeleteOrder()}
+                >
+                  Delete Order
+                </Button>
+              </p>
+            </CardHeader>
+          </Can>
+        )}
       </Card>
     );
   };

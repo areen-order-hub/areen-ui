@@ -217,3 +217,21 @@ exports.handleDelivery = async (req, res) => {
     res.status(err.status).json(err.message);
   }
 };
+
+exports.delete = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const url = `/v1/order/${orderId}`;
+
+    const spoc = await Request(
+      {
+        url,
+        method: "DELETE",
+      },
+      req.headers
+    );
+    res.json(spoc);
+  } catch (err) {
+    res.status(err.status).json(err.message);
+  }
+};

@@ -90,3 +90,10 @@ export const handleDelivery = async (data) => {
     data,
   });
 };
+
+export const deleteOrder = async (orderId) => {
+  return await Request({
+    url: `/api/order/${orderId}`,
+    method: "DELETE",
+  });
+};

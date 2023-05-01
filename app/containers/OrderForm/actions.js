@@ -50,6 +50,23 @@ export const onSubmit = (orderDetails) => {
           },
           {}
         ),
+        shippingAddressString: `\n ${get(
+          orderDetails,
+          "shippingAddress.name",
+          ""
+        )}, \n${get(orderDetails, "shippingAddress.address1", "")} ${get(
+          orderDetails,
+          "shippingAddress.address2",
+          ""
+        )}, \n${get(orderDetails, "shippingAddress.city", "")} - ${get(
+          orderDetails,
+          "shippingAddress.zip",
+          ""
+        )}, \n${get(orderDetails, "shippingAddress.province", "")}, ${get(
+          orderDetails,
+          "shippingAddress.country",
+          ""
+        )}, \nPhone: ${get(orderDetails, "shippingAddress.phone", "")} \n`,
       });
       NotificationHandler.open({
         operation: "success",
