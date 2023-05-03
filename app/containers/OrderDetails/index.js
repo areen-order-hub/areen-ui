@@ -343,7 +343,7 @@ export default function OrderDetails({ match }) {
                 <tbody>
                   {Object.entries(finalDisplayItems).map(([key, value]) => (
                     <tr>
-                      <td>{get(value, "title", "-")}</td>
+                      <td>{get(value, "title", "-") || "-"}</td>
                       <td>{key}</td>
                       <td>{get(value, "quantity", "-")}</td>
                       <td>{get(value, "invoicedQty", "-")}</td>

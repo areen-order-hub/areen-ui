@@ -136,7 +136,9 @@ export default function OrderForm() {
       </Row>
       <Form role="form" onSubmit={(e) => onSubmit(e)}>
         <FormGroup row>
-          <Label sm={2}>Store Alias</Label>
+          <Label sm={2}>
+            Store Alias <span className="text-danger">*</span>
+          </Label>
           <Col sm={6}>
             <RtInput
               onChange={(e) => dispatch(operations.changeStoreAlias(e))}
@@ -149,7 +151,9 @@ export default function OrderForm() {
           </Col>
         </FormGroup>
         <FormGroup row>
-          <Label sm={2}>Store Name</Label>
+          <Label sm={2}>
+            Store Name <span className="text-danger">*</span>
+          </Label>
           <Col sm={6}>
             <RtInput
               onChange={(e) => dispatch(operations.changeStoreName(e))}
@@ -175,7 +179,9 @@ export default function OrderForm() {
           </Col>
         </FormGroup>
         <FormGroup row>
-          <Label sm={2}>Payment Mode</Label>
+          <Label sm={2}>
+            Payment Mode <span className="text-danger">*</span>
+          </Label>
           <Col sm={6}>
             <RtCreatableSelect
               name="description"
@@ -198,7 +204,9 @@ export default function OrderForm() {
           </Col>
         </FormGroup>
         <FormGroup row>
-          <Label sm={2}>Order Date</Label>
+          <Label sm={2}>
+            Order Date <span className="text-danger">*</span>
+          </Label>
           <Col sm={6}>
             <RtInput
               inputType="date"
@@ -211,7 +219,9 @@ export default function OrderForm() {
           </Col>
         </FormGroup>
         <FormGroup row>
-          <Label sm={2}>Order ID</Label>
+          <Label sm={2}>
+            Order ID <span className="text-danger">*</span>
+          </Label>
           <Col sm={6}>
             <RtInput
               onChange={(e) => dispatch(operations.changeShopifyOrderName(e))}
@@ -224,7 +234,9 @@ export default function OrderForm() {
           </Col>
         </FormGroup>
         <FormGroup row>
-          <Label sm={2}>Order Price</Label>
+          <Label sm={2}>
+            Order Price <span className="text-danger">*</span>
+          </Label>
           <Col sm={6}>
             <RtInput
               onChange={(e) => dispatch(operations.changeShopifyPrice(e))}
@@ -237,7 +249,7 @@ export default function OrderForm() {
           </Col>
         </FormGroup>
         <FormGroup row>
-          <Label sm={2}>Weight</Label>
+          <Label sm={2}>Weight (Gms)</Label>
           <Col sm={6}>
             <RtInput
               onChange={(e) => dispatch(operations.changeWeight(e))}
@@ -585,7 +597,9 @@ export default function OrderForm() {
         {map(shopifyOrderItems, (item, index) => (
           <React.Fragment key={index}>
             <FormGroup row>
-              <Label sm={2}>Order Item {index + 1}</Label>
+              <Label sm={2}>
+                Order Item {index + 1} <span className="text-danger">*</span>
+              </Label>
               <Col sm={2}>
                 <RtInput
                   onChange={(e) =>
@@ -673,7 +687,7 @@ export default function OrderForm() {
                     )
                   }
                   type="text"
-                  placeholder="Title"
+                  placeholder="Title (Optional)"
                   error={validations}
                   name={`shopifyOrderItems[${index}].title`}
                   value={get(item, "title", "")}
