@@ -135,11 +135,15 @@ export default function Orders() {
     data.push({
       storeAlias: "",
       storeName: "",
-      customerName: "",
       paymentMode: "",
       shopifyOrderDate: "",
       shopifyOrderName: "",
       shopifyPrice: "",
+      itemQuantity: "",
+      itemSKU: "",
+      itemPrice: "",
+      itemTitle: "",
+      customerName: "",
       weight: "",
       "billingAddress.name": "",
       "billingAddress.address1": "",
@@ -159,10 +163,6 @@ export default function Orders() {
       "shippingAddress.zip": "",
       "shippingAddress.latitude": "",
       "shippingAddress.longitude": "",
-      itemTitle: "",
-      itemQuantity: "",
-      itemSKU: "",
-      itemPrice: "",
     });
 
     var ws = XLSX.utils.json_to_sheet(data);
