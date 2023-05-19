@@ -237,7 +237,8 @@ const getBillDocDefinition = ({
         },
         {},
         {
-          text: paymentMode === "COD" ? "600" : "N/A",
+          text:
+            paymentMode === "COD" ? get(invoiceDetails, "price", "0") : "N/A",
           alignment: "center",
           // fillColor: "#D9D9D9",
           bold: true,
