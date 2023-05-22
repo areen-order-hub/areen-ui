@@ -677,13 +677,14 @@ export default function Orders() {
             sort: true,
             formatter: (cell, { _id, noOfComments }) => (
               <>
-                <span
+                <a
+                  href={`/order/${_id}`}
                   className="text-primary hover-pointer"
-                  onClick={() => onClick(_id)}
+                  // onClick={() => onClick(_id)}
                   aria-hidden="true"
                 >
                   {cell}
-                </span>
+                </a>
                 {noOfComments != 0 && (
                   <Badge color="info" className="ml-2" title="No Of Comments">
                     {noOfComments}
