@@ -28,7 +28,8 @@ export default function ImportOrdersModal({ isOpen, toggle }) {
         value.forEach((order) => {
           finalOrder["customerName"] = get(order, "customerName", "N/A");
           finalOrder["shopifyOrderDate"] = moment(
-            get(order, "shopifyOrderDate"), "DD-MM-YYYY"
+            get(order, "shopifyOrderDate"),
+            "DD-MM-YYYY"
           ).valueOf();
           finalOrder["weight"] = get(order, "weight", 0.5);
           finalOrder["bulkStoreAlias"] = get(order, "storeAlias", "");
@@ -79,7 +80,7 @@ export default function ImportOrdersModal({ isOpen, toggle }) {
               ? "COD"
               : "Prepaid";
 
-          shopifyOrderItems[get(order, "itemSKU")] = {
+          shopifyOrderItems[get(order, "itemSKU", "").trim()] = {
             quantity: get(order, "itemQuantity", "0"),
             title: get(order, "itemTitle", "N/A"),
             price: get(order, "itemPrice", "0"),
