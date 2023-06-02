@@ -67,6 +67,8 @@ export default function OrderDetails({ match }) {
     bulkStoreName,
     comments,
     isShipmentCancelling,
+    isSaleOrderCreated,
+    saleOrderComments,
   } = useSelector((state) => ({
     shopifyOrderName: selectors.shopifyOrderName(state),
     shopifyOrderDate: selectors.shopifyOrderDate(state),
@@ -89,6 +91,8 @@ export default function OrderDetails({ match }) {
     paymentMode: selectors.paymentMode(state),
     bulkStoreName: selectors.bulkStoreName(state),
     comments: selectors.comments(state),
+    isSaleOrderCreated: selectors.isSaleOrderCreated(state),
+    saleOrderComments: selectors.saleOrderComments(state),
     isLoading: selectors.isLoading(state),
     isShipmentCancelling: selectors.isShipmentCancelling(state),
   }));
@@ -359,6 +363,28 @@ export default function OrderDetails({ match }) {
               </Table>
             </div>
           </div>
+        </CardHeader>
+        <CardHeader>
+          <div className="mb-3">
+            <span className="h3 text-muted">Sale Order - ERP</span>
+          </div>
+          <p>
+            <span className="text-muted">Order Created: </span>
+            <span
+              className={classNames("font-weight-bold", {
+                "text-success": isSaleOrderCreated,
+                "text-danger": !isSaleOrderCreated,
+              })}
+            >
+              {isSaleOrderCreated ? "Yes" : "No"}
+            </span>
+          </p>
+          <p>
+            <span className="text-muted">Failure Comments: </span>
+            <span className="font-weight-bold text-primary">
+              {saleOrderComments || "N/A"}
+            </span>
+          </p>
         </CardHeader>
         {bulkStoreName && (
           <Can moduleName={ORDER_MODULE} action={CREATE_ACTION}>

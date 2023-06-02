@@ -39,6 +39,10 @@ export const paymentMode = (state) =>
 export const bulkStoreName = (state) =>
   get(state, "orderDetails.bulkStoreName", "");
 export const comments = (state) => get(state, "orderDetails.comments", []);
+export const isSaleOrderCreated = (state) =>
+  get(state, "orderDetails.isSaleOrderCreated", false);
+export const saleOrderComments = (state) =>
+  get(state, "orderDetails.saleOrderComments", null);
 
 export const isLoading = (state) => get(state, "orderDetails.isLoading", "");
 export const isShipmentCancelling = (state) =>

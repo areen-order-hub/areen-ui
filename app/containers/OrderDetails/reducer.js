@@ -37,6 +37,8 @@ export const initialState = {
   bulkStoreName: "",
   finalDisplayItems: {},
   comments: [],
+  isSaleOrderCreated: false,
+  saleOrderComments: null,
 };
 
 const mapItemsForDisplay = (shopifyOrderItems = {}, invoiceDetails = {}) => {
@@ -98,6 +100,8 @@ const orderDetailsReducer = (state = initialState, action) =>
           action.payload.shopifyOrderItems,
           action.payload.invoiceDetails
         );
+        draft.isSaleOrderCreated = action.payload.isSaleOrderCreated;
+        draft.saleOrderComments = action.payload.saleOrderComments;
         draft.isLoading = false;
         break;
       case SET_COMMENT_DETAILS:
