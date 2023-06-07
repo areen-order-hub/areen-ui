@@ -80,7 +80,7 @@ export default function ImportOrdersModal({ isOpen, toggle }) {
               ? "COD"
               : "Prepaid";
 
-          shopifyOrderItems[get(order, "itemSKU", "").trim()] = {
+          shopifyOrderItems[`${get(order, "itemSKU", "")}`.trim()] = {
             quantity: get(order, "itemQuantity", "0"),
             title: get(order, "itemTitle", "N/A"),
             price: get(order, "itemPrice", "0"),
