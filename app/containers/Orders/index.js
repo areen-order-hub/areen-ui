@@ -459,209 +459,224 @@ export default function Orders() {
         <title>Orders</title>
         <meta name="description" content="Description of Orders" />
       </Helmet>
-      <Row className="mt-4">
-        <Col md="2">
-          <RtInput
-            type="text"
-            value={searchText}
-            placeholder="Enter Order ID to Search"
-            onChange={(e) => setSearchText(e)}
-          />
-        </Col>
-        <Can moduleName={ORDER_MODULE} action={CREATE_ACTION}>
-          <div className="align-items-right ml-auto mr-3 mr-md-3">
-            <Button
-              color="primary"
-              className="btn-icon btn-3"
-              type="button"
-              onClick={() => history.push("/order-form")}
-            >
-              <span className="btn-inner--icon">
-                <i className="fas fa-plus" />
-              </span>
-              <span className="btn-inner--text">Add Order</span>
-            </Button>
-          </div>
-        </Can>
-      </Row>
-      <Row className="mt-4">
-        <Col md="2">
-          <RtCreatableSelect
-            name="description"
-            placeholder="Select Stores"
-            isValidNewOption={() => false}
-            isMulti
-            options={getStoreFilter(stores)}
-            value={selectedStores}
-            onChange={(e) => {
-              setSelectedStores(e);
-            }}
-          />
-        </Col>
-        <Col md="2">
-          <RtCreatableSelect
-            name="description"
-            placeholder="Payment Mode"
-            isMulti
-            options={getPaymentFilter()}
-            value={selectedPaymentMode}
-            onChange={(e) => {
-              setSelectedPaymentMode(e);
-            }}
-          />
-        </Col>
-        <Col md="2">
-          <RtCreatableSelect
-            name="description"
-            placeholder="Carrier Status"
-            isMulti
-            options={getCarrierStatusFiler()}
-            value={selectedCarrierStatus}
-            onChange={(e) => {
-              setSelectedCarrierStatus(e);
-            }}
-          />
-        </Col>
-        <Col md="1">
-          <ReactDatetime
-            inputProps={{
-              placeholder: "Start Date",
-            }}
-            dateFormat="DD MMM YYYY"
-            timeFormat={false}
-            className="text-sm"
-            onChange={(e) => {
-              try {
-                setStartDate(e.format("DD MMM YYYY"));
-              } catch (err) {
-                setStartDate(null);
-              }
-            }}
-            value={startDate}
-          />
-        </Col>
-        <Col md="1">
-          <ReactDatetime
-            inputProps={{
-              placeholder: "End Date",
-            }}
-            dateFormat="DD MMM YYYY"
-            timeFormat={false}
-            className="text-sm"
-            onChange={(e) => {
-              try {
-                setEndDate(e.format("DD MMM YYYY"));
-              } catch (err) {
-                setEndDate(null);
-              }
-            }}
-            value={endDate}
-          />
-        </Col>
-        <div className="d-flex align-items-right ml-auto mr-3">
-          <Modal
-            isOpen={showExportModal}
-            toggle={toggleExportModal}
-            size="xl"
-            fullscreen
-            backdrop="static"
-          >
-            <ModalHeader toggle={toggleExportModal}>Export Orders</ModalHeader>
-            <ModalBody>
-              <RSelectAsync
-                groupClassName="m-0"
-                shouldInitialLoad
-                controlShouldRenderValue
-                placeholder="Select Orders"
-                url={`/api/order`}
+      <div className="sticky-top bg-secondary">
+        <div className="pt-1">
+          <Row className="mt-4">
+            <Col md="2">
+              <RtInput
+                type="text"
+                value={searchText}
+                placeholder="Enter Order ID to Search"
+                onChange={(e) => setSearchText(e)}
+              />
+            </Col>
+            <Can moduleName={ORDER_MODULE} action={CREATE_ACTION}>
+              <div className="align-items-right ml-auto mr-3 mr-md-3">
+                <Button
+                  color="primary"
+                  className="btn-icon btn-3"
+                  type="button"
+                  onClick={() => history.push("/order-form")}
+                >
+                  <span className="btn-inner--icon">
+                    <i className="fas fa-plus" />
+                  </span>
+                  <span className="btn-inner--text">Add Order</span>
+                </Button>
+              </div>
+            </Can>
+          </Row>
+          <Row className="mt-4">
+            <Col md="2">
+              <RtCreatableSelect
+                name="description"
+                placeholder="Select Stores"
+                isValidNewOption={() => false}
                 isMulti
-                name="ordersForExport"
-                value={ordersForExport}
-                param="shopifyOrderName"
-                id="ordersForExport"
-                getOptionLabel={(option) => option.shopifyOrderName}
-                getOptionValue={(option) => option._id}
+                options={getStoreFilter(stores)}
+                value={selectedStores}
                 onChange={(e) => {
-                  if (e) {
-                    setOrdersForExport(e);
-                  } else {
-                    setOrdersForExport([]);
-                  }
+                  setSelectedStores(e);
                 }}
               />
-            </ModalBody>
-            <ModalFooter>
-              <Button color="primary" onClick={() => shapeAndExportOrders()}>
-                Export
-              </Button>
-              <Button
-                color="secondary"
-                onClick={() => {
-                  setOrdersForExport([]);
-                  toggleExportModal();
+            </Col>
+            <Col md="2">
+              <RtCreatableSelect
+                name="description"
+                placeholder="Payment Mode"
+                isMulti
+                options={getPaymentFilter()}
+                value={selectedPaymentMode}
+                onChange={(e) => {
+                  setSelectedPaymentMode(e);
                 }}
+              />
+            </Col>
+            <Col md="2">
+              <RtCreatableSelect
+                name="description"
+                placeholder="Carrier Status"
+                isMulti
+                options={getCarrierStatusFiler()}
+                value={selectedCarrierStatus}
+                onChange={(e) => {
+                  setSelectedCarrierStatus(e);
+                }}
+              />
+            </Col>
+            <Col md="1">
+              <ReactDatetime
+                inputProps={{
+                  placeholder: "Start Date",
+                }}
+                dateFormat="DD MMM YYYY"
+                timeFormat={false}
+                className="text-sm"
+                onChange={(e) => {
+                  try {
+                    setStartDate(e.format("DD MMM YYYY"));
+                  } catch (err) {
+                    setStartDate(null);
+                  }
+                }}
+                value={startDate}
+              />
+            </Col>
+            <Col md="1">
+              <ReactDatetime
+                inputProps={{
+                  placeholder: "End Date",
+                }}
+                dateFormat="DD MMM YYYY"
+                timeFormat={false}
+                className="text-sm"
+                onChange={(e) => {
+                  try {
+                    setEndDate(e.format("DD MMM YYYY"));
+                  } catch (err) {
+                    setEndDate(null);
+                  }
+                }}
+                value={endDate}
+              />
+            </Col>
+            <div className="d-flex align-items-right ml-auto mr-3">
+              <Modal
+                isOpen={showExportModal}
+                toggle={toggleExportModal}
+                size="xl"
+                fullscreen
+                backdrop="static"
               >
-                Cancel
-              </Button>
-            </ModalFooter>
-          </Modal>
-          <ImportOrdersModal
-            isOpen={showImportModal}
-            toggle={toggleImportModal}
-          />
-          <Can moduleName={ORDER_MODULE} action={UPDATE_ACTION}>
-            {getGenerateShipmentButton()}
-          </Can>
-          <ButtonDropdown
-            isOpen={bulkDropdownOpen}
-            toggle={toggleBulkDropdown}
-            className="mb-2"
-            title="Trigger Sync"
-          >
-            <DropdownToggle color="primary" caret>
-              <span className="btn-inner--icon">
-                <i className="fas fa-file-export" />
-              </span>
-            </DropdownToggle>
-            <DropdownMenu>
-              <DropdownItem onClick={() => toggleExportModal()}>
-                Export Orders
-              </DropdownItem>
-              <Can moduleName={ORDER_MODULE} action={CREATE_ACTION}>
-                <DropdownItem onClick={() => downloadImportTemplate()}>
-                  Download Template
-                </DropdownItem>
-                <DropdownItem onClick={() => toggleImportModal()}>
-                  Upload Orders
-                </DropdownItem>
+                <ModalHeader toggle={toggleExportModal}>
+                  Export Orders
+                </ModalHeader>
+                <ModalBody>
+                  <RSelectAsync
+                    groupClassName="m-0"
+                    shouldInitialLoad
+                    controlShouldRenderValue
+                    placeholder="Select Orders"
+                    url={`/api/order`}
+                    isMulti
+                    name="ordersForExport"
+                    value={ordersForExport}
+                    param="shopifyOrderName"
+                    id="ordersForExport"
+                    getOptionLabel={(option) => option.shopifyOrderName}
+                    getOptionValue={(option) => option._id}
+                    onChange={(e) => {
+                      if (e) {
+                        setOrdersForExport(e);
+                      } else {
+                        setOrdersForExport([]);
+                      }
+                    }}
+                  />
+                </ModalBody>
+                <ModalFooter>
+                  <Button
+                    color="primary"
+                    onClick={() => shapeAndExportOrders()}
+                  >
+                    Export
+                  </Button>
+                  <Button
+                    color="secondary"
+                    onClick={() => {
+                      setOrdersForExport([]);
+                      toggleExportModal();
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </ModalFooter>
+              </Modal>
+              <ImportOrdersModal
+                isOpen={showImportModal}
+                toggle={toggleImportModal}
+              />
+              <Can moduleName={ORDER_MODULE} action={UPDATE_ACTION}>
+                {getGenerateShipmentButton()}
               </Can>
-            </DropdownMenu>
-          </ButtonDropdown>
-          <ButtonDropdown
-            isOpen={dropdownOpen}
-            toggle={toggle}
-            className="mb-2"
-            title="Bulk Actions"
-          >
-            <DropdownToggle color="primary" caret>
-              <span className="btn-inner--icon">
-                <i className="fas fa-sync" />
-              </span>
-            </DropdownToggle>
-            <DropdownMenu className="mr-4">
-              <DropdownItem onClick={() => dispatch(operations.syncOrders())}>
-                Sync Orders
-              </DropdownItem>
-              <DropdownItem onClick={() => dispatch(operations.syncInvoices())}>
-                Sync Invoices
-              </DropdownItem>
-              <DropdownItem onClick={() => dispatch(operations.syncProducts())}>
-                Sync Products
-              </DropdownItem>
-            </DropdownMenu>
-          </ButtonDropdown>
+              <ButtonDropdown
+                isOpen={bulkDropdownOpen}
+                toggle={toggleBulkDropdown}
+                className="mb-2"
+                title="Trigger Sync"
+              >
+                <DropdownToggle color="primary" caret>
+                  <span className="btn-inner--icon">
+                    <i className="fas fa-file-export" />
+                  </span>
+                </DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem onClick={() => toggleExportModal()}>
+                    Export Orders
+                  </DropdownItem>
+                  <Can moduleName={ORDER_MODULE} action={CREATE_ACTION}>
+                    <DropdownItem onClick={() => downloadImportTemplate()}>
+                      Download Template
+                    </DropdownItem>
+                    <DropdownItem onClick={() => toggleImportModal()}>
+                      Upload Orders
+                    </DropdownItem>
+                  </Can>
+                </DropdownMenu>
+              </ButtonDropdown>
+              <ButtonDropdown
+                isOpen={dropdownOpen}
+                toggle={toggle}
+                className="mb-2"
+                title="Bulk Actions"
+              >
+                <DropdownToggle color="primary" caret>
+                  <span className="btn-inner--icon">
+                    <i className="fas fa-sync" />
+                  </span>
+                </DropdownToggle>
+                <DropdownMenu className="mr-4">
+                  <DropdownItem
+                    onClick={() => dispatch(operations.syncOrders())}
+                  >
+                    Sync Orders
+                  </DropdownItem>
+                  <DropdownItem
+                    onClick={() => dispatch(operations.syncInvoices())}
+                  >
+                    Sync Invoices
+                  </DropdownItem>
+                  <DropdownItem
+                    onClick={() => dispatch(operations.syncProducts())}
+                  >
+                    Sync Products
+                  </DropdownItem>
+                </DropdownMenu>
+              </ButtonDropdown>
+            </div>
+          </Row>
         </div>
-      </Row>
+      </div>
       <Table
         bootstrap4
         striped
