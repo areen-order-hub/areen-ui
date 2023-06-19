@@ -6,12 +6,15 @@
 
 import {
   SET_ORDER_LIST,
+  SET_IS_EXPORT_LOADING,
+  SET_ORDERS_FOR_EXPORT,
   SET_STORE_LIST,
   SET_IS_SHIPMENT_GENERATING,
 } from "./constants";
 import {
   bulkCreate,
   paginateOrders,
+  getOrdersForExport,
   triggerProductSync,
   triggerInvoiceSync,
   triggerOrderSync,
@@ -30,6 +33,20 @@ export const fetchOrders = (params) => {
       dispatch(setOrderList(data));
     } catch (err) {
       dispatch(setOrderList());
+    }
+  };
+};
+
+export const fetchOrdersForExport = (params) => {
+  return async (dispatch) => {
+    try {
+      dispatch(setIsExportLoading(true));
+      const { data } = await getOrdersForExport(params);
+      dispatch(setOrdersForExport(data));
+    } catch (err) {
+      dispatch(setOrdersForExport());
+    } finally {
+      dispatch(setIsExportLoading(false));
     }
   };
 };
@@ -184,6 +201,16 @@ export const fetchStores = () => {
 
 const setOrderList = (payload = []) => ({
   type: SET_ORDER_LIST,
+  payload,
+});
+
+export const setOrdersForExport = (payload = []) => ({
+  type: SET_ORDERS_FOR_EXPORT,
+  payload,
+});
+
+export const setIsExportLoading = (payload = false) => ({
+  type: SET_IS_EXPORT_LOADING,
   payload,
 });
 

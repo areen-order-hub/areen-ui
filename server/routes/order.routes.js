@@ -4,6 +4,7 @@ const services = require("../services/order.service");
 const router = express.Router();
 
 router.get("/paginate", services.paginate);
+router.get("/export", services.getOrdersForExport);
 router.post("/bulk", services.bulkCreate);
 router.post("", services.create);
 router.get("", services.list);

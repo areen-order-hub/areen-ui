@@ -8,6 +8,14 @@ export const paginateOrders = async (params) => {
   });
 };
 
+export const getOrdersForExport = async (params) => {
+  return await Request({
+    url: "/api/order/export",
+    method: "GET",
+    params,
+  });
+};
+
 export const bulkCreate = async (data) => {
   return await Request({
     url: "/api/order/bulk",

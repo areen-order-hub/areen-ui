@@ -11,6 +11,7 @@ import {
   Row,
   Col,
   Spinner,
+  Label,
   Badge,
   ButtonDropdown,
   Button,
@@ -28,7 +29,6 @@ import {
   getCarrierStatusBadge,
 } from "utils/componentHelpers";
 import RtInput from "components/RtInput";
-import RSelectAsync from "components/RSelectAsync";
 import PaginationDetails from "components/PaginationDetails";
 import RtCreatableSelect from "components/RtCreatableSelect";
 import AlertPopupHandler from "components/AlertPopup/AlertPopupHandler";
@@ -54,7 +54,7 @@ import {
 import reducer from "./reducer";
 import numberFormatter from "../../utils/numberFormatter";
 import history from "../../utils/history";
-import { parseDate } from "../../utils/dateTimeHelpers";
+import { parseDate, checkValidDate } from "../../utils/dateTimeHelpers";
 import * as operations from "./actions";
 import * as selectors from "./selectors";
 import { useDebounce } from "react-use";
@@ -76,18 +76,23 @@ export default function Orders() {
 
   const [showExportModal, setShowExportModal] = useState(false);
   const toggleExportModal = () => setShowExportModal((v) => !v);
-  const [ordersForExport, setOrdersForExport] = useState([]);
+  const [exportStartDate, setExportStartDate] = useState(moment());
+  const [exportEndDate, setExportEndDate] = useState(moment());
 
   const [showImportModal, setShowImportModal] = useState(false);
   const toggleImportModal = () => setShowImportModal((v) => !v);
 
   const {
     orders,
+    isExportLoading,
+    ordersForExport,
     paginationDetails,
     stores,
     isShipmentGenerating,
   } = useSelector((state) => ({
     orders: selectors.orders(state),
+    isExportLoading: selectors.isExportLoading(state),
+    ordersForExport: selectors.ordersForExport(state),
     paginationDetails: selectors.paginationDetails(state),
     stores: selectors.stores(state),
     isShipmentGenerating: selectors.isShipmentGenerating(state),
@@ -106,6 +111,10 @@ export default function Orders() {
     dispatch(operations.fetchOrders({ page: 1 }));
     dispatch(operations.fetchStores());
   }, []);
+
+  useEffect(() => {
+    dispatch(operations.setOrdersForExport([]));
+  }, [exportStartDate, exportEndDate]);
 
   // Carrier Service
   const generateAreenShipment = (ordersString) => {
@@ -183,64 +192,83 @@ export default function Orders() {
     );
   };
 
+  const getOrdersForExport = () => {
+    dispatch(
+      operations.fetchOrdersForExport({
+        startDate: moment(exportStartDate)
+          .startOf("day")
+          .valueOf(),
+        endDate: moment(exportEndDate)
+          .endOf("day")
+          .valueOf(),
+      })
+    );
+  };
+
   const shapeAndExportOrders = () => {
     let data = [];
-    ordersForExport.forEach(
-      ({
-        shopifyOrderName,
-        invoiceDetails,
-        customerName,
-        shippingAddress,
-        paymentMode,
-        carrierService,
-        carrierStatus,
-        carrierServiceId,
-        shopifyOrderDate,
-        shopifyPrice,
-        weight,
-        storeId,
-      }) => {
-        let row = {
-          "Order Id": shopifyOrderName,
-          "Invoice No.": get(invoiceDetails, "orderNo", "N/A"),
-          "Customer Name": customerName,
-          "Customer Phone": get(shippingAddress, "phone", "N/A"),
-          "Payment Mode": paymentMode,
-          "Carrier Service": carrierService || "N/A",
-          "Carrier Status": carrierStatus || "N/A",
-          "Carrier Service Id":
-            carrierService == "Areen"
-              ? get(invoiceDetails, "orderNo")
-              : carrierServiceId || "N/A",
-          Date: parseDate(shopifyOrderDate, "DD MM YY"),
-          "Shopify Price (AED)": shopifyPrice,
-          "Inv. Price (AED)":
-            `${numberFormatter(get(invoiceDetails, "price"))}` || "N/A",
-          "Weight (Gms)": weight,
-          Store: get(storeId, "alias", "N/A"),
-        };
-        data.push(row);
+    if (!isEmpty(ordersForExport)) {
+      ordersForExport.forEach(
+        ({
+          shopifyOrderName,
+          invoiceDetails,
+          customerName,
+          shippingAddress,
+          paymentMode,
+          carrierService,
+          carrierStatus,
+          carrierServiceId,
+          shopifyOrderDate,
+          shopifyPrice,
+          weight,
+          storeId,
+        }) => {
+          let row = {
+            "Order Id": shopifyOrderName,
+            "Invoice No.": get(invoiceDetails, "orderNo", "N/A"),
+            "Customer Name": customerName,
+            "Customer Phone": get(shippingAddress, "phone", "N/A"),
+            "Payment Mode": paymentMode,
+            "Carrier Service": carrierService || "N/A",
+            "Carrier Status": carrierStatus || "N/A",
+            "Carrier Service Id":
+              carrierService == "Areen"
+                ? get(invoiceDetails, "orderNo")
+                : carrierServiceId || "N/A",
+            Date: parseDate(shopifyOrderDate, "DD-MM-YYYY"),
+            "Shopify Price (AED)": shopifyPrice,
+            "Inv. Price (AED)":
+              `${numberFormatter(get(invoiceDetails, "price"))}` || "N/A",
+            "Weight (Gms)": weight,
+            Store: get(storeId, "alias", "N/A"),
+          };
+          data.push(row);
+        }
+      );
+
+      var ws = XLSX.utils.json_to_sheet(data);
+      var wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Orders");
+      var wbout = XLSX.write(wb, { bookType: "xlsx", type: "binary" });
+
+      function s2ab(s) {
+        var buf = new ArrayBuffer(s.length);
+        var view = new Uint8Array(buf);
+        for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xff;
+        return buf;
       }
-    );
 
-    var ws = XLSX.utils.json_to_sheet(data);
-    var wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Orders");
-    var wbout = XLSX.write(wb, { bookType: "xlsx", type: "binary" });
-
-    function s2ab(s) {
-      var buf = new ArrayBuffer(s.length);
-      var view = new Uint8Array(buf);
-      for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xff;
-      return buf;
+      saveAs(
+        new Blob([s2ab(wbout)], { type: "application/octet-stream" }),
+        `aoh-exported-orders.xlsx`
+      );
+      dispatch(operations.setOrdersForExport([]));
+      setExportStartDate(moment());
+      setExportEndDate(moment());
+      toggleExportModal();
+    } else {
+      window.alert("Something went wrong. Please try again");
     }
-
-    saveAs(
-      new Blob([s2ab(wbout)], { type: "application/octet-stream" }),
-      `aoh-exported-orders.xlsx`
-    );
-    setOrdersForExport([]);
-    toggleExportModal();
   };
 
   const nonSelectableRows = useMemo(() => {
@@ -572,39 +600,94 @@ export default function Orders() {
                   Export Orders
                 </ModalHeader>
                 <ModalBody>
-                  <RSelectAsync
-                    groupClassName="m-0"
-                    shouldInitialLoad
-                    controlShouldRenderValue
-                    placeholder="Select Orders"
-                    url={`/api/order`}
-                    isMulti
-                    name="ordersForExport"
-                    value={ordersForExport}
-                    param="shopifyOrderName"
-                    id="ordersForExport"
-                    getOptionLabel={(option) => option.shopifyOrderName}
-                    getOptionValue={(option) => option._id}
-                    onChange={(e) => {
-                      if (e) {
-                        setOrdersForExport(e);
-                      } else {
-                        setOrdersForExport([]);
-                      }
-                    }}
-                  />
+                  <Row>
+                    <Col>
+                      <Label>Start Date</Label>
+                      <ReactDatetime
+                        inputProps={{
+                          placeholder: "Start Date",
+                        }}
+                        dateFormat="DD MMM YYYY"
+                        timeFormat={false}
+                        className="text-sm"
+                        closeOnSelect
+                        onChange={(e) => {
+                          try {
+                            setExportStartDate(e.format("DD MMM YYYY"));
+                          } catch (err) {
+                            setExportStartDate(null);
+                          }
+                        }}
+                        value={exportStartDate}
+                      />
+                    </Col>
+                    <Col>
+                      <Label>End Date</Label>
+                      <ReactDatetime
+                        inputProps={{
+                          placeholder: "End Date",
+                        }}
+                        dateFormat="DD MMM YYYY"
+                        timeFormat={false}
+                        className="text-sm"
+                        closeOnSelect
+                        isValidDate={(current) =>
+                          checkValidDate(current, exportStartDate)
+                        }
+                        onChange={(e) => {
+                          try {
+                            setExportEndDate(e.format("DD MMM YYYY"));
+                          } catch (err) {
+                            setExportEndDate(null);
+                          }
+                        }}
+                        value={exportEndDate}
+                      />
+                    </Col>
+                  </Row>
+                  <Row className="mt-3">
+                    <Col>
+                      <p>
+                        <span className="text-primary font-weight-bold">
+                          {ordersForExport.length || 0}
+                        </span>{" "}
+                        orders will be exported.
+                      </p>
+                    </Col>
+                  </Row>
                 </ModalBody>
                 <ModalFooter>
+                  {isExportLoading ? (
+                    <Button
+                      type="button"
+                      color="primary"
+                      className="btn-icon"
+                      disabled={true}
+                    >
+                      <span className="btn-inner-icon">
+                        <Spinner size="sm" className="mr-2" />
+                      </span>
+                      <span className="btn-inner-text">Fetching</span>
+                    </Button>
+                  ) : (
+                    <Button
+                      color="primary"
+                      onClick={() => getOrdersForExport()}
+                    >
+                      Fetch
+                    </Button>
+                  )}
                   <Button
                     color="primary"
                     onClick={() => shapeAndExportOrders()}
+                    disabled={isEmpty(ordersForExport)}
                   >
                     Export
                   </Button>
                   <Button
                     color="secondary"
                     onClick={() => {
-                      setOrdersForExport([]);
+                      dispatch(operations.setOrdersForExport([]));
                       toggleExportModal();
                     }}
                   >

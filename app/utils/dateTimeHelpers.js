@@ -54,6 +54,11 @@ export const disablePastDates = (current) => {
   return current.isAfter(yesterday);
 };
 
+export const checkValidDate = (current, startDate) => {
+  const prev = moment(startDate, "DD MMM YYYY");
+  return current.isAfter(prev);
+};
+
 export const getDifference = (dateTime) => {
   if (moment().isAfter(dateTime)) return 0;
   return moment(dateTime).diff(moment(), "seconds");

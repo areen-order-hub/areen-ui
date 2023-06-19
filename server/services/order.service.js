@@ -16,6 +16,22 @@ exports.paginate = async (req, res) => {
   }
 };
 
+exports.getOrdersForExport = async (req, res) => {
+  try {
+    const orders = await Request(
+      {
+        url: "/v1/order/export",
+        method: "GET",
+        params: req.query,
+      },
+      req.headers
+    );
+    res.json(orders);
+  } catch (err) {
+    res.status(err.status).json(err.message);
+  }
+};
+
 exports.bulkCreate = async (req, res) => {
   try {
     const orders = await Request(
