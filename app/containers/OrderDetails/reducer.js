@@ -11,7 +11,7 @@ import {
   SET_IS_SHIPMENT_CANCELLING,
 } from "./constants";
 import { getDateTimeString, parseDate } from "utils/dateTimeHelpers";
-import { isEmpty } from "lodash";
+import { isEmpty, get } from "lodash";
 
 export const initialState = {
   isLoading: true,
@@ -42,7 +42,11 @@ export const initialState = {
   saleOrderComments: null,
 };
 
-const mapItemsForDisplay = (shopifyOrderItems = {}, invoiceDetails = {}) => {
+const mapItemsForDisplay = ({
+  shopifyOrderItems = {},
+  invoiceDetails = {},
+  stockInHand = {},
+}) => {
   const { items: invoiceItems = [] } = invoiceDetails;
   let finalDisplayItems = { ...shopifyOrderItems };
   for (let item of invoiceItems) {
@@ -61,6 +65,10 @@ const mapItemsForDisplay = (shopifyOrderItems = {}, invoiceDetails = {}) => {
         invoicedUnitPrice: unitPrice,
       };
     }
+  }
+
+  for (let key of Object.keys(finalDisplayItems)) {
+    finalDisplayItems[key]["stockInHand"] = get(stockInHand, key, "NA");
   }
 
   return finalDisplayItems;
@@ -98,10 +106,7 @@ const orderDetailsReducer = (state = initialState, action) =>
         draft.paymentMode = action.payload.paymentMode;
         draft.bulkStoreName = action.payload.bulkStoreName;
         draft.isBulkOrder = action.payload.isBulkOrder;
-        draft.finalDisplayItems = mapItemsForDisplay(
-          action.payload.shopifyOrderItems,
-          action.payload.invoiceDetails
-        );
+        draft.finalDisplayItems = mapItemsForDisplay(action.payload);
         draft.isSaleOrderCreated = action.payload.isSaleOrderCreated;
         draft.saleOrderComments = action.payload.saleOrderComments;
         draft.isLoading = false;

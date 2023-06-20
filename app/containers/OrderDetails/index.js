@@ -342,6 +342,7 @@ export default function OrderDetails({ match }) {
                   <tr>
                     <th scope="col">Title</th>
                     <th scope="col">Item Code</th>
+                    <th scope="col">Stock in hand</th>
                     <th scope="col">Ordered QTY.</th>
                     <th scope="col">Invoiced QTY.</th>
                     <th scope="col">Website Unit Price</th>
@@ -354,6 +355,7 @@ export default function OrderDetails({ match }) {
                     <tr>
                       <td>{get(value, "title", "-") || "-"}</td>
                       <td>{key}</td>
+                      <td>{get(value, "stockInHand", "-")}</td>
                       <td>{get(value, "quantity", "-")}</td>
                       <td>{get(value, "invoicedQty", "-")}</td>
                       <td>{get(value, "price", "-")}</td>
