@@ -8,6 +8,13 @@ export const paginateOrders = async (params) => {
   });
 };
 
+export const getCarrierStatus = async () => {
+  return await Request({
+    url: "/api/order/carrierStatusOptions",
+    method: "GET",
+  });
+};
+
 export const getOrdersForExport = async (params) => {
   return await Request({
     url: "/api/order/export",
