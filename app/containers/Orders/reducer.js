@@ -6,6 +6,7 @@
 import produce from "immer";
 import {
   SET_ORDER_LIST,
+  SET_CARRIER_STATUS_OPTIONS,
   SET_IS_EXPORT_LOADING,
   SET_ORDERS_FOR_EXPORT,
   SET_STORE_LIST,
@@ -14,6 +15,7 @@ import {
 
 export const initialState = {
   orders: [],
+  carrierStatusOptions: [],
   isExportLoading: false,
   ordersForExport: [],
   stores: [],
@@ -36,6 +38,9 @@ const ordersReducer = (state = initialState, action) =>
           ),
           ...rest,
         };
+        break;
+      case SET_CARRIER_STATUS_OPTIONS:
+        draft.carrierStatusOptions = action.payload;
         break;
       case SET_IS_EXPORT_LOADING:
         draft.isExportLoading = action.payload;

@@ -6,6 +6,7 @@
 
 import {
   SET_ORDER_LIST,
+  SET_CARRIER_STATUS_OPTIONS,
   SET_IS_EXPORT_LOADING,
   SET_ORDERS_FOR_EXPORT,
   SET_STORE_LIST,
@@ -14,6 +15,7 @@ import {
 import {
   bulkCreate,
   paginateOrders,
+  getCarrierStatus,
   getOrdersForExport,
   triggerProductSync,
   triggerInvoiceSync,
@@ -33,6 +35,17 @@ export const fetchOrders = (params) => {
       dispatch(setOrderList(data));
     } catch (err) {
       dispatch(setOrderList());
+    }
+  };
+};
+
+export const fetchCarrierStatus = () => {
+  return async (dispatch) => {
+    try {
+      const { data } = await getCarrierStatus();
+      dispatch(setCarrierStatusOptions(data));
+    } catch (err) {
+      dispatch(setCarrierStatusOptions());
     }
   };
 };
@@ -201,6 +214,11 @@ export const fetchStores = () => {
 
 const setOrderList = (payload = []) => ({
   type: SET_ORDER_LIST,
+  payload,
+});
+
+const setCarrierStatusOptions = (payload = []) => ({
+  type: SET_CARRIER_STATUS_OPTIONS,
   payload,
 });
 
