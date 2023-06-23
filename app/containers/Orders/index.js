@@ -48,7 +48,6 @@ import { isEmpty, get, map, filter, some, isNil } from "lodash";
 import {
   getStoreFilter,
   getPaymentFilter,
-  getCarrierStatusFiler,
   generateAreenShippingBills,
 } from "./helpers";
 import reducer from "./reducer";
@@ -84,6 +83,7 @@ export default function Orders() {
 
   const {
     orders,
+    carrierStatusOptions,
     isExportLoading,
     ordersForExport,
     paginationDetails,
@@ -91,6 +91,7 @@ export default function Orders() {
     isShipmentGenerating,
   } = useSelector((state) => ({
     orders: selectors.orders(state),
+    carrierStatusOptions: selectors.carrierStatusOptions(state),
     isExportLoading: selectors.isExportLoading(state),
     ordersForExport: selectors.ordersForExport(state),
     paginationDetails: selectors.paginationDetails(state),
@@ -110,6 +111,7 @@ export default function Orders() {
   useEffect(() => {
     dispatch(operations.fetchOrders({ page: 1 }));
     dispatch(operations.fetchStores());
+    dispatch(operations.fetchCarrierStatus());
   }, []);
 
   useEffect(() => {
@@ -543,7 +545,7 @@ export default function Orders() {
                 name="description"
                 placeholder="Carrier Status"
                 isMulti
-                options={getCarrierStatusFiler()}
+                options={carrierStatusOptions}
                 value={selectedCarrierStatus}
                 onChange={(e) => {
                   setSelectedCarrierStatus(e);
