@@ -15,6 +15,14 @@ export const getCarrierStatus = async () => {
   });
 };
 
+export const getFilterCount = async (params) => {
+  return await Request({
+    url: "/api/order/filterCount",
+    method: "GET",
+    params,
+  });
+};
+
 export const getOrdersForExport = async (params) => {
   return await Request({
     url: "/api/order/export",
