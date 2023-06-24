@@ -32,6 +32,22 @@ exports.getCarrierStatusOptions = async (req, res) => {
   }
 };
 
+exports.getFilterCount = async (req, res) => {
+  try {
+    const options = await Request(
+      {
+        url: "/v1/order/filterCount",
+        method: "GET",
+        params: req.query,
+      },
+      req.headers
+    );
+    res.json(options);
+  } catch (err) {
+    res.status(err.status).json(err.message);
+  }
+};
+
 exports.getOrdersForExport = async (req, res) => {
   try {
     const orders = await Request(
