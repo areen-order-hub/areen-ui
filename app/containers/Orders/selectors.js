@@ -4,6 +4,9 @@ export const stores = (state) => _get(state, "orders.stores", []);
 export const orders = (state) => _get(state, "orders.orders", []);
 export const carrierStatusOptions = (state) =>
   _get(state, "orders.carrierStatusOptions", []);
+export const filterCount = (state) => _get(state, "orders.filterCount", {});
+export const isFilterCountLoading = (state) =>
+  _get(state, "orders.isFilterCountLoading", true);
 export const isExportLoading = (state) =>
   _get(state, "orders.isExportLoading", false);
 export const ordersForExport = (state) =>
