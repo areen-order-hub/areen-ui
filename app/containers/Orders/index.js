@@ -81,9 +81,13 @@ export default function Orders() {
   const [showImportModal, setShowImportModal] = useState(false);
   const toggleImportModal = () => setShowImportModal((v) => !v);
 
+  const [filterTab, setFilterTab] = useState("All");
+
   const {
     orders,
     carrierStatusOptions,
+    filterCount,
+    isFilterCountLoading,
     isExportLoading,
     ordersForExport,
     paginationDetails,
@@ -92,6 +96,8 @@ export default function Orders() {
   } = useSelector((state) => ({
     orders: selectors.orders(state),
     carrierStatusOptions: selectors.carrierStatusOptions(state),
+    filterCount: selectors.filterCount(state),
+    isFilterCountLoading: selectors.isFilterCountLoading(state),
     isExportLoading: selectors.isExportLoading(state),
     ordersForExport: selectors.ordersForExport(state),
     paginationDetails: selectors.paginationDetails(state),
@@ -112,6 +118,7 @@ export default function Orders() {
     dispatch(operations.fetchOrders({ page: 1 }));
     dispatch(operations.fetchStores());
     dispatch(operations.fetchCarrierStatus());
+    dispatch(operations.fetchFilterCount());
   }, []);
 
   useEffect(() => {
@@ -290,7 +297,7 @@ export default function Orders() {
   }, [orders]);
 
   const getFilterParams = () => {
-    let filter = { page: 1 };
+    let filter = { page: 1, filterTab };
     if (searchText && !isEmpty(searchText)) {
       filter["searchText"] = searchText;
     }
@@ -309,6 +316,8 @@ export default function Orders() {
       filter["carrierStatus"] = map(selectedCarrierStatus, ({ value }) => value)
         .filter((x) => x)
         .join(",");
+      delete filter.filterTab;
+      setFilterTab("All");
     }
 
     if (startDate && !isEmpty(startDate)) {
@@ -335,7 +344,9 @@ export default function Orders() {
   };
 
   useEffect(() => {
-    dispatch(operations.fetchOrders(getFilterParams()));
+    const filterParams = getFilterParams();
+    dispatch(operations.fetchOrders(filterParams));
+    dispatch(operations.fetchFilterCount(filterParams));
   }, [
     selectedStores,
     selectedPaymentMode,
@@ -346,11 +357,17 @@ export default function Orders() {
 
   useDebounce(
     () => {
-      dispatch(operations.fetchOrders(getFilterParams()));
+      const filterParams = getFilterParams();
+      dispatch(operations.fetchOrders(filterParams));
+      dispatch(operations.fetchFilterCount(filterParams));
     },
     1000,
     [searchText]
   );
+
+  useEffect(() => {
+    dispatch(operations.fetchOrders(getFilterParams()));
+  }, [filterTab]);
 
   const onClick = (id) =>
     history.push({
@@ -757,6 +774,35 @@ export default function Orders() {
                 </DropdownMenu>
               </ButtonDropdown>
             </div>
+          </Row>
+          <Row className="mb-3">
+            <Col>
+              {[
+                "All",
+                "To be Invoiced",
+                "To be Packed",
+                "In Transit",
+                "Delivered",
+              ].map((title) => (
+                <Button
+                  size="sm"
+                  color={title === filterTab ? "primary" : "secondary"}
+                  onClick={() => setFilterTab(title)}
+                  disabled={!isEmpty(selectedCarrierStatus)}
+                >
+                  <span className="btn-inner-text">{title}</span>
+                  {isFilterCountLoading ? (
+                    <span className="btn-inner--icon">
+                      <Spinner size="sm" className="mx-2" />
+                    </span>
+                  ) : (
+                    <span className="ml-1">
+                      {`(${get(filterCount, title, 0)})`}
+                    </span>
+                  )}
+                </Button>
+              ))}
+            </Col>
           </Row>
         </div>
       </div>

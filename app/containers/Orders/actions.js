@@ -7,6 +7,8 @@
 import {
   SET_ORDER_LIST,
   SET_CARRIER_STATUS_OPTIONS,
+  SET_FILTER_COUNT,
+  SET_IS_FILTER_COUNT_LOADING,
   SET_IS_EXPORT_LOADING,
   SET_ORDERS_FOR_EXPORT,
   SET_STORE_LIST,
@@ -16,6 +18,7 @@ import {
   bulkCreate,
   paginateOrders,
   getCarrierStatus,
+  getFilterCount,
   getOrdersForExport,
   triggerProductSync,
   triggerInvoiceSync,
@@ -46,6 +49,20 @@ export const fetchCarrierStatus = () => {
       dispatch(setCarrierStatusOptions(data));
     } catch (err) {
       dispatch(setCarrierStatusOptions());
+    }
+  };
+};
+
+export const fetchFilterCount = (params) => {
+  return async (dispatch) => {
+    try {
+      dispatch(setIsFilterCountLoading(true));
+      const { data } = await getFilterCount(params);
+      dispatch(setFilterCount(data));
+    } catch (err) {
+      dispatch(setFilterCount());
+    } finally {
+      dispatch(setIsFilterCountLoading(false));
     }
   };
 };
@@ -219,6 +236,16 @@ const setOrderList = (payload = []) => ({
 
 const setCarrierStatusOptions = (payload = []) => ({
   type: SET_CARRIER_STATUS_OPTIONS,
+  payload,
+});
+
+const setFilterCount = (payload = {}) => ({
+  type: SET_FILTER_COUNT,
+  payload,
+});
+
+const setIsFilterCountLoading = (payload = false) => ({
+  type: SET_IS_FILTER_COUNT_LOADING,
   payload,
 });
 
