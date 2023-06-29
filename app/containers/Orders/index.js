@@ -505,7 +505,7 @@ export default function Orders() {
         <meta name="description" content="Description of Orders" />
       </Helmet>
       <div className="sticky-top bg-secondary">
-        <div className="pt-1">
+        <div className="py-1">
           <Row className="mt-4">
             <Col md="2">
               <RtInput
