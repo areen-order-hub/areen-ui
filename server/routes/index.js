@@ -18,6 +18,8 @@ const orderRoutes = require("./order.routes");
 const commentRoutes = require("./comment.routes");
 const roleRoutes = require("./role.routes");
 
+const emailNotificationRoutes = require("./emailNotification.routes");
+
 const multer = require("multer");
 var storage = multer.memoryStorage({
   destination: function(req, file, callback) {
@@ -44,6 +46,12 @@ router.use("/store", session.protected, storeRoutes);
 router.use("/order", session.protected, orderRoutes);
 router.use("/comment", session.protected, commentRoutes);
 router.use("/role", session.protected, roleRoutes);
+
+router.use(
+  "/config/emailNotifications",
+  session.protected,
+  emailNotificationRoutes
+);
 
 router.use("", session.protected, authorisedRoutes);
 
