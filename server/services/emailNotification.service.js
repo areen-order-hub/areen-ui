@@ -1,3 +1,5 @@
+const Request = require("../utils/request");
+
 exports.findOne = async (req, res) => {
   try {
     const url = `/v1/config/emailNotifications`;

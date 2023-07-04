@@ -38,6 +38,8 @@ import RoleForm from "containers/RoleForm";
 
 import DeliveryManagement from "containers/DeliveryManagement";
 
+import EmailNotifications from "containers/EmailNotifications";
+
 const routes = {
   home: [
     {
@@ -154,6 +156,22 @@ const routes = {
       icon: "fas fa-box-open text-secondary",
       component: DeliveryManagement,
       layout: "",
+    },
+    {
+      collapse: true,
+      name: "Settings",
+      icon: "fas fa-cog text-secondary",
+      state: "settingsCollapse",
+      views: [
+        {
+          moduleName: "EMAIL_NOTIFICATIONS",
+          path: "/settings/email-notifications",
+          name: "Email Notifications",
+          miniName: "",
+          component: EmailNotifications,
+          layout: "",
+        },
+      ],
     },
     {
       path: "/logout",
