@@ -11,6 +11,8 @@ export const billingAddress = (state) =>
   get(state, "orderDetails.billingAddress", {});
 export const shippingAddress = (state) =>
   get(state, "orderDetails.shippingAddress", {});
+export const contactEmail = (state) =>
+  get(state, "orderDetails.contactEmail", "");
 export const shopifyOrderItems = (state) =>
   get(state, "orderDetails.shopifyOrderItems", {});
 export const finalDisplayItems = (state) =>

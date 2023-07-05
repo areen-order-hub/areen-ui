@@ -20,6 +20,7 @@ export const initialState = {
   shopifyOrderDate: "",
   billingAddress: {},
   shippingAddress: {},
+  contactEmail: "",
   shopifyOrderItems: {},
   shopifyPrice: "",
   invoiceDetails: {},
@@ -75,6 +76,7 @@ const orderDetailsReducer = (state = initialState, action) =>
         draft.storeDetails = action.payload.storeId;
         draft.billingAddress = action.payload.billingAddress;
         draft.shippingAddress = action.payload.shippingAddress;
+        draft.contactEmail = action.payload.contactEmail;
         draft.shopifyOrderItems = action.payload.shopifyOrderItems;
         draft.shopifyPrice = action.payload.shopifyPrice;
         draft.invoiceDetails = action.payload.invoiceDetails;

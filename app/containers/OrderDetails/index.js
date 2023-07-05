@@ -26,6 +26,7 @@ import Skeleton from "react-loading-skeleton";
 import AlertPopupHandler from "components/AlertPopup/AlertPopupHandler";
 import classNames from "classnames";
 import Can from "components/Can";
+import CopyToClipBoard from "components/CopyToClipBoard";
 import {
   CREATE_ACTION,
   ORDER_MODULE,
@@ -50,6 +51,7 @@ export default function OrderDetails({ match }) {
     storeDetails,
     billingAddress,
     shippingAddress,
+    contactEmail,
     shopifyOrderItems,
     finalDisplayItems,
     shopifyPrice,
@@ -72,6 +74,7 @@ export default function OrderDetails({ match }) {
     storeDetails: selectors.storeDetails(state),
     billingAddress: selectors.billingAddress(state),
     shippingAddress: selectors.shippingAddress(state),
+    contactEmail: selectors.contactEmail(state),
     shopifyOrderItems: selectors.shopifyOrderItems(state),
     finalDisplayItems: selectors.finalDisplayItems(state),
     shopifyPrice: selectors.shopifyPrice(state),
@@ -438,6 +441,20 @@ export default function OrderDetails({ match }) {
                       {get(shippingAddress, "phone", "-")}
                     </div>
                   </div>
+                </Col>
+              </Row>
+            </CardBody>
+          </Card>
+          <Card>
+            <CardHeader>Contact Information</CardHeader>
+            <CardBody>
+              <Row>
+                <Col>
+                  <CopyToClipBoard text={contactEmail}>
+                    <span className="text-primary font-weight-bold hover-pointer">
+                      {contactEmail || "--"}
+                    </span>
+                  </CopyToClipBoard>
                 </Col>
               </Row>
             </CardBody>
