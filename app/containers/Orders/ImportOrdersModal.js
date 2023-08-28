@@ -10,7 +10,7 @@ import {
   Col,
 } from "reactstrap";
 import { useDropzone } from "react-dropzone";
-import { isEmpty, groupBy, map, get } from "lodash";
+import { isEmpty, groupBy, map, get, round } from "lodash";
 import moment from "moment-timezone";
 import * as XLSX from "xlsx/xlsx.mjs";
 import * as operations from "./actions";
@@ -83,7 +83,7 @@ export default function ImportOrdersModal({ isOpen, toggle }) {
           shopifyOrderItems[`${get(order, "itemSKU", "")}`.trim()] = {
             quantity: get(order, "itemQuantity", "0"),
             title: get(order, "itemTitle", "N/A"),
-            price: get(order, "itemPrice", "0"),
+            price: round(get(order, "itemPrice", 0), 2),
           };
         });
 
