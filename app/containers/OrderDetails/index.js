@@ -65,6 +65,7 @@ export default function OrderDetails({ match }) {
     weight,
     paymentMode,
     bulkStoreName,
+    isBulkOrder,
     comments,
     isShipmentCancelling,
     isSaleOrderCreated,
@@ -90,6 +91,7 @@ export default function OrderDetails({ match }) {
     weight: selectors.weight(state),
     paymentMode: selectors.paymentMode(state),
     bulkStoreName: selectors.bulkStoreName(state),
+    isBulkOrder: selectors.isBulkOrder(state),
     comments: selectors.comments(state),
     isSaleOrderCreated: selectors.isSaleOrderCreated(state),
     saleOrderComments: selectors.saleOrderComments(state),
@@ -386,7 +388,7 @@ export default function OrderDetails({ match }) {
             </span>
           </p>
         </CardHeader>
-        {bulkStoreName && (
+        {isBulkOrder && (
           <Can moduleName={ORDER_MODULE} action={CREATE_ACTION}>
             <CardHeader>
               <div className="mb-3">

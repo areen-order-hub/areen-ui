@@ -35,6 +35,7 @@ export const initialState = {
   weight: 0,
   paymentMode: "",
   bulkStoreName: "",
+  isBulkOrder: "",
   finalDisplayItems: {},
   comments: [],
   isSaleOrderCreated: false,
@@ -96,6 +97,7 @@ const orderDetailsReducer = (state = initialState, action) =>
         draft.weight = action.payload.weight;
         draft.paymentMode = action.payload.paymentMode;
         draft.bulkStoreName = action.payload.bulkStoreName;
+        draft.isBulkOrder = action.payload.isBulkOrder;
         draft.finalDisplayItems = mapItemsForDisplay(
           action.payload.shopifyOrderItems,
           action.payload.invoiceDetails

@@ -38,6 +38,8 @@ export const paymentMode = (state) =>
   get(state, "orderDetails.paymentMode", "");
 export const bulkStoreName = (state) =>
   get(state, "orderDetails.bulkStoreName", "");
+export const isBulkOrder = (state) =>
+  get(state, "orderDetails.isBulkOrder", false);
 export const comments = (state) => get(state, "orderDetails.comments", []);
 export const isSaleOrderCreated = (state) =>
   get(state, "orderDetails.isSaleOrderCreated", false);
