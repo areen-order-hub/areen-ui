@@ -16,6 +16,10 @@ export const getStoreFilter = (stores = []) => {
 export const getPaymentFilter = () => {
   return [
     {
+      value: "All",
+      label: "All",
+    },
+    {
       value: "COD",
       label: "COD",
     },

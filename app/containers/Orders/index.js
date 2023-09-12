@@ -100,7 +100,7 @@ export default function Orders() {
 
   const [searchText, setSearchText] = useState("");
   const [selectedStores, setSelectedStores] = useState([]);
-  const [selectedPaymentMode, setSelectedPaymentMode] = useState([]);
+  const [selectedPaymentMode, setSelectedPaymentMode] = useState("All");
   const [selectedCarrierStatus, setSelectedCarrierStatus] = useState([]);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -299,10 +299,8 @@ export default function Orders() {
         .join(",");
     }
 
-    if (!isEmpty(selectedPaymentMode)) {
-      filter["paymentMode"] = map(selectedPaymentMode, ({ value }) => value)
-        .filter((x) => x)
-        .join(",");
+    if (!isEmpty(selectedPaymentMode) && selectedPaymentMode !== "All") {
+      filter["paymentMode"] = selectedPaymentMode;
     }
 
     if (!isEmpty(selectedCarrierStatus)) {
@@ -530,9 +528,9 @@ export default function Orders() {
             </Col>
             <Col md="2">
               <RtCreatableSelect
+                title="Payment Mode"
                 name="description"
                 placeholder="Payment Mode"
-                isMulti
                 options={getPaymentFilter()}
                 value={selectedPaymentMode}
                 onChange={(e) => {
