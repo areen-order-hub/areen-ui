@@ -25,6 +25,7 @@ import { get, map, isEmpty } from "lodash";
 import Skeleton from "react-loading-skeleton";
 import AlertPopupHandler from "components/AlertPopup/AlertPopupHandler";
 import classNames from "classnames";
+import * as XLSX from "xlsx/xlsx.mjs";
 import Can from "components/Can";
 import CopyToClipBoard from "components/CopyToClipBoard";
 import {
@@ -204,6 +205,42 @@ export default function OrderDetails({ match }) {
     );
   };
 
+  const shapeAndDownloadItems = () => {
+    const shapedData = [];
+
+    Object.entries(finalDisplayItems).forEach(([key, value]) =>
+      shapedData.push({
+        Title: get(value, "title", "-") || "-",
+        "Item Code": key,
+        "Stock in Hand": get(value, "stockInHand", "-"),
+        "Ordered QTY.": get(value, "quantity", "-"),
+        "Invoiced QTY.": get(value, "invoicedQty", "-"),
+        "Website Unit Price": get(value, "price", "-"),
+        "Invoice Unit Price": get(value, "invoicedUnitPrice", "-"),
+        Total: get(value, "invoicedPrice", "-"),
+      })
+    );
+
+    var ws = XLSX.utils.json_to_sheet(shapedData);
+    var wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Order Items");
+    var wbout = XLSX.write(wb, { bookType: "xlsx", type: "binary" });
+
+    function s2ab(s) {
+      var buf = new ArrayBuffer(s.length);
+      var view = new Uint8Array(buf);
+      for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xff;
+      return buf;
+    }
+
+    saveAs(
+      new Blob([s2ab(wbout)], { type: "application/octet-stream" }),
+      get(invoiceDetails, "orderNo")
+        ? `${shopifyOrderName}-${get(invoiceDetails, "orderNo")}.xlsx`
+        : `${shopifyOrderName}.xlsx`
+    );
+  };
+
   const getOrderComponent = () => {
     return (
       <Card>
@@ -335,6 +372,21 @@ export default function OrderDetails({ match }) {
               {get(invoiceDetails, "price", "0.00")}
             </span>
           </p>
+          <Row className="d-flex justify-content-end mb-2">
+            <Col className="text-right" md="4" sm="2">
+              <Button
+                size="md"
+                color="primary"
+                className="p-2"
+                onClick={shapeAndDownloadItems}
+              >
+                <span className="btn-inner--icon mr-1">
+                  <i className="fas fa-file-download" />
+                </span>
+                <span className="btn-inner--text">Download</span>
+              </Button>
+            </Col>
+          </Row>
           <div className="w-100">
             <div className="table-responsive">
               <Table className="align-items-center responsive">
@@ -342,7 +394,7 @@ export default function OrderDetails({ match }) {
                   <tr>
                     <th scope="col">Title</th>
                     <th scope="col">Item Code</th>
-                    <th scope="col">Stock in hand</th>
+                    <th scope="col">Stock in Hand</th>
                     <th scope="col">Ordered QTY.</th>
                     <th scope="col">Invoiced QTY.</th>
                     <th scope="col">Website Unit Price</th>
