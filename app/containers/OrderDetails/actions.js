@@ -9,12 +9,14 @@ import {
   INIT_ORDER_DETAILS,
   SET_ORDER_DETAILS,
   SET_COMMENT_DETAILS,
+  SET_IS_FILE_UPLOADING,
   SET_IS_SHIPMENT_CANCELLING,
 } from "./constants";
 import { getOrder, cancelShipment, deleteOrder } from "api/order";
 import { saveComment, getComments } from "api/comment";
 import NotificationHandler from "../../components/Notifications/NotificationHandler";
 import history from "utils/history";
+import { uploadOrderFile } from "api/file";
 
 export const fetchOrder = (orderId) => {
   return async (dispatch) => {
@@ -29,6 +31,33 @@ export const fetchOrder = (orderId) => {
           "Something went wrong. Please try again later",
         title: "Unable to fetch Order details",
       });
+    }
+  };
+};
+
+export const addFiles = (orderId, files) => {
+  return async (dispatch) => {
+    try {
+      dispatch(setIsFileUploading(true));
+      const formData = new FormData();
+      files.forEach((file, index) => {
+        formData.append(`file[${index}]`, file);
+      });
+      await uploadOrderFile(formData, orderId);
+      NotificationHandler.open({
+        operation: "success",
+        title: "File(s) uploaded successfully",
+      });
+    } catch (err) {
+      NotificationHandler.open({
+        operation: "failure",
+        message:
+          get(err, "response.data", null) ||
+          "Something went wrong. Please try again later",
+        title: "Unable to upload file(s)",
+      });
+    } finally {
+      dispatch(setIsFileUploading(false));
     }
   };
 };
@@ -128,6 +157,11 @@ const setCommentDetails = (payload) => ({
 
 export const orderDetailsInit = () => ({
   type: INIT_ORDER_DETAILS,
+});
+
+const setIsFileUploading = (payload = false) => ({
+  type: SET_IS_FILE_UPLOADING,
+  payload,
 });
 
 const setIsShipmentCancelling = (payload = false) => ({

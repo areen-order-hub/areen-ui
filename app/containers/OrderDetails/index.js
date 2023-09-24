@@ -4,7 +4,7 @@
  *
  */
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Helmet } from "react-helmet";
 import { useInjectReducer } from "utils/injectReducer";
@@ -21,6 +21,8 @@ import {
   Button,
   Spinner,
 } from "reactstrap";
+import { useDropzone } from "react-dropzone";
+import { accept } from "./constants";
 import { get, map, isEmpty } from "lodash";
 import Skeleton from "react-loading-skeleton";
 import AlertPopupHandler from "components/AlertPopup/AlertPopupHandler";
@@ -46,6 +48,7 @@ export default function OrderDetails({ match }) {
   const dispatch = useDispatch();
   const {
     isLoading,
+    isFileUploading,
     shopifyOrderName,
     shopifyOrderDate,
     syncedAt,
@@ -97,10 +100,27 @@ export default function OrderDetails({ match }) {
     isSaleOrderCreated: selectors.isSaleOrderCreated(state),
     saleOrderComments: selectors.saleOrderComments(state),
     isLoading: selectors.isLoading(state),
+    isFileUploading: selectors.isFileUploading(state),
     isShipmentCancelling: selectors.isShipmentCancelling(state),
   }));
 
   const [commentText, setCommentText] = useState("");
+
+  const [filesToBeUploaded, setFilesToBeUploaded] = useState([]);
+
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      setFilesToBeUploaded([...filesToBeUploaded, ...acceptedFiles]);
+    },
+    [filesToBeUploaded]
+  );
+
+  const {
+    getRootProps,
+    getInputProps,
+    isDragActive,
+    acceptedFiles,
+  } = useDropzone({ onDrop, accept, multiple: true });
 
   useEffect(() => {
     const { id } = match.params;
@@ -238,6 +258,38 @@ export default function OrderDetails({ match }) {
       get(invoiceDetails, "orderNo")
         ? `${shopifyOrderName}-${get(invoiceDetails, "orderNo")}.xlsx`
         : `${shopifyOrderName}.xlsx`
+    );
+  };
+
+  const onUpload = () => {
+    dispatch(operations.addFiles(match.params.id, filesToBeUploaded));
+    setFilesToBeUploaded([]);
+  };
+
+  const getFileUploadButton = () => {
+    if (isFileUploading)
+      return (
+        <Button
+          type="button"
+          color="primary"
+          className="btn-icon"
+          disabled={true}
+        >
+          <span className="btn-inner-icon">
+            <Spinner size="sm" className="mr-2" />
+          </span>
+          <span className="btn-inner-text">Upload</span>
+        </Button>
+      );
+    return (
+      <Button
+        type="button"
+        color="primary"
+        disabled={isEmpty(filesToBeUploaded)}
+        onClick={(e) => onUpload(e)}
+      >
+        Upload
+      </Button>
     );
   };
 
@@ -525,6 +577,53 @@ export default function OrderDetails({ match }) {
                   </div>
                 </Col>
               </Row>
+            </CardBody>
+          </Card>
+          <Card>
+            <CardHeader>Upload Files</CardHeader>
+            <CardBody>
+              <Form>
+                <FormGroup row>
+                  <Col>
+                    <div
+                      {...getRootProps({ className: "dropzone" })}
+                      className="dz-drag-hover dz-preview-img  dz-message dropzone"
+                    >
+                      <input {...getInputProps()} />
+                      {isDragActive ? (
+                        <p>Drop the file here ...</p>
+                      ) : (
+                        <p>
+                          Drag and drop your file here, or click to select file.
+                        </p>
+                      )}
+                    </div>
+                  </Col>
+                </FormGroup>
+                {filesToBeUploaded.length > 0 && (
+                  <FormGroup row>
+                    <Col>
+                      <div className="text-sm">
+                        <Label
+                          for="exampleSelect"
+                          className="text-sm ml-4"
+                          sm={12}
+                        >
+                          Uploaded File(s)
+                          <ul>
+                            {filesToBeUploaded.map((file) => (
+                              <li>{file.path}</li>
+                            ))}
+                          </ul>
+                        </Label>
+                      </div>
+                    </Col>
+                  </FormGroup>
+                )}
+                <FormGroup row>
+                  <Col className="mt-3">{getFileUploadButton()}</Col>
+                </FormGroup>
+              </Form>
             </CardBody>
           </Card>
           <Card>

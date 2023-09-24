@@ -27,7 +27,7 @@ var storage = multer.memoryStorage({
   },
 });
 
-var upload = multer({ storage: storage }).single("file");
+var upload = multer({ storage: storage }).any();
 const router = express.Router();
 
 router.use("/auth", authRoutes);

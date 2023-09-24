@@ -1,8 +1,8 @@
 import Request from "utils/request";
 
-export const uploadFile = async (formData, path, fileKey) => {
+export const uploadOrderFile = async (formData, orderId) => {
   return await Request({
-    url: `/api/file/upload/${path}/${fileKey}`,
+    url: `/api/file/order/${orderId}`,
     method: "POST",
     data: formData,
   });

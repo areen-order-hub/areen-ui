@@ -3,7 +3,7 @@ const service = require("../services/file.service");
 
 const router = express.Router();
 
-router.post('/upload/:path/:email', service.UploadFile);
+router.post('/order/:orderId', service.uploadOrderFile);
 router.get('/download/:path/:email', service.GetFileUrl);
 
 

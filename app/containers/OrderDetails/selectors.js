@@ -47,5 +47,6 @@ export const saleOrderComments = (state) =>
   get(state, "orderDetails.saleOrderComments", null);
 
 export const isLoading = (state) => get(state, "orderDetails.isLoading", "");
+export const isFileUploading = (state) => get(state, "orderDetails.isFileUploading", false);
 export const isShipmentCancelling = (state) =>
   get(state, "orderDetails.isShipmentCancelling", false);
