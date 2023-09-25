@@ -9,6 +9,7 @@ import {
   SET_ORDER_DETAILS,
   SET_COMMENT_DETAILS,
   SET_IS_FILE_UPLOADING,
+  SET_ORDER_FILES,
   SET_IS_SHIPMENT_CANCELLING,
 } from "./constants";
 import { getDateTimeString, parseDate } from "utils/dateTimeHelpers";
@@ -16,7 +17,9 @@ import { isEmpty, get } from "lodash";
 
 export const initialState = {
   isLoading: true,
-  isFileUploading :false,
+  isFileUploading: false,
+  orderFiles: true,
+  isOrderFilesLoading: true,
   isShipmentCancelling: false,
   shopifyOrderName: "",
   shopifyOrderDate: "",
@@ -120,6 +123,10 @@ const orderDetailsReducer = (state = initialState, action) =>
         return initialState;
       case SET_IS_FILE_UPLOADING:
         draft.isFileUploading = action.payload;
+        break;
+      case SET_ORDER_FILES:
+        draft.orderFiles = action.payload;
+        draft.isOrderFilesLoading = false;
         break;
       case SET_IS_SHIPMENT_CANCELLING:
         draft.isShipmentCancelling = action.payload;

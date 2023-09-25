@@ -20,6 +20,7 @@ import {
   Label,
   Button,
   Spinner,
+  Badge,
 } from "reactstrap";
 import { useDropzone } from "react-dropzone";
 import { accept } from "./constants";
@@ -49,6 +50,8 @@ export default function OrderDetails({ match }) {
   const {
     isLoading,
     isFileUploading,
+    isOrderFilesLoading,
+    orderFiles,
     shopifyOrderName,
     shopifyOrderDate,
     syncedAt,
@@ -101,6 +104,8 @@ export default function OrderDetails({ match }) {
     saleOrderComments: selectors.saleOrderComments(state),
     isLoading: selectors.isLoading(state),
     isFileUploading: selectors.isFileUploading(state),
+    isOrderFilesLoading: selectors.isOrderFilesLoading(state),
+    orderFiles: selectors.orderFiles(state),
     isShipmentCancelling: selectors.isShipmentCancelling(state),
   }));
 
@@ -128,6 +133,7 @@ export default function OrderDetails({ match }) {
       history.push("/orders");
     } else {
       dispatch(operations.fetchOrder(id));
+      dispatch(operations.fetchOrderFiles(id));
       dispatch(operations.fetchComments(id));
     }
     return () => dispatch(operations.orderDetailsInit());
@@ -198,6 +204,28 @@ export default function OrderDetails({ match }) {
       confirmBtnText: "Yes, Delete",
       cancelBtnText: "No, Go Back",
       text: `You are about to delete the order. Do you want to continue?`,
+      data: {},
+      type: "danger",
+      customClass: "text-xs",
+      btnSize: "sm",
+      confirmBtnBsStyle: "danger",
+      cancelBtnBsStyle: "outline-danger",
+    });
+  };
+
+  const onDeleteFile = (fileName, path, index) => {
+    AlertPopupHandler.open({
+      onConfirm: () =>
+        dispatch(operations.removeOrderFile(match.params.id, { path, index })),
+      confirmBtnText: "Yes, Delete",
+      cancelBtnText: "No, Go Back",
+      text: (
+        <>
+          You are about to delete the file{" "}
+          <span className="font-weight-bold">{fileName}</span>. Once deleted,
+          the file can't be recovered.
+        </>
+      ),
       data: {},
       type: "danger",
       customClass: "text-xs",
@@ -423,6 +451,38 @@ export default function OrderDetails({ match }) {
             <span className="text-primary font-weight-bold">
               {get(invoiceDetails, "price", "0.00")}
             </span>
+          </p>
+          <p>
+            <span className="text-muted">Files: </span>
+            <div className="d-flex flex-wrap">
+              {isOrderFilesLoading ? (
+                <Spinner size="sm" className="mr-2" />
+              ) : isEmpty(orderFiles) ? (
+                <span>NA</span>
+              ) : (
+                orderFiles.map(({ name, path, url }, index) => (
+                  <div className="d-flex align-items-center mt-1" key={index}>
+                    <Badge
+                      color="primary"
+                      className="mr-1 ml-2 hover-pointer"
+                      onClick={() => window.open(url, "_blank")}
+                    >
+                      {name}
+                    </Badge>
+                    <Button
+                      className="p-0 m-0"
+                      size="sm"
+                      outline
+                      onClick={() => onDeleteFile(name, path, index)}
+                    >
+                      <span className="btn-inner--icon text-danger">
+                        <i className="fas fa-trash" />
+                      </span>
+                    </Button>
+                  </div>
+                ))
+              )}
+            </div>
           </p>
           <Row className="d-flex justify-content-end mb-2">
             <Col className="text-right" md="4" sm="2">

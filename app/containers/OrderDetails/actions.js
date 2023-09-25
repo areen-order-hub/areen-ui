@@ -10,13 +10,14 @@ import {
   SET_ORDER_DETAILS,
   SET_COMMENT_DETAILS,
   SET_IS_FILE_UPLOADING,
+  SET_ORDER_FILES,
   SET_IS_SHIPMENT_CANCELLING,
 } from "./constants";
 import { getOrder, cancelShipment, deleteOrder } from "api/order";
 import { saveComment, getComments } from "api/comment";
+import { uploadOrderFiles, getOrderFiles, deleteOrderFile } from "api/file";
 import NotificationHandler from "../../components/Notifications/NotificationHandler";
 import history from "utils/history";
-import { uploadOrderFile } from "api/file";
 
 export const fetchOrder = (orderId) => {
   return async (dispatch) => {
@@ -35,6 +36,23 @@ export const fetchOrder = (orderId) => {
   };
 };
 
+export const fetchOrderFiles = (orderId) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await getOrderFiles(orderId);
+      dispatch(setOrderFiles(data));
+    } catch (err) {
+      NotificationHandler.open({
+        operation: "failure",
+        message:
+          get(err, "response.data", null) ||
+          "Something went wrong. Please try again later",
+        title: "Unable to fetch Order files",
+      });
+    }
+  };
+};
+
 export const addFiles = (orderId, files) => {
   return async (dispatch) => {
     try {
@@ -43,11 +61,12 @@ export const addFiles = (orderId, files) => {
       files.forEach((file, index) => {
         formData.append(`file[${index}]`, file);
       });
-      await uploadOrderFile(formData, orderId);
+      await uploadOrderFiles(formData, orderId);
       NotificationHandler.open({
         operation: "success",
         title: "File(s) uploaded successfully",
       });
+      dispatch(fetchOrderFiles(orderId));
     } catch (err) {
       NotificationHandler.open({
         operation: "failure",
@@ -58,6 +77,27 @@ export const addFiles = (orderId, files) => {
       });
     } finally {
       dispatch(setIsFileUploading(false));
+    }
+  };
+};
+
+export const removeOrderFile = (orderId, data) => {
+  return async (dispatch) => {
+    try {
+      await deleteOrderFile(orderId, data);
+      NotificationHandler.open({
+        operation: "success",
+        title: "File deleted successfully",
+      });
+      dispatch(fetchOrderFiles(orderId));
+    } catch (err) {
+      NotificationHandler.open({
+        operation: "failure",
+        message:
+          get(err, "response.data", null) ||
+          "Something went wrong. Please try again later",
+        title: "Unable to delete file",
+      });
     }
   };
 };
@@ -161,6 +201,11 @@ export const orderDetailsInit = () => ({
 
 const setIsFileUploading = (payload = false) => ({
   type: SET_IS_FILE_UPLOADING,
+  payload,
+});
+
+const setOrderFiles = (payload = []) => ({
+  type: SET_ORDER_FILES,
   payload,
 });
 

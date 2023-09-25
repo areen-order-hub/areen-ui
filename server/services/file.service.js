@@ -2,7 +2,7 @@ const Request = require("../utils/request");
 var FormData = require("form-data");
 const { get, forEach } = require("lodash");
 
-exports.uploadOrderFile = async (req, res) => {
+exports.uploadOrderFiles = async (req, res) => {
   try {
     const { orderId } = req.params;
 
@@ -19,6 +19,45 @@ exports.uploadOrderFile = async (req, res) => {
         url,
         data: formData,
         method: "POST",
+      },
+      headers
+    );
+    res.json(response);
+  } catch (err) {
+    console.log("Error-----", err);
+    res.status(err.status).json(err.message);
+  }
+};
+
+exports.getOrderFiles = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const url = `/v1/file/order/${orderId}`;
+    let headers = req.headers;
+    const response = await Request(
+      {
+        url,
+        method: "GET",
+      },
+      headers
+    );
+    res.json(response);
+  } catch (err) {
+    console.log("Error-----", err);
+    res.status(err.status).json(err.message);
+  }
+};
+
+exports.deleteOrderFile = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const url = `/v1/file/order/${orderId}`;
+    let headers = req.headers;
+    const response = await Request(
+      {
+        url,
+        method: "DELETE",
+        data: req.body,
       },
       headers
     );
